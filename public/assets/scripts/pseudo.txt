@@ -1,0 +1,82 @@
+// --- 1. DATA LOADING AND INITIALIZATION --- //
+FUNCTION Load_Data():
+    // Load data from persistent storage into DataFrames (structured tables)
+    df_interest = READ_CSV("processed_interest_data.csv")
+    df_interest = READ_CSV("processed_clusters.csv")
+
+    // Simulate assigning a random performance group to each student in the interest DataFrame
+    DECLARE performance_options AS LIST OF STRING: ['High', 'Average', 'Low']
+    FOR EACH row IN df_interest DO
+        row['performance_group] = SELECT_RANDOM_ELEMENT(performance_options)
+    END FOR
+
+    RETURN df_interest
+EACH FUNCTION
+
+
+// --- 2. PREPROCESSING AND ENCODING --- //
+FUNCTION Preprocess_Data(DataFrame df_interest):
+    // Initialize Label Encoders (objects that map string labels to unique integers)
+    le_pref = INITIALIZE_LABEL_ENCODER()
+    le_track = INITIALIZE_LABEL_ENCODER()
+    
+    // Fit and transform string columns into numerical representations
+    df_interest['performance_encoded'] = le_pref.FIT_TRANSFORM(df_interest['performance_group'])
+    df_interest['track_ecoded'] = le_track.FIT_TRANSFORM(df_interest['Track'])
+
+    // Define feature set (X) and target variable (y)
+    X = df_interest[['Interest_IT', 'performance_encoded']]
+    y = df_interest['track_ecoded']
+
+    RETURN X, y, le_pref, le_track
+
+END FUNCTION
+
+
+// --- 3. MODEL TRAINING AND EVALUATION --- //
+FUNCTION Train_Model(X, y):
+    // Split the data into training (80%) and testing (20%) sets
+    // Use a fixed random state for reproducibility
+    X_train, X_test, y_train, y_test ← SPLIT_DATA(X, y, test_size=0.2, random_state=42)
+
+    // Initialize the Random Forest Classifier model
+    // Configure with 100 decision trees, balanced class weights, and a fixed random state
+    model ← INITIALIZE_RANDOM_FOREST_CLASSIFIER(n_estimators=100, random_state=42, class_weight='balanced')
+    
+    // Train the model using the training data
+    model.FIT(X_train, y_train)
+
+    // Evaluate the model's accuracy on the unseen test data
+    accuracy ← model.SCORE(X_test, y_test)
+    OUTPUT "Model Accuracy: ", accuracy
+
+    RETURN model, le_track, le_perf
+END FUNCTION
+
+// --- 4. PREDICTION ON NEW DATA --- //
+FUNCTION Predict_New_Student_Track(model, le_track, le_perf):
+    // Create a new data input for a single student
+    // Need to encode 'Low' performance to the integer the model expects
+    encoded_low_perf ← le_perf.TRANSFORM('Low')
+
+    new_student_data ← CREATE_DATAFRAME_ROW(
+        'Interest_in_IT': 0.8,
+        'performance_encoded': encoded_low_perf
+    )
+    
+    // Use the trained model to predict the track ID
+    predicted_id ← model.PREDICT(new_student_data)
+    
+    // Inverse transform the predicted ID back into the original string name
+    predicted_track_name ← le_track.INVERSE_TRANSFORM(predicted_id)
+
+    OUTPUT "Predicted Track:", predicted_track_name[0]
+END FUNCTION
+
+// --- MAIN EXECUTION BLOCK --- //
+BEGIN
+    df ← Load_Data()
+    X_data, y_data, le_perf_obj, le_track_obj ← Preprocess_Data(df)
+    trained_model, lt, lp ← Train_Model(X_data, y_data)
+    Predict_New_Student_Track(trained_model, lt, lp)
+END

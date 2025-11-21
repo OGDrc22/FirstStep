@@ -1,0 +1,145 @@
+:root {
+    --primary-color: #19429C;
+    --secondary-color: #000A21;
+    --bg-color: #F5F5F5;
+    --font-family: 'Poppins', sans-serif;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-family);
+    color: var(--secondary-color);
+    line-height: 1.6;
+}
+
+
+
+
+.header-pcu {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.pcu-logo {
+    width: 92px;
+    height: auto;
+    margin: 16px;
+}
+
+.pcu-coi-logo {
+    width: 120px;
+    height: auto;
+    margin: 16px;
+}
+
+ .pcu-text {
+    color: var(--primary-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 16px;
+}
+
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+.left {
+    flex: 3;
+}
+
+.question {
+    margin: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: var(--font-family);
+}
+
+.question-card {
+    display: none;
+}
+.question-card.active-q {
+    display: block;
+}
+
+.choices-holder {
+    list-style-type: none;
+    margin: 10px 20px;
+    padding: 0;
+}
+.choices {
+    background-color: #e0e0e0;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 8px;
+    border: solid 1px #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.choices:hover {
+    background-color: #d0d0d0;
+    border: solid 2px var(--primary-color);
+}
+
+.active-choice {
+    background-color: #d0d0d0;
+    border: solid 2px var(--primary-color);
+}
+
+
+.right {
+    flex: 1;
+    margin-inline: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #e0e0e0;
+    /* display: none; */
+}
+
+.question-navigator {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.question-navigator .nav-q-btn {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ccc;
+    color: var(--secondary-color);
+    font-family: var(--font-family);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.question-navigator .nav-q-btn:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.question-navigator .nav-q-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.nav-q-btn.q-done {
+    border: 2px solid var(--primary-color);
+}
