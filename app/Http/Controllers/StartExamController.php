@@ -10,9 +10,9 @@ class StartExamController extends Controller
         $pythonOutput = shell_exec("python assets/scripts/gemini.py");
         $data = json_decode($pythonOutput, true);
 
-        if (json_last_error() === JSON_ERROR_NONE) {
-            return view('start_exam', compact('data', 'pythonOutput'));
-        }
+        // if (json_last_error() === JSON_ERROR_NONE) {
+        //     return view('start_exam', compact('data', 'pythonOutput'));
+        // }
 
         $keys = [];
 

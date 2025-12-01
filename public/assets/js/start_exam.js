@@ -265,5 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
+    document.getElementById("examForm").addEventListener("submit", function () {
+        document.getElementById("questionData").value = JSON.stringify(questionData);
+    });
 });

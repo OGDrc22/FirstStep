@@ -9,12 +9,17 @@ class ExamReasultController extends Controller
     public function submitExam(Request $request) {
         $studentAnswer = $request->input('answer');
         $keyAns = session('answer_keys');
+        $questionData = json_decode($request->input('questionData'), true);
+
 
         // dd($keyAns, $studentAnswer);
+        // dd($questionData);
         $payload = json_encode([
             "answers" => $studentAnswer,
             "keys"    => $keyAns
         ]);
+
+        // dd($studentAnswer, $keyAns);
 
         $command = "python assets/scripts/checkerTry.py";
 

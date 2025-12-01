@@ -20,10 +20,11 @@
         <div class="left">
             <div id="timerD"></div>
             <div id="timerDF"></div>
-            <form action="{{ route('submit-exam') }}" method="POST">
+            <form action="{{ route('submit-exam') }}" method="POST" id="examForm">
                 @csrf
                 @if (isset($data))
-                    <div class="questions">    
+                    <div class="questions">
+                        <input type="hidden" name="questionData" id="questionData">
                         @foreach ($data['data'] as $q)
                             <div class="question-card" data-index="{{ $loop->index }}">
                                 <h3 class="question">{{ $loop->index + 1 }}. {{ $q[0] }}</h3>
@@ -38,7 +39,7 @@
                                             <label>
                                                 <input class="radio" type="radio" name="answer[{{ $loop->parent->index }}]" value="{{ $letter }}"> {{ $letter }}. {{ $text }}
                                             </label>
-                                        </li>                                
+                                        </li>                         
                                     @endforeach
                                 </ul>
                             </div>
