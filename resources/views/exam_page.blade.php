@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/start_exam.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/exam_page.css')}}">
     <!-- <link rel="stylesheet" href="{{asset('assets/css/exam_style.css')}}"> -->
+
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <div class="header-pcu">
@@ -15,16 +18,21 @@
         <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="" srcset="">
     </div>
 
+
+    <!-- <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading Result...</p>
+    </div> -->
     
     <div class="main-container">
         <div class="left">
             <div id="timerD"></div>
-            <div id="timerDF"></div>
             <form action="{{ route('submit-exam') }}" method="POST" id="examForm">
                 @csrf
                 @if (isset($data))
                     <div class="questions">
                         <input type="hidden" name="questionData" id="questionData">
+                                <input type="hidden" name="questionText" id="questionText">
                         @foreach ($data['data'] as $q)
                             <div class="question-card" data-index="{{ $loop->index }}">
                                 <h3 class="question">{{ $loop->index + 1 }}. {{ $q[0] }}</h3>
@@ -52,22 +60,22 @@
                         <button class="btn-controls" id="submit" type="submit">Submit</button>
                     </div>
                 @else
+                    <p>No data available.</p>
+                @endif
             </form>
-                <p>No data available.</p>
-            @endif
         </div>
 
         <div class="right">
             <h3>Question Navigator</h3>
             <div class="question-navigator">
                 @foreach ($data['data'] as $q)
-                    <button class="nav-q-btn" data-index="{{ $loop->index }}">{{ $loop->index + 1 }} Question</button>
+                    <button type="button" class="nav-q-btn" data-index="{{ $loop->index }}">{{ $loop->index + 1 }} Question</button>
                 @endforeach
             </div>
         </div>
 
     </div>
 
-    <script src="{{ asset('assets/js/start_exam.js') }}"></script>
+    <script src="{{ asset('assets/js/exam_page.js') }}"></script>
 </body>
 </html>

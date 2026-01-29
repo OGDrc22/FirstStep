@@ -7,9 +7,27 @@
     <title>PCU First Step</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/welcome.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
 </head>
 
 <body>
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+    <!-- <div class="alert-bg">
+        <div class="alert alert-danger">
+            Sample Error Message
+        </div>
+    </div> -->
+    
+    <!-- <div class="">
+        <div class="heads-up-message">
+            Sample Error Message
+        </div>
+    </div> -->
 
     <div class="header-pcu">
         <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="" srcset="">
@@ -18,8 +36,10 @@
     </div>
 
     <div class="container-btn">
-        <a href="{{ url("/login") }}" class="btn-start-exam">Start Exam</a>
+        <a href="{{ url("/assessment-entry") }}" class="btn-start-exam">Start Exam</a>
         <a href="{{ url("/retrieve-result") }}" class="btn-retrieve-result">Retrieve Result</a>
     </div>
+
+    <script src="{{ asset('assets/js/flash_message.js') }}"></script>
 </body>
 </html>

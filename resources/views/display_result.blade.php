@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result</title>
-
-    <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
+    <title>Results</title>
 </head>
-
-
 <body>
-    @if (isset($resData))
-        <h3>Score: {{ $resData['score'] }}</h3>
-        <h3>Total: {{ $resData['total'] }}</h3>
+    @if (isset($examResult))
+        <h3>Latest exam attempt result</h3>
+        <h3>Score: {{ $examResult['score'] }}</h3>
+        <h3>Total: {{ $examResult['total'] }}</h3>
         <div class="questions-review">
 
         <!-- Can be used as Answer Review -->
@@ -51,50 +48,18 @@
             </div>
             <div class="chart-info">
                 <div class="info">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Category</th>
-                                <th>Track Percentage</th>
-                                <th>Accuracy</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
-                                </td>
-                                <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['CE'] }}%</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
-                                </td>
-                                <td>{{ $trackPercentage['Computer Science'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['CS'] }}%</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
-                                </td>
-                                <td>{{ $trackPercentage['Information Technology'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['IT'] }}%</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
-                                </td>
-                                <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['MMA'] }}%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div> Computer Engineering: {{ $trackPercentage['Computer Engineering'] }}%</div>
+                
+                    <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div> Computer Science: {{ $trackPercentage['Computer Science'] }}%</div>
+            
+                    <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div> Information Technology: {{ $trackPercentage['Information Technology'] }}%</div>
+                
+                    <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div> Multimedia Arts: {{ $trackPercentage['Multimedia Arts'] }}%</div>
                 </div>
             </div>
         </div>
 
-        <!-- <div class="progress-flex" style="background-color: gray">
+        <div class="progress-flex" style="background-color: gray">
             <div class="percent" style="width: {{ $trackPercentage['Computer Engineering'] }}%; background-color: violet;">
                 <h3>Computer Engineering: {{ $trackPercentage['Computer Engineering'] }}%</h3>
             </div>
@@ -107,13 +72,26 @@
             <div class="percent" style="width: {{ $trackPercentage['Multimedia Arts'] }}%; background-color: lightgreen;">
                 <h3>Multimedia Arts: {{ $trackPercentage['Multimedia Arts'] }}%</h3>
             </div>
-        </div> -->
+        </div>
 
-        
+        <!-- <h3>Computer Engineering: {{ $trackPercentage['Computer Engineering'] }}%</h3>
+        <div class="progress" style="background-color: gray">
+            <div class="percent" style="width: {{ $trackPercentage['Computer Engineering'] }}vw; background-color: violet;"></div>
+        </div>
+        <h3>Computer Science: {{ $trackPercentage['Computer Science'] }}%</h3>
+        <div class="progress" style="background-color: gray">
+            <div class="percent" style="width: {{ $trackPercentage['Computer Science'] }}vw; background-color: yellow;"></div>
+        </div>
+        <h3>Information Technology: {{ $trackPercentage['Information Technology'] }}%</h3>
+        <div class="progress" style="background-color: gray">
+            <div class="percent" style="width: {{ $trackPercentage['Information Technology'] }}vw; background-color: blue;"></div>
+        </div>
+        <h3>Multimedia Arts: {{ $trackPercentage['Multimedia Arts'] }}%</h3>
+        <div class="progress" style="background-color: gray">
+            <div class="percent" style="width: {{ $trackPercentage['Multimedia Arts'] }}vw; background-color: lightgreen;"></div>
+        </div> -->
 
         <h3>System Accuracy: {{ $accuracy }}</h3>
     @endif
-
-    <a href="{{ route('welcome') }}">Home</a>
 </body>
 </html>

@@ -2,6 +2,7 @@
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,33 +13,23 @@ from sklearn.preprocessing import LabelEncoder
 script_path = Path(__file__)
 base_path = script_path.parent
 path_to_data = base_path / "files"
-csv_file = path_to_data / "processed_data.csv"
+csv_file = path_to_data / "processed_interest_data.csv"
 df_interest = pd.read_csv(csv_file)
 df_interest
 
-df_interest['Interest_in_IT'] = df_interest['Interest_in_IT'].astype(int)
-
-
-# Auto-generate performance group based on Interest_in_IT
-def derive_performance(score):
-    if score < 0.4:
-        return 'Low'
-    elif score < 0.7:
-        return 'Average'
-    else:
-        return 'High'
-
-df_interest['performance_group'] = df_interest['Interest_in_IT'].apply(derive_performance)
 # %%
 csv_file_perf = path_to_data / "processed_clusters.csv"
 df_perf = pd.read_csv(csv_file_perf)
 # df_perf
 
 # %%
+df_interest['performance_group'] = np.random.choice(['High', 'Average', 'Low'], len(df_interest))
+
+print(df_interest.head())
+
+# %%
 le_perf = LabelEncoder()
 le_track = LabelEncoder()
-
-le_perf.fit(['Low', 'Average', 'High'])
 
 df_interest['performance_encoded'] = le_perf.fit_transform(df_interest['performance_group'])
 df_interest['track_encoded'] = le_track.fit_transform(df_interest['Track'])
@@ -54,7 +45,17 @@ model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='
 model.fit(X_train, y_train)
 
 accuracy = model.score(X_test, y_test)
-# print(f"Model Accuracy: {accuracy:.2f}")
+print(f"Model Accuracy: {accuracy:.2f}")
+
+# %%
+# new_student = pd.DataFrame({
+#     'Interest_in_IT': [0.8],
+#     'performance_encoded': [le_perf.transform(['Low'])[0]]
+# })
+
+# predicted_track = le_track.inverse_transform(model.predict(new_student))
+# print("Predicted Track:", predicted_track[0])
+
 
 #%%
 import sys, json
@@ -66,17 +67,13 @@ except Exception as e:
 
 answers = payload["answers"]
 keys = payload["keys"]
-data = payload["questionsData"]
+data = payload["questions"]
 score = 0
-interest_n = []
 for i in range(len(answers)):
-    is_correct = answers[i] == keys[i]
-    data[i]["correct"] = is_correct
     if answers[i] == keys[i]:
         score += 1
 
-total_questions = len(keys)
-percentage = (score / total_questions)
+percentage = (score / len(keys))
 
 if percentage < 0.4:
     performance_group = 'Low'
@@ -85,25 +82,11 @@ elif 0.4 <= percentage < 0.7:
 else:
     performance_group = 'High'
 
-
 encoded_performance = le_perf.transform([performance_group])[0]
-
-
-correct_answers = sum(1 for q in data if q["correct"])
-average_time = sum(q["duration"] for q in data) / total_questions
-
-accuracy_score_student = correct_answers / total_questions
-
-max_time = max(q["duration"] for q in data)
-min_time = min(q["duration"] for q in data)
-
-speed_score = [(max_time - q["duration"]) / (max_time - min_time + 1e-6) for q in data]
-average_speed_score = sum(speed_score) / total_questions
-percentage_interest = (0.6 * accuracy_score_student) + (0.4 * average_speed_score)
 
 # %%
 new_student = pd.DataFrame({
-    'Interest_in_IT': [percentage_interest],
+    'Interest_in_IT': [payload["interest"]],
     'performance_encoded': [encoded_performance]
 })
 
@@ -113,6 +96,26 @@ print(json.dumps({
     "score": score,
     "total": len(keys),
     "predicted_track": predicted_track[0],
-    "qData": data,
+    "qData": data
     "keys": keys
 }))
+
+# %%
+# print(df_interest['Track'].value_counts())
+# print(df_interest['Track'].unique())
+
+
+# %%
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.2f}")
+
+# %%
+cm = confusion_matrix(y_test, y_pred)
+
+
+# %%
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix for Random Forest Classifier')
+plt.show()

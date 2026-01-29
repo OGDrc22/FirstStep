@@ -8,6 +8,7 @@ except Exception as e:
 
 answers = payload["answers"]
 keys = payload["keys"]
+data = payload["questionsData"]
 
 score = 0
 for i in range(len(answers)):
@@ -16,5 +17,7 @@ for i in range(len(answers)):
 
 print(json.dumps({
     "score": score,
-    "total": len(keys)
+    "total": len(keys),
+    "keys": keys,
+    "qData": data
 }))

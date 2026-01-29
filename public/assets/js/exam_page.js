@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const questionData = Array.from({length: qCard.length}, (_, index) => ({
         index: index,
+        questionText: qCard[index].querySelector('.question').innerText,
         keyAnswer: null,
         answer: null,
         startTime: null,
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let seconds = 0;
     let timerInterval;
-    const timerDisplay = document.getElementById('timerD');
+    // const timerDisplay = document.getElementById('timerD');
     const displayF = document.getElementById('timerDF');
 
     function onQuestionViewed(index) {
@@ -202,26 +203,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         prevBtn.disabled = index === 0;
         nextBtn.disabled = index === qCard.length - 1;
-        // submitBtn.style.display = index === qCard.length - 1 ? 'inline-block' : 'none';
 
         updateNavButtons(index);
         updateNavButtonsStatus();
         update_choices(index)
 
-        // if (!startTimes[index]) {
-        //     startTimes[index] = seconds;  // record start time once
-        //     console.log(`Started Q${index} at ${startTimes[index]}s`);
-        // }
-
-        // if (questionData[index].startTime === null)
 
         onQuestionViewed(index);
         startTimer();
         // console.log("QData: ", questionData[index]);
         console.log("QData: ", questionData);
-
-        // const radios = qCard[index].querySelectorAll('.radio');
-        // radios.forEach(r => r.checked = r.value === answers[index]);
     }
 
     prevBtn.addEventListener('click', function() {
@@ -234,14 +225,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     nextBtn.addEventListener('click', function() {
         if (currentQuestionIndex < qCard.length - 1) {
-            // if (!answerTimes[currentQuestionIndex] && answers[currentQuestionIndex] !== null) {
-            //     recordAnswerTime(currentQuestionIndex);
-            // } else if (!answerTimes[currentQuestionIndex] && answers[currentQuestionIndex] === null) {
-            //     answerTimes[currentQuestionIndex] = Date.now();
-            //     if (startTimes[currentQuestionIndex]) {
-            //         durationsMs[currentQuestionIndex] = answerTimes[currentQuestionIndex] - startTimes[currentQuestionIndex];
-            //     }
-            // }
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
@@ -265,7 +248,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById("examForm").addEventListener("submit", function () {
+    document.getElementById("examForm").addEventListener("submit", async function (e) {
+        stopTimer();
         document.getElementById("questionData").value = JSON.stringify(questionData);
+        const questionTexts = questionData.map(q => q.questionText);
+        document.getElementById("questionText").value = JSON.stringify(questionTexts);
+
+        console.log('Clicked submit');
+        
     });
+
+
+    function showLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.display = 'block';
+    }
+    window.onload = function() {
+        showLoadingScreen();
+    }
+    
 });

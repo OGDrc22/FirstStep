@@ -1,0 +1,87 @@
+:root {
+    --primary-color: #19429C;
+    --secondary-color: #000A21;
+    --bg-color: #F5F5F5;
+    --font-family: 'Poppins', sans-serif;
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-family);
+    color: var(--secondary-color);
+    line-height: 1.6;
+}
+
+
+.progress {
+    background-color: lightgray;
+    border-radius: 8px;
+}
+
+.progress-flex {
+    background-color: lightgray;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.percent {
+    background-color: #0066ff00;
+    height: auto;
+    display: flex;
+    align-items: center;
+    padding: 0px 16px;
+}
+
+.percent:first-of-type {
+    border-radius: 8px 0 0 8px;
+}
+
+.percent:last-of-type {
+    border-radius: 0 8px 8px 0;
+}
+
+.pie-container {
+    display: flex;
+    justify-content: center;
+}
+
+.chart {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pie-chart {
+    width: 250px;
+    height: 250px;
+    background-color: darkblue;
+    border-radius: 50%;
+}
+
+.chart-info {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-info .info {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+}
+
+.chart-info div {
+    display: flex;
+    gap: 4px;
+}
