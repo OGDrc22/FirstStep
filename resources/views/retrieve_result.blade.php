@@ -9,6 +9,11 @@
 </head>
 <body>
     
+
+    @if ($errors->has('email'))
+        <div class="alert alert-danger">{{ $errors->first('email') }}</div>
+    @endif
+
     @if (!isset($examResult))
         <div class="login-container">
             <h2>Login</h2>
@@ -63,28 +68,28 @@
                                         <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
                                     </td>
                                     <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['CE'] }}%</td>
+                                    <td>{{ $examResult['accuracy_per_category']['CE'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
                                     </td>
                                     <td>{{ $trackPercentage['Computer Science'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['CS'] }}%</td>
+                                    <td>{{ $examResult['accuracy_per_category']['CS'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
                                     </td>
                                     <td>{{ $trackPercentage['Information Technology'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['IT'] }}%</td>
+                                    <td>{{ $examResult['accuracy_per_category']['IT'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
                                     </td>
                                     <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['MMA'] }}%</td>
+                                    <td>{{ $examResult['accuracy_per_category']['MMA'] * 100 }}%</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -130,7 +135,9 @@
             <table>
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Date</th>
+                        <th>Score</th>
                         <th>Track Percentage</th>
                         <th>Predicted Track</th>
                         <th>Remarks</th>
@@ -138,8 +145,10 @@
                 </thead>
                 <tbody>
                     @foreach($examResult as $exam)
-                        <tr>
+                        <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
+                            <td>{{ $exam->id }}</td>
                             <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
+                            <td>{{ $exam->score }}</td>
                             <td>
                                 @php
                                     $sorted = collect($exam->track_percentage)->sortDesc();
@@ -154,8 +163,104 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- @foreach ($averageAcc as $ac_p)
+                <p>{{ $ac_p }}</p>
+            @endforeach
+
+
+            <h3>....</h3>
+            <p>{{ $averageDuration['IT'] }}</p> -->
+
+            <h3>Recommended track based on all exam attempt:</h3>
+            <h4>{{ $recommendedTrack }}</h4>
+
+            <div class="line" style="width: 30vw; aspect-ratio: 5/1;">
+                <canvas id="stackedLineChart"></canvas>
+            </div>
         @endif
     @endif
     <a href="{{ route('welcome') }}">Home</a>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+
+
+    @if (isset($examResult) && $action === 'all')
+    <script>
+        const ctx = document.getElementById('stackedLineChart').getContext('2d');
+
+        Chart.defaults.font.size = 16;
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['IT', 'CPE', 'CS', 'MMA'],
+                datasets: [
+                    {
+                        label: 'Average Accuracy (%)',
+                        data: [
+                            {{ $averageAcc['IT'] }},
+                            {{ $averageAcc['CE'] }},
+                            {{ $averageAcc['CS'] }},
+                            {{ $averageAcc['MMA'] }}
+                        ],
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'yAccuracy'
+                    },
+                    {
+                        label: 'Average Time Taken (sec)',
+                        data: [
+                            {{ $averageDuration['IT'] }},
+                            {{ $averageDuration['CE'] }},
+                            {{ $averageDuration['CS'] }},
+                            {{ $averageDuration['MMA'] }}
+                        ],
+                        borderWidth: 2,
+                        tension: 0.3,
+                        yAxisID: 'yDuration'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Average Accuracy vs Average Time per Track'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: false
+                    },
+                    yAccuracy: {
+                        type: 'linear',
+                        position: 'left',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Accuracy (%)'
+                        },
+                        max: 100
+                    },
+                    yDuration: {
+                        type: 'linear',
+                        position: 'right',
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Average Time (seconds)'
+                        },
+                        grid: {
+                            drawOnChartArea: false // 👈 VERY important
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    @endif
+
 </body>
 </html>

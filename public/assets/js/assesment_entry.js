@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // showLoadingScreen();
 
     // let targetX = -1000;
     // let targetY = -1000;
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             inputValue = this.querySelector('h3').dataset.value;
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
-                selectedInterest.filter(item => item !== inputValue);
+                selectedInterest = selectedInterest.filter(item => item !== inputValue);
             } else {
                 this.classList.add('selected');
                 selectedInterest.push(inputValue);
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             //     }
             // }
             interestInput.value = selectedInterest.join(', ');
-            // console.log('Selected: ', selectedInterest);
+            console.log('Selected: ', selectedInterest);
 
         });
     });
@@ -173,11 +174,11 @@ form.addEventListener('submit', async function (e) {
         const data = await res.json();
         console.log('Generate exam response:', data);
 
-        // if (data.status !== 'processing') {
-        //     throw new Error('Failed to start exam generation');
-        // }
+        if (!data.job_id) {
+            throw new Error('Job ID not returned from server');
+        }
 
-        startPolling();
+        startPolling(data.job_id);
 
     } catch (err) {
         console.error('Error starting exam generation:', err);
@@ -186,25 +187,34 @@ form.addEventListener('submit', async function (e) {
 });
 
 
-function startPolling() {
+function startPolling(jobId) {
     const interval = setInterval(() => {
-        fetch('/exam-status')
-            .then(res => res.json())
-            .then(data => {
-                console.log('Exam Status:', data.status, data.message);
-                statusText.textContent = data.message;
-
-                if (data.status === 'done') {
-                    clearInterval(interval);
-                    window.location.href = '/show-exam';
-                }
-                if (data.status === 'error') {
-                    clearInterval(interval);
-                    statusText.textContent = 'An error occurred while generating the exam.';
-                }
-            });
-    }, 1500);
+    fetch(`/exam/status/${jobId}`)
+        .then(res => res.json())
+        .then(job => {
+            if (job.status == null || job.message == null) {
+                statusText.textContent = "Getting Ready..."
+            } else if (job.status === 'null' || job.message === 'null') {
+                statusText.textContent = "Getting Ready..."
+            }
+            statusText.textContent = job.message + " " + job.progress + "%";
+            console.log('Polling job status:', job.message || job.status);
+            if (job.status === 'done') {
+                clearInterval(interval);
+                setTimeout(() => {
+                    window.location.href = `/show-exam/${job.id}`;
+                }, 500)
+            }
+            if (job.status === 'failed') {
+                clearInterval(interval);
+                        statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
+            }
+        });
+    }, 2000);
 }
+
+
+
 
 
 });

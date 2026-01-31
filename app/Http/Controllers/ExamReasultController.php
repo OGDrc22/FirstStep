@@ -84,17 +84,19 @@ class ExamReasultController extends Controller
         $predictedTrack = $resData['predicted_track'];
         $trackPercentage = $resData['track_percentage'];
         $acc_per_category = $resData['accuracy_per_category'];
+        $duration_per_category =$resData['duration_per_category'];
 
-        // dd($resData);
+        // dd($duration_per_category);
 
         // Save results
-        DB::transaction(function () use ($student, $predictedTrack, $trackPercentage, $resData, $studentAnswer, $qData) {
+        DB::transaction(function () use ($student, $predictedTrack, $trackPercentage, $resData, $studentAnswer, $qData, $acc_per_category, $duration_per_category) {
             $student->examResults()->create([
                 'score' => $resData['score'],
                 'predicted_track' => $predictedTrack,
                 'track_percentage' => $trackPercentage,
                 'accuracy' => $resData['accuracy'],
-                'accuracy_per_category' => $resData['accuracy_per_category'],
+                'accuracy_per_category' => $acc_per_category,
+                'duration_per_category' => $duration_per_category,
                 'answers' => $studentAnswer,
                 'questions' => $qData,
             ]);
@@ -104,7 +106,7 @@ class ExamReasultController extends Controller
 
         $accuracy = $resData['accuracy'] * 100 . "%";
 
-        return redirect()->route('exam_result', compact('resData', 'qData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category'));
+        return view('exam_result', compact('resData', 'qData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category'));
         // return response()->json([
         //     'resData' => $resData,
         //     'qData' => $qData,

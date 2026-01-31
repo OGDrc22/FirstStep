@@ -5,6 +5,7 @@ use App\Http\Controllers\ExamReasultController;
 use App\Http\Controllers\StartExamController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\RetrieveResultController;
+use App\Models\ExamJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\PreventDirectAccess;
 
@@ -22,10 +23,19 @@ Route::post('/get-result', [RetrieveResultController::class, 'getResult']);
 Route::post('/generate-exam', [AssessmentController::class, 'generateExam'])->name('generate-exam');
 // Route::post('/generate-exam', [StartExamController::class, 'getView'])->name('generate-exam');
 Route::middleware(['web'])->group(function () {
-    Route::get('/show-exam', [AssessmentController::class, 'showExam'])->name('show-exam');
-    Route::get('/start-exam', [AssessmentController::class, 'startExam'])->name('start-exam');
-    Route::get('/exam-status', [AssessmentController::class, 'examStatus'])->name('exam-status');
+    // Route::get('/show-exam', [AssessmentController::class, 'showExam'])->name('show-exam');
+    // Route::get('/exam-status', [AssessmentController::class, 'examStatus'])->name('exam-status');
+    
+    Route::get('/show-exam/{job}', [AssessmentController::class, 'showExam'])
+    ->name('show-exam');
 
+    Route::get('/exam/status/{job}',  function (ExamJob $job) {
+        return response()->json($job);
+    });
+
+    Route::get('/show-exam-result/{id}', [RetrieveResultController::class, 'getSpecificExam'])->name('show-exam-result');
+
+    
     // Protected route
     Route::post('/submit-exam', [ExamReasultController::class, 'submitExam'])
         ->name('submit-exam');

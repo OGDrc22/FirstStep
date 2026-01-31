@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamJob;
 use Illuminate\Http\Request;
 use App\Models\student_tb;
 use Illuminate\Support\Facades\Auth;
@@ -10,46 +11,8 @@ use Illuminate\Support\Facades\Session;
 class AssessmentController extends Controller
 {
     public function showAssessmentEntryForm() {
-        return view('assessment_entry'); // form with name + email
-    }
-
-    public function login_data(Request $request) {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-        ]);
-
-        // dd ($request->all());
-
-        $requestData = $request->all();
-        session(['requestData' => $requestData]);
-
-        // Check if student exists
-        $student = student_tb::firstOrCreate(
-            ['email' => $request->email],
-            ['name' => $request->name]
-        );
-
-        // Log the student in
-        Auth::guard('web')->login($student);
-
-        return redirect()->route('start-exam');
-    }
-
-    public function logout(Request $request) {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('assessment_entry');
-    }
-
-
-
-    public function startExam(Request $request) {
         return view('assessment_entry');
     }
-
-
     public function generateExam(Request $request)  {
 
         $request->validate([
@@ -74,41 +37,34 @@ class AssessmentController extends Controller
         
 
         try {
-            $outputFile = storage_path(
-                'app/exam_' . session()->getId() . '.json'
-            );
-            // if (!file_exists($outputFile)) {
-            //     return response()->json([
-            //         'status' => 'processing',
-            //         'message' => 'Exam generation in progress...22'
-            //     ]);
-            // }
-
-            $payloadFile = storage_path(
-                'app/payload_' . session()->getId() . '.json' 
-            );
-
-            file_put_contents($payloadFile, json_encode([
-                'interests' => explode(',', $request->input('interest', ''))])
-            );
+            $job = ExamJob::create([
+                'student_id' => $student->id,
+                'payload' => [
+                    'interest' => explode(',', $request->input('interest', '')),
+                ],
+                'status' => 'pending',
+            ]);
     
 
             // WINDOWS-SAFE background execution
             $pythonPath = 'C:\Users\admin\AppData\Local\Programs\Python\Python312\python.exe';
             $scriptPath = base_path('public/assets/scripts/gemini.py');
             $command = sprintf(
-                'start "" /B "%s" "%s" "%s" "%s"',
+                'start "" /B "%s" -u "%s" %d',
                 $pythonPath,
                 $scriptPath,
-                $payloadFile,
-                $outputFile
+                $job->id,
             );
 
             // ⬇️ RUN IN BACKGROUND (THIS IS CRITICAL)
             pclose(popen($command, "r"));
+            // $command = "\"$pythonPath\" \"$scriptPath\" {$job->id}";
+            // exec($command);
+
 
             return response()->json([
-                'status' => 'started'
+                'status' => 'started',
+                'job_id' => $job->id
             ]);
 
         } catch (\Throwable $e) {
@@ -119,40 +75,47 @@ class AssessmentController extends Controller
         }
     }
 
-    public function examStatus() {
-        $file = storage_path('app/exam_' . session()->getId() . '.json');
+    // public function examStatus() {
+    //     $file = storage_path('app/exam_' . session()->getId() . '.json');
 
-        if (file_exists($file)) {
-            $data = json_decode(file_get_contents($file), true);
+    //     if (file_exists($file)) {
+    //         $data = json_decode(file_get_contents($file), true);
 
-            return response()->json($data);  // returns current status
-        }
+    //         return response()->json($data);  // returns current status
+    //     }
 
-        // file not created yet
-        return response()->json([
-            'status' => 'processing',
-            'message' => 'Exam generation is starting...'
-        ]);
-    }
-
-
+    //     // file not created yet
+    //     return response()->json([
+    //         'status' => 'processing',
+    //         'message' => 'Exam generation is starting...'
+    //     ]);
+    // }
 
 
-    public function showExam(){
+
+
+    public function showExam(ExamJob $job){
 
         $student = Auth::guard('web')->user();
-        // dd($student);
-        $file = storage_path('app/exam_' . session()->getId() . '.json');
-
-        if (!file_exists($file)) {
-            abort(404, 'No exam data available.');
+      
+        if ($job->student_id !== $student->id) {
+            abort(403, 'Unauthorized access to this exam.');
         }
 
-        $data = json_decode(file_get_contents($file), true);
+        if ($job->status !== 'done') {
+            abort(404, 'Exam is not ready yet.');
+        }
+
+        $questions = $job->output;
+
+        
+        if (!is_array($questions)) {
+            abort(500, 'Exam output is missing or invalid.');
+        }
         
         $keys = [];
 
-        foreach ($data['data'] as $qSet) {
+        foreach ($questions as $qSet) {
             $keys[] = $qSet[2];
         }
 
@@ -163,7 +126,11 @@ class AssessmentController extends Controller
         // OPTIONAL: cleanup after loading
         // unlink($file);
 
-        return view('exam_page', compact('data'));
+        return view('exam_page', [
+            'data' => [
+                'data' => $questions
+            ]
+        ]);
     }
 
 

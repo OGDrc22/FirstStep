@@ -13,6 +13,7 @@ class ExamResult extends Model
         'track_percentage',
         'accuracy',
         'accuracy_per_category',
+        'duration_per_category',
         'answers',
         'questions'
     ];
@@ -22,6 +23,7 @@ class ExamResult extends Model
         'answers' => 'array',
         'questions' => 'array',
         'accuracy_per_category' => 'array',
+        'duration_per_category' => 'array',
     ];
 
     public function student()

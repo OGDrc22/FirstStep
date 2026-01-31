@@ -12,14 +12,14 @@
 
     <div class="loading-screen" id="loading-screen">
         <div class="loader-container">
-            <div class="spinner"></div>
-            @if (session('status'))
-            @else
-            @endif
-            
+            <!-- <div class="spinner"></div> -->
+            <span class="loader"></span>            
             <p id="text-loader">{{ session('status') }}</p>
+            
         </div>
     </div>
+
+    
 
     <div class="login-container">
         <h2>Assesment Entry</h2>

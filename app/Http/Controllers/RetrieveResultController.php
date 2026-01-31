@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ExamResult;
+use App\Models\student_tb;
 
 class RetrieveResultController extends Controller
 {
@@ -22,11 +23,20 @@ class RetrieveResultController extends Controller
 
         if ($action === 'latest') {
             $action = $request->input('action');
+            $request->validate([
+                'email' => 'required|email'
+            ]);
+
             $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
                 $query->where('email', $request->email);
             })
-            ->orderBy('id', 'desc')
+            ->latest('id')
             ->first();
+
+            if ($examResult === null) {
+                return redirect()->back()
+                    ->withErrors(['email' => 'No exam results found for ' . $request->email]);
+            }
 
             // dd($examResult);
 
@@ -37,26 +47,130 @@ class RetrieveResultController extends Controller
             $username = $examResult ? $examResult->student->name : null;
             $predictedTrack = $examResult ? $examResult->predicted_track : null;
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
-            $accuracy = $examResult ? $examResult->accuracy : null;
+            // $accuracy = $examResult ? $examResult->accuracy : null;
             if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username', 'qData', 'predictedTrack', 'trackPercentage', 'accuracy'));
+                return view('retrieve_result', compact('action', 'examResult', 'username', 'qData', 'predictedTrack', 'trackPercentage'));
             } else {
                 return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
             }
         } elseif ($action === 'all') {
             $action = $request->input('action');
+            $request->validate([
+                'email' => 'required|email'
+            ]);
+
             $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
                 $query->where('email', $request->email);
             })
-            ->orderBy('id', 'desc')
+            ->latest('id')
             ->get();
 
-            // dd($examResult);
+             if ($examResult->isEmpty()) {
+                return redirect()->back()
+                    ->withErrors(['email' => 'No exam results found for ' . $request->email]);
+            }
 
-            $username = $examResult->first()->student->name;
+            
+            // $username = "TRY";
+
+            // Get username from the first attempt's related student
+            $firstAttempt = $examResult->first();
+            $username = null;
+            if ($firstAttempt && $firstAttempt->student) {
+                $username = $firstAttempt->student->name;
+            }
+
+
+            $totalsAcc = [];
+            $counts = [];
+
+            foreach ($examResult as $attempt) {
+                foreach ($attempt->accuracy_per_category as $track => $accuracy) {
+
+                    // Sum accuracy per track
+                    $totalsAcc[$track] = ($totalsAcc[$track] ?? 0) + $accuracy;
+
+                    // Count how many times this track appears
+                    $counts[$track] = ($counts[$track] ?? 0) + 1;
+                }
+            }
+
+            // Average
+            $averageAcc = [];
+            foreach ($totalsAcc as $track => $total) {
+                $averageAcc[$track] = round($total / $counts[$track], 3) * 100;
+            }
+
+            asort($averageAcc);          
+
+            // dd($averageAcc);
+
+            $durationTotals = [
+                'IT' => 0,
+                'CE' => 0,
+                'CS' => 0,
+                'MMA' => 0,
+            ];
+
+            $attemptCount = 0;
+
+
+            $duration_per_category = [];
+
+
+            $trackTotals = [
+                'CE' => 0,
+                'IT' => 0,
+                'CS' => 0,
+                'MMA' => 0
+            ];
+
+            // dd($examResult);
+            foreach ($examResult as $attempt) {
+                if (!empty($attempt->duration_per_category)) {
+                    $attemptCount++;
+
+                    foreach ($attempt->duration_per_category as $track => $duration) {
+                        $durationTotals[$track] += $duration;
+                    }
+                }
+            }
+
+            $averageDuration = [];
+
+            if ($attemptCount > 0) {
+                foreach ($durationTotals as $track => $total) {
+                    $averageDuration[$track] = round($total / $attemptCount, 2);
+                }
+            }
+
+
+            $scorePerTrack = [];
+
+            foreach (['IT', 'CE', 'CS', 'MMA'] as $track) {
+                $accuracy = $averageAcc[$track];               // e.g. 92
+                $time     = $averageDuration[$track];          // e.g. 55
+
+                $timeScore = 1 / max($time, 1);                 // lower time = higher score
+
+                $scorePerTrack[$track] =
+                    (0.7 * $accuracy) +                         // accuracy weight
+                    (0.3 * $timeScore * 100);                   // scaled time
+            }
+
+
+            $recommendedTrack = collect($scorePerTrack)
+                ->sortDesc()
+                ->keys()
+                ->first();
+
+
+
+
+            // dd($examResult, $duration_per_category, $averageDuration);
 
             if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username'));
+                return view('retrieve_result', compact('action', 'examResult', 'username', 'recommendedTrack', 'averageAcc', 'duration_per_category', 'averageDuration'));
             } else {
                 return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
             }
@@ -66,17 +180,17 @@ class RetrieveResultController extends Controller
         }
     }
 
-    // public function getAllResult(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email',
-    //     ]);
+    public function getSpecificExam($id)
+    {
+        $examResult = ExamResult::with('student')->findOrFail($id);
+        $qData = $examResult ? $examResult->questions : null;
+        $predictedTrack = $examResult ? $examResult->predicted_track : null;
+        $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
+        
+        $username = $examResult ? $examResult->student->name : null;
 
-    //     if ($examResult) {
-    //         return view('display_result', ['examResult' => $examResult]);
-    //     } else {
-    //         return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
-    //     }
-    // }
+        return view('retrieve_specific_result', compact('username', 'examResult', 'qData', 'predictedTrack', 'trackPercentage'));
+        
+    }
 }

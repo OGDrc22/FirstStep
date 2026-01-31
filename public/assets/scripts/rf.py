@@ -60,7 +60,8 @@ if answers is None:
         "interest_score": 0,
         "performance_group": "Unknown",
         "accuracy": "0.00",
-        "accuracy_per_category": {}
+        "accuracy_per_category": {},
+        "duration_per_category": {},
     }))
     sys.exit(0)
 
@@ -146,6 +147,32 @@ for cat, score in category_scores.items():
     else:
         category_accuracy[cat] = 0.0
 
+
+# Initialize
+category_time = {cat: [] for cat in categories}
+
+for i in range(total_questions):
+    q_num = data[i]["index"] + 1
+    duration = data[i].get("duration")
+    if duration is None:
+        continue  # skip if no duration
+
+    # Assign duration to category
+    for cat, rng in categories.items():
+        if q_num in rng:
+            category_time[cat].append(duration)
+            break  # a question belongs to only 1 category
+
+# Compute average time per category
+time_per_category = {}
+for cat, durations in category_time.items():
+    if len(durations) > 0:
+        time_per_category[cat] = sum(durations)
+    else:
+        time_per_category[cat] = 0.0
+
+
+
 # --- Predict track ---
 # predicted_track_encoded = model.predict(new_student)
 # predicted_track = le_track.inverse_transform(predicted_track_encoded)
@@ -178,6 +205,7 @@ print(json.dumps({
     "qData": data,
     "keys": keys,
     "accuracy_per_category": category_accuracy,
+    "duration_per_category": time_per_category,
     "interest_score": interest_score,
     "performance_group": performance_group,
     "accuracy": accuracy_2f
