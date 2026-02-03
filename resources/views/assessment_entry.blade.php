@@ -150,15 +150,15 @@
                     </div>
                     <div class="buttons">
                         <button type="button" class="btn prev-btn">Previous</button>
-                        <button type="button" class="btn next-btn">Next</button>
+                        <button type="button" class="btn next-btn" id="skill-next-btn">Next</button>
                     </div>
                 </div>
 
                 <!-- Mini Test -->
                 <div class="form-step" id="diagnostic-mini-test">
                     <div class="form-container">
-                        <label for="minitest">Mini Test</label>
-                        <input type="text" name="minitest" id="minitest">
+                        <h3>Mini Test</h3>
+                        <div class="mini-test-container" id="mini-test-container"></div>
                     </div>
                     <div class="buttons">
                         <button type="button" class="btn prev-btn">Previous</button>

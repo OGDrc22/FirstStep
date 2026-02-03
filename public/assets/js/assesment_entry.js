@@ -2,6 +2,119 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // showLoadingScreen();
 
+
+    function getInputs() {
+        const form = document.getElementById('assessment-form');
+
+        const formData = new FormData(form);
+
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+    }
+
+
+
+
+    const interestCards = document.querySelectorAll('.interest-card');
+    const interestInput = document.getElementById('interest-input');
+    const interestOther = document.getElementById('other-interest-input');
+    const addOtherInterestBtn = document.querySelector('.add-other-interest');
+    const otherInterestList = document.getElementById('other-interest');
+
+    let selectedInterest = [];
+    let otherInterest = [];
+
+    interestCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove 'selected' class from all cards
+            inputValue = this.querySelector('h3').dataset.value;
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                selectedInterest = selectedInterest.filter(item => item !== inputValue);
+            } else {
+                this.classList.add('selected');
+                selectedInterest.push(inputValue);
+            }
+
+            // if (interestOther.value.trim() !== '') {
+            //     if (!interestOther.value.trim() in selectedInterest) {
+            //         selectedInterest.push(interestOther.value.trim());
+            //     }
+            // }
+            interestInput.value = selectedInterest.join(', ');
+            console.log('Selected: ', selectedInterest);
+
+        });
+    });
+
+    addOtherInterestBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        const otherValue = interestOther.value.trim();
+        if (otherValue !== '' && !otherInterest.includes(otherValue)) {
+            otherInterest.push(otherValue);
+            const li = document.createElement('li');
+            li.textContent = otherValue;
+            li.title = 'Click to remove';
+            otherInterestList.appendChild(li);
+            interestOther.value = '';
+            console.log('Other Interests: ', otherInterest);
+        }
+    });
+
+    otherInterestList.addEventListener('click', function(event) {
+        if (event.target.tagName === 'LI') {
+            const valueToRemove = event.target.textContent;
+            otherInterest = otherInterest.filter(item => item !== valueToRemove);
+            otherInterestList.removeChild(event.target);
+            console.log('Other Interests: ', otherInterest);
+        }
+    });
+
+
+    const assessmentState = {
+        basicInfo: {},
+        interests: [],
+        skills: {}
+    };
+
+
+    function getAllInterest() {
+        const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
+        return allInterests;
+        // allInterestsData = allInterests.join(', ');
+        // interestInput.value = allInterestsData;
+        // interestInput.value = JSON.stringify(allInterestsData);
+        // console.log('Final Interests on Submit: ', interestInput.value);
+    }
+
+    // const form = document.getElementById('assessment-form');
+    // form.addEventListener('submit', function(event) {
+    //     event.preventDefault();
+    //     showLoadingScreen();
+    //     const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
+    //     allInterestsData = allInterests.join(', ');
+    //     interestInput.value = allInterestsData;
+    //     // interestInput.value = JSON.stringify(allInterestsData);
+    //     console.log('Final Interests on Submit: ', interestInput.value);
+    //     form.submit();
+    //});
+
+
+
+    function collectBasicInfo() {
+        const form = document.getElementById('assessment-form');
+        const formData = new FormData(form);
+
+        assessmentState.basicInfo = {
+            name: formData.get('name'),
+            email: formData.get('email')
+        };
+
+        assessmentState.interests = getAllInterest();
+    }
+
+
     const prevBtns = document.querySelectorAll('.prev-btn');
     const nextBtns = document.querySelectorAll('.next-btn');
     const progress = document.getElementById('progress')
@@ -9,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formSteps = this.documentElement.querySelectorAll('.form-step')
 
     const interest_next_btn = document.getElementById('interest-next-btn');
+    const skill_next_btn = document.getElementById('skill-next-btn')
 
     let formStepsNum = 0;
 
@@ -21,6 +135,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 allInterest = getAllInterest();
                 console.log(allInterest);
                 createLikertScale();
+            }
+
+            if (btn === skill_next_btn) {
+                collectBasicInfo();
+                collectSkillRatings();
+
+                if (!validatePreMiniTest()) return;
+                renderMiniTest(miniTestQuestions);
+                getInputs();
             }
         })
     })
@@ -124,6 +247,42 @@ document.addEventListener('DOMContentLoaded', function() {
         return SCALE_CONFIG[type];
     }
 
+    function collectSkillRatings() {
+    assessmentState.skills = {};
+
+    document
+        .querySelectorAll('input[type="radio"]:checked')
+        .forEach(input => {
+            const match = input.name.match(/skills\[(.*?)\]\[(.*?)\]/);
+            if (!match) return;
+
+            const interest = match[1];
+            const skill = match[2];
+
+            if (!assessmentState.skills[interest]) {
+                assessmentState.skills[interest] = {};
+            }
+
+            assessmentState.skills[interest][skill] = Number(input.value);
+        });
+    }
+
+    function validatePreMiniTest() {
+        if (!assessmentState.interests.length) {
+            alert('Please select at least one interest.');
+            return false;
+        }
+
+        if (!Object.keys(assessmentState.skills).length) {
+            alert('Please rate your skills.');
+            return false;
+        }
+
+        return true;
+    }
+
+
+
 
 
     function createLikertScale() {
@@ -197,82 +356,83 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    let miniTestQuestions = [];
 
-    const interestCards = document.querySelectorAll('.interest-card');
-    const interestInput = document.getElementById('interest-input');
-    const interestOther = document.getElementById('other-interest-input');
-    const addOtherInterestBtn = document.querySelector('.add-other-interest');
-    const otherInterestList = document.getElementById('other-interest');
+    miniTestQuestions = [
+        {
+            interest: 'coding',
+            question: 'What does a loop do?',
+            options: ['Repeat code', 'End program', 'Store data'],
+            correct: 0 // optional, backend can keep this
+        },
+        {
+            interest: 'ui_ux_designer',
+            question: 'What is wireframing mainly used for?',
+            options: [
+                'Visual layout planning',
+                'Writing code',
+                'Testing performance',
+                'Deploying apps'
+            ],
+            correct: 0
+        },
+        {
 
-    let selectedInterest = [];
-    let otherInterest = [];
+            interest: 'graphic_design',
+            question: 'Which principle relates to text readability?',
+            options: [
+                'Typography',
+                'Contrast',
+                'Balance',
+                'Proximity'
+            ],
+            correct: 0
+        }
+    ];
 
-    interestCards.forEach(card => {
-        card.addEventListener('click', function() {
-            // Remove 'selected' class from all cards
-            inputValue = this.querySelector('h3').dataset.value;
-            if (this.classList.contains('selected')) {
-                this.classList.remove('selected');
-                selectedInterest = selectedInterest.filter(item => item !== inputValue);
-            } else {
-                this.classList.add('selected');
-                selectedInterest.push(inputValue);
-            }
 
-            // if (interestOther.value.trim() !== '') {
-            //     if (!interestOther.value.trim() in selectedInterest) {
-            //         selectedInterest.push(interestOther.value.trim());
-            //     }
-            // }
-            interestInput.value = selectedInterest.join(', ');
-            console.log('Selected: ', selectedInterest);
 
+    function renderMiniTest(questions) {
+        const container = document.getElementById('mini-test-container');
+        container.innerHTML = '';
+
+        questions.forEach((q, idx) => {
+            const block = document.createElement('div');
+            block.classList.add('mini-question');
+
+            block.innerHTML = `
+                <p>${idx + 1}. ${q.question}</p>
+                ${q.options.map((opt, i) => `
+                    <label>
+                        <input type="radio"
+                            name="minitest[${idx}]"
+                            value="${i}"
+                            data-interest="${q.interest}"
+                            required>
+                        ${opt}
+                    </label>
+                `).join('<br>')}
+            `;
+
+            container.appendChild(block);
         });
-    });
-
-    addOtherInterestBtn.addEventListener('click', function(event) {
-        event.preventDefault();
-        const otherValue = interestOther.value.trim();
-        if (otherValue !== '' && !otherInterest.includes(otherValue)) {
-            otherInterest.push(otherValue);
-            const li = document.createElement('li');
-            li.textContent = otherValue;
-            li.title = 'Click to remove';
-            otherInterestList.appendChild(li);
-            interestOther.value = '';
-            console.log('Other Interests: ', otherInterest);
-        }
-    });
-
-    otherInterestList.addEventListener('click', function(event) {
-        if (event.target.tagName === 'LI') {
-            const valueToRemove = event.target.textContent;
-            otherInterest = otherInterest.filter(item => item !== valueToRemove);
-            otherInterestList.removeChild(event.target);
-            console.log('Other Interests: ', otherInterest);
-        }
-    });
-
-    function getAllInterest() {
-        const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
-        return allInterests;
-        // allInterestsData = allInterests.join(', ');
-        // interestInput.value = allInterestsData;
-        // interestInput.value = JSON.stringify(allInterestsData);
-        // console.log('Final Interests on Submit: ', interestInput.value);
     }
 
-    // const form = document.getElementById('assessment-form');
-    // form.addEventListener('submit', function(event) {
-    //     event.preventDefault();
-    //     showLoadingScreen();
-    //     const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
-    //     allInterestsData = allInterests.join(', ');
-    //     interestInput.value = allInterestsData;
-    //     // interestInput.value = JSON.stringify(allInterestsData);
-    //     console.log('Final Interests on Submit: ', interestInput.value);
-    //     form.submit();
-    //});
+    function collectMiniTestAnswers() {
+        assessmentState.miniTest = [];
+
+        document
+            .querySelectorAll('input[name^="minitest"]:checked')
+            .forEach(input => {
+                assessmentState.miniTest.push({
+                    interest: input.dataset.interest,
+                    selected: Number(input.value)
+                });
+            });
+    }
+
+
+
 
     function showLoadingScreen() {
         console.log('Showing loading screen...');
@@ -295,14 +455,15 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        showLoadingScreen();
-
         const formData = new FormData(form);
 
-        // for (const [key, value] of formData.entries()) {
-        //     console.log(key, value);
-        // }
+        showLoadingScreen();
 
+        collectBasicInfo();
+        collectSkillRatings();
+        collectMiniTestAnswers();
+
+        getInputs();
         try {
             const res = await fetch('/generate-exam', {
                 method: 'POST',
