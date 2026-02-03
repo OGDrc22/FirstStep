@@ -20,7 +20,7 @@ class AssessmentController extends Controller
             'email' => 'required|email',
         ]);
 
-        // dd ($request->all());
+        dd ($request->all());
 
         $requestData = $request->all();
         session(['requestData' => $requestData]);

@@ -2,33 +2,199 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // showLoadingScreen();
 
-    // let targetX = -1000;
-    // let targetY = -1000;
+    const prevBtns = document.querySelectorAll('.prev-btn');
+    const nextBtns = document.querySelectorAll('.next-btn');
+    const progress = document.getElementById('progress')
+    const progressSteps = document.querySelectorAll('.progress-step')
+    const formSteps = this.documentElement.querySelectorAll('.form-step')
 
-    // // Current is where the glow currently is
-    // let currentX = -1000;
-    // let currentY = -1000;
+    const interest_next_btn = document.getElementById('interest-next-btn');
 
-    // window.addEventListener('mousemove', (e) => {
-    // targetX = e.clientX;
-    // targetY = e.clientY;
-    // });
+    let formStepsNum = 0;
 
-    // function animate() {
-    // // The '0.1' is the speed/delay. 
-    // // Lower = slower/more trail. Higher = snappier.
-    // currentX += (targetX - currentX) * 0.1;
-    // currentY += (targetY - currentY) * 0.1;
+    nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formStepsNum++;
+            updateFormSteps();
+            updateProgressStep();
+            if (btn === interest_next_btn) {
+                allInterest = getAllInterest();
+                console.log(allInterest);
+                createLikertScale();
+            }
+        })
+    })
 
-    // document.body.style.setProperty('--mouse-x', `${currentX}px`);
-    // document.body.style.setProperty('--mouse-y', `${currentY}px`);
+    prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formStepsNum--;
+            updateFormSteps();
+            updateProgressStep();
+        })
+    })
 
-    // requestAnimationFrame(animate);
-    // }
 
-    // // Start the loop
-    // animate();
+    function updateFormSteps() {
+        formSteps.forEach(formStep => {
+            if (formStep.classList.contains('active')) {
+                formStep.classList.remove('active')
+            }
+        })
+        if (formSteps[formStepsNum]) {
+            formSteps[formStepsNum].classList.add('active');
+        }
+    }
 
+    function updateProgressStep() {
+        progressSteps.forEach((progressStep, idx) => {
+            if (idx < formStepsNum + 1) {
+                progressStep.classList.add('active');
+            } else {
+                progressStep.classList.remove('active')
+            }
+
+            const progressActive = document.querySelectorAll('.progress-step.active');
+
+            progress.style.width = (progressActive.length -1) / (progressSteps.length -1) * 100 + '%';
+        })
+    }
+
+    const interestSkillMap = {
+        coding: ['Programming Logic', 'Syntax', 'Problem Solving'],
+        game_development: ['Game Mechanics', 'Physics Logic', 'Problem Solving'],
+        software_mobile_dev: ['App Architecture', 'Tool Familiarity', 'Debugging'],
+        cybersec_hacking: ['Security Awareness', 'Threat Analysis', 'Ethical Hacking Basics'],
+        networking: ['Network Fundamentals', 'Troubleshooting', 'Protocol Knowledge'],
+        building_robots: ['Hardware Logic', 'Sensors & Actuators', 'Problem Solving'],
+        data_analytics: ['Data Interpretation', 'Statistics', 'Tool Familiarity'],
+        ui_ux_designer: ['User Research', 'Wireframing', 'Visual Design'],
+        videographer: ['Camera Operation', 'Storytelling', 'Editing Workflow'],
+        editor: ['Timeline Control', 'Pacing', 'Storytelling'],
+        graphic_design: ['Typography', 'Layout Composition', 'Visual Communication'],
+        ai_ml: ['Algorithmic Thinking', 'Data Understanding' ,'Model Interpretation']
+    };
+
+
+    const genericSkillSet = [
+        'Basic Knowledge',
+        'Practical Experience',
+        'Problem Solving',
+        'Tool Familiarity'
+    ];
+
+    function getRandomItems(array, count) {
+        const shuffled = [...array].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    }
+
+
+    function getSkillsForInterest(interest) {
+        const skills = interestSkillMap[interest] || genericSkillSet;
+
+        // Unknown / Other interest
+        return getRandomItems(skills, 2);
+    }
+
+
+    const SCALE_CONFIG = {
+        default: {
+            labels: ['Novice', 'Beginner', 'Intermediate', 'Advanced', 'Expert'],
+            values: [1, 2, 3, 4, 5]
+        },
+        exposure: {
+            labels: [
+                'No Exposure',
+                'Heard Of',
+                'Basic Understanding',
+                'Can Explain',
+                'Applied in Practice'
+            ],
+            values: [1, 2, 3, 4, 5]
+        }
+    };
+
+    const INTEREST_SCALE_TYPE = {
+        ai_ml: 'exposure',
+        data_analytics: 'exposure'
+        // everything else defaults to skill-based
+    };
+
+    function getScaleForInterest(interest) {
+        const type = INTEREST_SCALE_TYPE[interest] || 'default';
+        return SCALE_CONFIG[type];
+    }
+
+
+
+    function createLikertScale() {
+        const container = document.getElementById('likert-container');
+        container.innerHTML = ''; // reset
+
+        const allInterests = getAllInterest();
+
+        allInterests.forEach(interest => {
+            const skills = getSkillsForInterest(interest);
+
+
+            const likrt_interest = document.createElement('div');
+            likrt_interest.classList.add('likert-interest');
+            container.appendChild(likrt_interest);
+
+
+            const scaleHint = document.createElement('small');
+            scaleHint.className = 'scale-hint';
+
+            scaleHint.textContent =
+                INTEREST_SCALE_TYPE[interest] === 'exposure'
+                    ? 'Scale based on familiarity and exposure'
+                    : 'Scale based on skill level';
+
+            likrt_interest.appendChild(scaleHint);
+
+
+            // Interest title
+            const title = document.createElement('h4');
+            title.textContent = interest.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                likrt_interest.appendChild(title);
+
+
+            skills.forEach(skill => {
+                const skillRow = document.createElement('div');
+                skillRow.className = 'likert-row';
+
+                const label = document.createElement('label');
+                label.textContent = `${skill}`;
+                skillRow.appendChild(label);
+
+                const scale = document.createElement('div');
+                scale.className = 'likert-scale';
+
+                
+                const scaleConfig = getScaleForInterest(interest);
+
+                scaleConfig.values.forEach((value, index) => {
+                    const radioId = `${interest}-${skill}-${value}`.replace(/\s+/g, '-');
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `skills[${interest}][${skill}]`;
+                    input.value = value;
+                    input.id = radioId;
+                    input.required = true;
+
+                    const radioLabel = document.createElement('label');
+                    radioLabel.setAttribute('for', radioId);
+                    radioLabel.textContent = scaleConfig.labels[index];
+
+                    scale.appendChild(input);
+                    scale.appendChild(radioLabel);
+                });
+
+                skillRow.appendChild(scale);
+                likrt_interest.appendChild(skillRow);
+            });
+        });
+    }
 
 
 
@@ -87,6 +253,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    function getAllInterest() {
+        const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
+        return allInterests;
+        // allInterestsData = allInterests.join(', ');
+        // interestInput.value = allInterestsData;
+        // interestInput.value = JSON.stringify(allInterestsData);
+        // console.log('Final Interests on Submit: ', interestInput.value);
+    }
 
     // const form = document.getElementById('assessment-form');
     // form.addEventListener('submit', function(event) {
@@ -113,105 +287,79 @@ document.addEventListener('DOMContentLoaded', function() {
         // }, 500);
     }
 
-const loadingScreen = document.getElementById('loading-screen');
-const statusText = loadingScreen.querySelector('p');
-const form = document.getElementById('assessment-form');
-
-// form.addEventListener('submit', function (e) {
-//     e.preventDefault();
-
-//     showLoadingScreen();
-
-//     const formData = new FormData(form);
-
-//     fetch('/generate-exam', {
-//         method: 'POST',
-//         headers: {
-//             'X-CSRF-TOKEN': document
-//                 .querySelector('meta[name="csrf-token"]')
-//                 .content
-//         },
-//         body: formData
-//     }).then(res => {
-//         if (!res.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return res.json();
-//     }).then(data => {
-//         console.log('Exam generation started:', data)
-        
-//         if (data.status === 'started') {
-//             startPolling();
-//         } else {
-//             throw new Error('Failed to start exam generation');
-//         }
-//     }).catch(error => {
-//         console.error('Error starting exam generation:', error);
-//         statusText.textContent = 'An error occurred while starting exam generation. Please try again.';
-//     });
-// });
+    const loadingScreen = document.getElementById('loading-screen');
+    const statusText = loadingScreen.querySelector('p');
+    const form = document.getElementById('assessment-form')
 
 
-form.addEventListener('submit', async function (e) {
-    e.preventDefault();
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-    showLoadingScreen();
+        showLoadingScreen();
 
-    const formData = new FormData(form);
+        const formData = new FormData(form);
 
-    try {
-        const res = await fetch('/generate-exam', {
-            method: 'POST',
-            credentials: 'same-origin', // ⭐ THIS FIXES AUTH
-            headers: {
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .content
-            },
-            body: formData
-        });
+        // for (const [key, value] of formData.entries()) {
+        //     console.log(key, value);
+        // }
 
-        const data = await res.json();
-        console.log('Generate exam response:', data);
+        try {
+            const res = await fetch('/generate-exam', {
+                method: 'POST',
+                credentials: 'same-origin', // ⭐ THIS FIXES AUTH
+                headers: {
+                    'X-CSRF-TOKEN': document
+                        .querySelector('meta[name="csrf-token"]')
+                        .content
+                },
+                body: formData
+            });
 
-        if (!data.job_id) {
-            throw new Error('Job ID not returned from server');
+            const text = await res.text();
+            console.log(text);
+
+
+            const data = await res.json();
+            console.log('Generate exam response:', data);
+
+            if (!data.job_id) {
+                throw new Error('Job ID not returned from server');
+            }
+
+            startPolling(data.job_id);
+
+        } catch (err) {
+            console.error('Error starting exam generation:', err);
+            alert('Error', err);
         }
+    });
 
-        startPolling(data.job_id);
 
-    } catch (err) {
-        console.error('Error starting exam generation:', err);
-        alert('Error', err);
+    function startPolling(jobId) {
+        const interval = setInterval(() => {
+        fetch(`/exam/status/${jobId}`)
+            .then(res => res.json())
+            .then(job => {
+                if (job.status == null || job.message == null) {
+                    statusText.textContent = "Getting Ready..."
+                } else if (job.status === 'null' || job.message === 'null') {
+                    statusText.textContent = "Getting Ready..."
+                }
+                statusText.textContent = job.message + " " + job.progress + "%";
+                console.log('Polling job status:', job.message || job.status);
+                if (job.status === 'done') {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.location.href = `/show-exam/${job.id}`;
+                    }, 500)
+                }
+                if (job.status === 'failed') {
+                    clearInterval(interval);
+                            statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
+                }
+            });
+        }, 2000);
     }
-});
-
-
-function startPolling(jobId) {
-    const interval = setInterval(() => {
-    fetch(`/exam/status/${jobId}`)
-        .then(res => res.json())
-        .then(job => {
-            if (job.status == null || job.message == null) {
-                statusText.textContent = "Getting Ready..."
-            } else if (job.status === 'null' || job.message === 'null') {
-                statusText.textContent = "Getting Ready..."
-            }
-            statusText.textContent = job.message + " " + job.progress + "%";
-            console.log('Polling job status:', job.message || job.status);
-            if (job.status === 'done') {
-                clearInterval(interval);
-                setTimeout(() => {
-                    window.location.href = `/show-exam/${job.id}`;
-                }, 500)
-            }
-            if (job.status === 'failed') {
-                clearInterval(interval);
-                        statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
-            }
-        });
-    }, 2000);
-}
 
 
 

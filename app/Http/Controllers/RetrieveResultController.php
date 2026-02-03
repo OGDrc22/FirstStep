@@ -145,6 +145,7 @@ class RetrieveResultController extends Controller
             }
 
 
+            $tracks = ['', '', '', ''];
             $scorePerTrack = [];
 
             foreach (['IT', 'CE', 'CS', 'MMA'] as $track) {
@@ -159,10 +160,17 @@ class RetrieveResultController extends Controller
             }
 
 
-            $recommendedTrack = collect($scorePerTrack)
+            $recommended = collect($scorePerTrack)
                 ->sortDesc()
                 ->keys()
                 ->first();
+
+            $recommendedTrack = match ($recommended) {
+                'IT' => 'Information Technology',
+                'CE' => 'Computer Engineering',
+                'CS' => 'Computer Science',
+                'MMA' => 'Multimedia Arts',
+            };
 
 
 

@@ -6,11 +6,13 @@
     --bg-color-alt: #E0E0E0;
     --bg-color-dark: #171718;
 
-    
+
     --grid-size: 30px;
     --base-grid-color: rgba(255, 255, 255, 0.08);
     --grid-strength: 1px;
     --glow-color: rgba(52, 152, 219, 0.6);
+
+    --light-gray: #bbbbbb;
 }
 
 
@@ -122,17 +124,125 @@ body::after {
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
 }
+
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+/* ----General Design */
+.buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    width: 100%;
+}
+.btn {
+    display: block;
+    width: 50%;
+    text-align: center;
+    background-color: var(--primary-color);
+    border-radius: 8px;
+    color: var(--bg-color);
+}
+.ml-50 {
+    margin-left: auto;
 }
 
 
 
 
 
+
+form {
+    background-color: var(--bg-color-alt);
+    padding: 16px;
+    margin: 24px 16%;
+}
+
+
+
+/* ProgressBar */
+.progressbar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    counter-reset: step;
+    margin: 24px 32px;
+}
+
+.progressbar::before, .progress {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    background-color: var(--light-gray);
+}
+
+.progress-step {
+    width: 32px;
+    aspect-ratio: 1/1;
+    background-color: var(--light-gray);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.progress-step.active {
+    background-color: var(--primary-color);
+}
+
+.progress-step::before {
+    counter-increment: step;
+    content: counter(step);
+}
+.progress-step.active::before {
+    color: var(--bg-color);
+}
+
+.progress-step::after {
+    content: attr(data-title);
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    width: max-content;
+}
+
+.progress {
+    background-color: var(--primary-color);
+    width: 0%;
+    transition: 0.3s ease-in-out;
+}
+
+
+/* Form Step */
+.form-step {
+    display: none;
+    margin-top: 24px;
+}
+
+.form-step.active {
+    display: block;
+}
+
+.forms-data-collection {
+    display: flex;
+    flex-direction: row;
+}
+
+
 .interest-selection {
-    margin-inline: 20%;
+    /* margin-inline: 20%; */
     padding: 16px;
 }
 
@@ -252,11 +362,12 @@ body::after {
     border-radius: 50%;
     position: relative;
     box-shadow: 0 0 30px 4px rgba(0, 0, 0, 0.5) inset,
-      0 5px 12px rgba(0, 0, 0, 0.15);
+        0 5px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
-  }
-  .loader:before,
-  .loader:after {
+}
+
+.loader:before,
+.loader:after {
     content: "";
     position: absolute;
     width: 100%;
@@ -266,17 +377,74 @@ body::after {
     left: 0;
     background-color: #fff;
     animation: wave 5s linear infinite;
-  }
-  .loader:before {
+}
+
+.loader:before {
     border-radius: 30%;
     background: rgba(255, 255, 255, 0.4);
     animation: wave 5s linear infinite;
-  }
-  @keyframes wave {
+}
+
+@keyframes wave {
     0% {
-      transform: rotate(0);
+        transform: rotate(0);
     }
+
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
+
+
+
+
+
+
+
+#diagnostic-skill-test {
+    width: 100%;
+}
+
+
+.labels {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--bg-color);
+    margin-bottom: 4px;
+}
+
+.labels .skill-text {
+    flex: 1;
+}
+
+.labels .scale-text {
+    flex: 3;
+    display: flex;
+}
+
+.labels .scale-text label {
+    flex: 1;
+}
+
+
+.likert-interest {
+    background-color: var(--bg-color);
+    margin-bottom: 4px;
+    padding: 16px;
+}
+
+.likert-row {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+}
+.likert-row label {
+    flex: 1;
+}
+
+.likert-scale {
+    flex: 3;
+    display: flex;
+    gap: 12px;
+}
