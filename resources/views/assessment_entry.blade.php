@@ -41,6 +41,9 @@
                 <div class="progress-step" data-title="Mini Test"></div>
             </div>
 
+            
+            <input type="hidden" name="minitest" id="minitest-input">
+
             <!-- Steps -->
             <div class="forms-data-collection">
                 <div class="form-step active">
@@ -158,7 +161,8 @@
                 <div class="form-step" id="diagnostic-mini-test">
                     <div class="form-container">
                         <h3>Mini Test</h3>
-                        <div class="mini-test-container" id="mini-test-container"></div>
+                        <div class="mini-test-container" id="mini-test-container">
+                        </div>
                     </div>
                     <div class="buttons">
                         <button type="button" class="btn prev-btn">Previous</button>

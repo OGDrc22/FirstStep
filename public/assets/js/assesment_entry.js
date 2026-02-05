@@ -48,10 +48,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    function normalizeInterest(value) {
+        return value.trim().toLowerCase();
+    }
+
     addOtherInterestBtn.addEventListener('click', function(event) {
         event.preventDefault();
         const otherValue = interestOther.value.trim();
-        if (otherValue !== '' && !otherInterest.includes(otherValue)) {
+        const otherNormalized = normalizeInterest(otherValue);
+        const selectedNormalized = selectedInterest.map(normalizeInterest);
+        const otherListNormalized = otherInterest.map(normalizeInterest);
+
+        if (
+            otherValue !== '' &&
+            !otherListNormalized.includes(otherNormalized) &&
+            !selectedNormalized.includes(otherNormalized)
+        ) {
             otherInterest.push(otherValue);
             const li = document.createElement('li');
             li.textContent = otherValue;
@@ -78,30 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
         skills: {}
     };
 
-
-    function getAllInterest() {
-        const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
-        return allInterests;
-        // allInterestsData = allInterests.join(', ');
-        // interestInput.value = allInterestsData;
-        // interestInput.value = JSON.stringify(allInterestsData);
-        // console.log('Final Interests on Submit: ', interestInput.value);
-    }
-
-    // const form = document.getElementById('assessment-form');
-    // form.addEventListener('submit', function(event) {
-    //     event.preventDefault();
-    //     showLoadingScreen();
-    //     const allInterests = [...new Set([...selectedInterest, ...otherInterest])];
-    //     allInterestsData = allInterests.join(', ');
-    //     interestInput.value = allInterestsData;
-    //     // interestInput.value = JSON.stringify(allInterestsData);
-    //     console.log('Final Interests on Submit: ', interestInput.value);
-    //     form.submit();
-    //});
-
-
-
     function collectBasicInfo() {
         const form = document.getElementById('assessment-form');
         const formData = new FormData(form);
@@ -113,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         assessmentState.interests = getAllInterest();
     }
+
 
 
     const prevBtns = document.querySelectorAll('.prev-btn');
@@ -142,7 +131,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 collectSkillRatings();
 
                 if (!validatePreMiniTest()) return;
-                renderMiniTest(miniTestQuestions);
+                const interest = getAllInterest()
+                const question = generateMiniTestQuestions(interest);
+                renderMiniTest(question);
                 getInputs();
             }
         })
@@ -284,6 +275,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+    function getAllInterest() {
+        // Prefer selectedInterest values when duplicates exist (case-insensitive).
+        const merged = [...selectedInterest, ...otherInterest];
+        const seen = new Map();
+        merged.forEach(item => {
+            const key = normalizeInterest(item);
+            if (!seen.has(key)) {
+                seen.set(key, item);
+            }
+        });
+        return Array.from(seen.values());
+        // allInterestsData = allInterests.join(', ');
+        // interestInput.value = allInterestsData;
+        // interestInput.value = JSON.stringify(allInterestsData);
+        // console.log('Final Interests on Submit: ', interestInput.value);
+    }
+
 
     function createLikertScale() {
         const container = document.getElementById('likert-container');
@@ -314,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Interest title
             const title = document.createElement('h4');
             title.textContent = interest.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-                likrt_interest.appendChild(title);
+            likrt_interest.appendChild(title);
 
 
             skills.forEach(skill => {
@@ -390,6 +398,76 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
+    let genericMiniTest = [];
+
+    genericMiniTest = [
+        {
+            question: 'How do you usually approach learning a new technical skill?',
+            options: [
+                'I wait for formal instruction',
+                'I follow tutorials step-by-step',
+                'I experiment and practice',
+                'I research and build projects'
+            ]
+        },
+        {
+            question: 'When facing a problem you don’t understand, what do you do first?',
+            options: [
+                'Skip it',
+                'Ask for help immediately',
+                'Search for information',
+                'Break it into smaller parts'
+            ]
+        }
+    ];
+
+
+    function collectMiniTestAnswers() {
+        assessmentState.miniTest = [];
+
+        document
+            .querySelectorAll('#mini-test-container input[type="radio"]:checked')
+            .forEach(input => {
+                assessmentState.miniTest.push({
+                    interest: input.dataset.interest,
+                    question_id: input.dataset.questionId,
+                    selected: Number(input.value)
+                });
+                console.log("interest: " + input.dataset.interest,
+                "selected: " + Number(input.value))
+            });
+
+    }
+
+
+
+    function generateMiniTestQuestions(interests) {
+        const selected = [];
+
+        interests.forEach(interest => {
+            // Try to find a matching question
+            const match = miniTestQuestions.find(q => q.interest === interest);
+
+            if (match) {
+                selected.push(match);
+            } else {
+                // 👇 OTHER INTEREST → generic question
+                const generic = genericMiniTest[
+                    Math.floor(Math.random() * genericMiniTest.length)
+                ];
+
+                selected.push({
+                    ...generic,
+                    interest: 'other',
+                    original_interest: interest
+                });
+            }
+        });
+
+        return selected;
+    }
+
+
 
 
     function renderMiniTest(questions) {
@@ -406,8 +484,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <label>
                         <input type="radio"
                             name="minitest[${idx}]"
-                            value="${i}"
+                            data-question-id="${q.id}"
                             data-interest="${q.interest}"
+                            value="${i}"
                             required>
                         ${opt}
                     </label>
@@ -416,19 +495,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             container.appendChild(block);
         });
-    }
-
-    function collectMiniTestAnswers() {
-        assessmentState.miniTest = [];
-
-        document
-            .querySelectorAll('input[name^="minitest"]:checked')
-            .forEach(input => {
-                assessmentState.miniTest.push({
-                    interest: input.dataset.interest,
-                    selected: Number(input.value)
-                });
-            });
     }
 
 
@@ -455,13 +521,21 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const formData = new FormData(form);
-
         showLoadingScreen();
 
         collectBasicInfo();
         collectSkillRatings();
+
         collectMiniTestAnswers();
+
+        // inject JSON into hidden input
+        document.getElementById('minitest-input').value =
+        JSON.stringify(assessmentState.miniTest);
+
+
+
+        const formData = new FormData(form);
+
 
         getInputs();
         try {

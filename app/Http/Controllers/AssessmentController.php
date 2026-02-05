@@ -20,10 +20,37 @@ class AssessmentController extends Controller
             'email' => 'required|email',
         ]);
 
-        dd ($request->all());
-
         $requestData = $request->all();
         session(['requestData' => $requestData]);
+
+
+        $miniTest = $request->minitest; // [ "0" ]
+
+        $score = 0;
+
+        foreach ($miniTest as $answer) {
+            if ($answer == 0) {
+                $score++;
+            }
+        }
+
+
+        session([
+            'miniTest' => [
+                'answers' => $miniTest,
+                'score'   => $score,
+                'total'   => count($miniTest),
+            ]
+        ]);
+
+        dd($miniTest, $score);
+
+        $interestWeight = match (true) {
+            $score >= 3 => 1.2,
+            $score == 2 => 1.0,
+            default     => 0.8,
+        };
+
 
         // Check if student exists
         $student = student_tb::firstOrCreate(
