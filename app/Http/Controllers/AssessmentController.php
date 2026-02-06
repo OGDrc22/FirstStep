@@ -52,7 +52,55 @@ class AssessmentController extends Controller
             : null;
 
 
-        dd($requestData, $miniTest, $answer, $score);
+        $miniTestSummary = [];
+
+        foreach ($miniTest as $answer) {
+            $miniTestSummary[] = [
+                'interest' => $answer['interest'],
+                'question_id' => $answer['question_id'],
+                'is_correct' => (
+                    $answer['correct'] !== null &&
+                    (int)$answer['selected'] === (int)$answer['correct']
+                )
+            ];
+        }
+
+        $interestSignals = [];
+
+        foreach ($miniTestSummary as $item) {
+            $key = $item['interest'];
+
+            if (!isset($interestSignals[$key])) {
+                $interestSignals[$key] = [
+                    'mini_test_correct' => 0,
+                    'mini_test_total' => 0
+                ];
+            }
+
+            if ($item['is_correct'] !== null) {
+                $interestSignals[$key]['mini_test_total']++;
+                if ($item['is_correct']) {
+                    $interestSignals[$key]['mini_test_correct']++;
+                }
+            }
+        }
+
+        $payloadInterests = [];
+
+        foreach ($interestSignals as $interest => $mini) {
+            $payloadInterests[] = [
+                'interest' => $interest,
+                'skills' => $request->skills[$interest] ?? null,
+                'mini_test' => [
+                    'correct' => $mini['mini_test_correct'],
+                    'total'   => $mini['mini_test_total'],
+                ],
+                'type' => $interest === 'other' ? 'generic' : 'known'
+            ];
+        }
+
+
+        // dd($interestSignals, $miniTestSummary, $payloadInterests);
 
         // Check if student exists
         $student = student_tb::firstOrCreate(
@@ -61,38 +109,12 @@ class AssessmentController extends Controller
         );
 
         // Log the student in
-        Auth::guard('web')->login($student);
-
-
-        $payload = [
-            'user' => [
-                'name' => $request->name,
-                'email' => $request->email,
-            ],
-
-            'interests' => $interests,
-
-            'self_ratings' => $request->skills,
-
-            'mini_test' => [
-                'answers' => collect($miniTest)
-                    ->reject(fn ($a) => $a['interest'] === 'other')
-                    ->values()
-                    ->toArray(),
-
-                'score' => session('miniTest.score'),
-                'total' => session('miniTest.total'),
-            ],
-
-            'other_interest_context' => $otherContext,
-        ];
-
-        
+        Auth::guard('web')->login($student);        
 
         try {
             $job = ExamJob::create([
                 'student_id' => $student->id,
-                'payload' => $payload,
+                'payload' => $payloadInterests,
                 'status' => 'pending',
             ]);
     
@@ -158,6 +180,7 @@ class AssessmentController extends Controller
         }
 
         $questions = $job->output;
+        // dd($questions);
 
         
         if (!is_array($questions)) {
@@ -166,13 +189,14 @@ class AssessmentController extends Controller
         
         $keys = [];
 
-        foreach ($questions as $qSet) {
-            $keys[] = $qSet[2];
+        foreach ($questions['questions'] as $qSet) {
+            $keys[] = $qSet['answer'];
         }
 
         session(['answer_keys' => $keys]);
 
-        // dd($keys, $data);
+
+        // dd($keys, $questions);
 
         // OPTIONAL: cleanup after loading
         // unlink($file);

@@ -686,10 +686,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: formData
             });
 
-            const text = await res.text();
-            console.log(text);
-
-
             const data = await res.json();
             console.log('Generate exam response:', data);
 
@@ -711,13 +707,12 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(`/exam/status/${jobId}`)
                 .then(res => res.json())
                 .then(job => {
-                    if (job.status == null || job.message == null) {
+                    if (job.status === "pending") {
                         statusText.textContent = "Getting Ready..."
-                    } else if (job.status === 'null' || job.message === 'null') {
-                        statusText.textContent = "Getting Ready..."
+                    } else {
+                        statusText.textContent = job.message + " " + job.progress + "%";
                     }
-                    statusText.textContent = job.message + " " + job.progress + "%";
-                    console.log('Polling job status:', job.message || job.status);
+                    console.log('Polling job status:', job.status);
                     if (job.status === 'done') {
                         clearInterval(interval);
                         setTimeout(() => {

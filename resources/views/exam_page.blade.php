@@ -33,25 +33,22 @@
                     <div class="questions">
                         <input type="hidden" name="questionData" id="questionData">
                                 <input type="hidden" name="questionText" id="questionText">
-                        @foreach ($data['data'] as $q)
+                        @foreach ($data['data']['questions'] as $q)
                             <div class="question-card" data-index="{{ $loop->index }}">
-                                <h3 class="question">{{ $loop->index + 1 }}. {{ $q[0] }}</h3>
+                                <h3 class="question">{{ $loop->index + 1 }}. {{ $q['question'] }}</h3>
                                 <ul class="choices-holder">
-                                    @foreach ($q[1] as $choises)
-                                        @php
-                                            $parts = preg_split('/\.\s*/', $choises, 2);
-                                            $letter = isset($parts[0]) ? trim($parts[0]) : '';
-                                            $text = isset($parts[1]) ? trim($parts[1]) : '';
-                                        @endphp
+                                    @foreach ($q['choices'] as $letter => $text)
                                         <li class="choices">
                                             <label>
-                                                <input class="radio" type="radio" name="answer[{{ $loop->parent->index }}]" value="{{ $letter }}"> {{ $letter }}. {{ $text }}
+                                                <input class="radio" type="radio" name="answer[{{ $loop->parent->index }}]" value="{{ $letter }}">
+                                                {{ $letter }}. {{ $text }}
                                             </label>
                                         </li>                         
                                     @endforeach
                                 </ul>
                             </div>
                         @endforeach
+
                     </div>
 
                     <div id="controls">
@@ -68,7 +65,7 @@
         <div class="right">
             <h3>Question Navigator</h3>
             <div class="question-navigator">
-                @foreach ($data['data'] as $q)
+                @foreach ($data['data']['questions'] as $q)
                     <button type="button" class="nav-q-btn" data-index="{{ $loop->index }}">{{ $loop->index + 1 }} Question</button>
                 @endforeach
             </div>

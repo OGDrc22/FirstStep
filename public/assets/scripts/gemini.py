@@ -173,17 +173,46 @@ def main():
     time.sleep(div3)
     
     payload_ = row['payload']
+
     if isinstance(payload_, str):
-        payload_ = json.loads(payload_) 
+        payload_ = json.loads(payload_)
 
-    update_job(
-        'processing',
-        message="Reading your inputs.",
-        progress=40
-    )    
-    time.sleep(div3)
+    # Debug once (remove later)
+    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+        f.write(f"📦 Payload parsed: {json.dumps(payload_, indent=2)}\n")
 
-    interest = ", ".join(payload_.get("interest", []))
+    # Normalize interest
+        
+    if isinstance(payload_, dict):
+        interests = payload_.get("interest")
+
+    elif isinstance(payload_, list):
+        # Case 1: list of interests directly
+        if all(isinstance(i, str) for i in payload_):
+            interests = payload_
+
+        # Case 2: list of objects with "interest"
+        else:
+            interests = []
+            for item in payload_:
+                if isinstance(item, dict) and "interest" in item:
+                    val = item["interest"]
+                    if isinstance(val, list):
+                        interests.extend(val)
+                    else:
+                        interests.append(val)
+
+    else:
+        interests = None
+
+    if not interests:
+        raise Exception("Interest not found in payload")
+
+    if isinstance(interests, str):
+        interests = [interests]
+
+    interest_text = ", ".join(interests)
+
 
     update_job(
         'processing',
@@ -192,27 +221,52 @@ def main():
     )
     time.sleep(div3)
 
-    prompt = ("Generate 20 multiple-choice questions in NCAE format based on this interest: "  + interest + ", divided into 4 categories:\n"
-                "1-5: Information Technology\n"
-                "6-10: Computer Science\n"
-                "11-15: Computer Engineering\n"
-                "16-20: Multimedia Arts\n"
-                "Each question must follow this exact format:\n"
-                "Question <number>: <question text>\n"
-                "A. <option>\n"
-                "B. <option>\n"
-                "C. <option>\n"
-                "D. <option>\n"
-                "Key: <A/B/C/D>\n"
-                "Rules:\n"
-                "Provide exactly four choices per question.\n"
-                "The correct answer must be labeled using 'Key: <letter>'.\n"
-                "Do NOT include explanations.\n"
-                "Follow the arragement of category.\n"
-                "Keep the questions appropriate for senior high school / NCAE level."
-                )
+    prompt = f"""
+    You are an exam content generator.
+
+    Generate EXACTLY 20 multiple-choice questions in NCAE format
+    based on the following interests: {interest_text}
+
+    Divide the questions into these categories:
+    - Questions 1–5: Information Technology
+    - Questions 6–10: Computer Science
+    - Questions 11–15: Computer Engineering
+    - Questions 16–20: Multimedia Arts
+
+    STRICT OUTPUT RULES:
+    - Output ONLY valid JSON
+    - Do NOT include explanations
+    - Do NOT include extra text
+    - Follow the schema exactly
+
+    JSON SCHEMA:
+    {{
+    "questions": [
+        {{
+        "number": 1,
+        "category": "Information Technology",
+        "question": "Question text",
+        "choices": {{
+            "A": "choice",
+            "B": "choice",
+            "C": "choice",
+            "D": "choice"
+        }},
+        "answer": "A"
+        }}
+    ]
+    }}
+    """
+
 
     response = model.generate_content(prompt)
+
+    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+        f.write("\n🤖 RAW AI RESPONSE:\n")
+        f.write(str(response) + "\n")
+        f.write("🤖 response.text:\n")
+        f.write(str(response.text) + "\n")
+
 
     update_job(
         'processing',
@@ -234,8 +288,22 @@ def main():
         progress=100
     )
 
+    raw_text = response.text.strip()
 
-    parsed_questions = parse_questions(response.text)
+    # Remove ```json and ``` wrappers
+    if raw_text.startswith("```"):
+        raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+
+    # parsed_questions = parse_questions(response.text)
+    try:
+        parsed_questions = json.loads(raw_text)
+    except json.JSONDecodeError as e:
+        raise Exception(f"Failed to parse AI output: {e}")
+
+
+    with open(DEBUG_FILE, "a", encoding="UTF-8") as f:
+        f.write(json.dumps(parsed_questions, indent=2))
+        
 
     update_job(
         'done',

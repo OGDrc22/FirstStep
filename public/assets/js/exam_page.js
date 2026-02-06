@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
         duration: null,
     }));
 
+    if (questionData == null) {
+        console.log("Question data is!")
+    }
     let currentQuestionIndex = 0;
 
     let seconds = 0;
@@ -27,10 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const displayF = document.getElementById('timerDF');
 
     function onQuestionViewed(index) {
+        console.log('Viewing index:', index);
+        console.log('questionData length:', questionData.length);
+        console.log('questionData[index]:', questionData[index]);
+
+        if (!questionData[index]) {
+            console.error('❌ Invalid question index:', index);
+            return;
+        }
+
         if (questionData[index].startTime === null) {
             questionData[index].startTime = seconds;
         }
     }
+
 
     function onAnswerSelected(index, value) {
         questionData[index].answer = value;
