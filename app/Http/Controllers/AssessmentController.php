@@ -25,14 +25,22 @@ class AssessmentController extends Controller
 
 
         $miniTest = $request->minitest; // [ "0" ]
-
+        // $miniTest = json_decode($request->minitest, true) ?? [];
+        
         $score = 0;
 
         foreach ($miniTest as $answer) {
-            if ($answer == 0) {
+            dd($answer['correct']);
+            if (
+                isset($answer['correct']) &&
+                $answer['correct'] !== null &&
+                isset($answer['selected']) &&
+                (int)$answer['selected'] === (int)$answer['correct']
+            ) {
                 $score++;
             }
         }
+
 
 
         session([
@@ -43,7 +51,6 @@ class AssessmentController extends Controller
             ]
         ]);
 
-        dd($miniTest, $score);
 
         $interestWeight = match (true) {
             $score >= 3 => 1.2,

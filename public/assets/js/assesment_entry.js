@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // showLoadingScreen();
 
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let otherInterest = [];
 
     interestCards.forEach(card => {
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             // Remove 'selected' class from all cards
             inputValue = this.querySelector('h3').dataset.value;
             if (this.classList.contains('selected')) {
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return value.trim().toLowerCase();
     }
 
-    addOtherInterestBtn.addEventListener('click', function(event) {
+    addOtherInterestBtn.addEventListener('click', function (event) {
         event.preventDefault();
         const otherValue = interestOther.value.trim();
         const otherNormalized = normalizeInterest(otherValue);
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    otherInterestList.addEventListener('click', function(event) {
+    otherInterestList.addEventListener('click', function (event) {
         if (event.target.tagName === 'LI') {
             const valueToRemove = event.target.textContent;
             otherInterest = otherInterest.filter(item => item !== valueToRemove);
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const progressActive = document.querySelectorAll('.progress-step.active');
 
-            progress.style.width = (progressActive.length -1) / (progressSteps.length -1) * 100 + '%';
+            progress.style.width = (progressActive.length - 1) / (progressSteps.length - 1) * 100 + '%';
         })
     }
 
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
         videographer: ['Camera Operation', 'Storytelling', 'Editing Workflow'],
         editor: ['Timeline Control', 'Pacing', 'Storytelling'],
         graphic_design: ['Typography', 'Layout Composition', 'Visual Communication'],
-        ai_ml: ['Algorithmic Thinking', 'Data Understanding' ,'Model Interpretation']
+        ai_ml: ['Algorithmic Thinking', 'Data Understanding', 'Model Interpretation']
     };
 
 
@@ -195,6 +195,191 @@ document.addEventListener('DOMContentLoaded', function() {
         'Problem Solving',
         'Tool Familiarity'
     ];
+
+
+    let miniTestQuestions = [];
+
+    miniTestQuestions = [
+        {
+            interest: 'coding',
+            question: 'What does a loop do?',
+            options: ['Repeat code', 'End program', 'Store data', 'Debug errors'],
+            correct: 0
+        },
+        {
+            interest: 'game_development',
+            question: 'What is a "Game Engine" primarily used for?',
+            options: [
+                'Playing music in the background',
+                'Providing a framework to build and render games',
+                'Lowering the price of games',
+                'Cleaning the computer hardware'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'software_mobile_dev',
+            question: 'Which of these allows an app to run on both iOS and Android using one codebase?',
+            options: [
+                'Native Development',
+                'Cross-platform Framework',
+                'Binary Translation',
+                'Cloud Storage'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'cybersec_hacking',
+            question: 'What is the main purpose of "Encryption"?',
+            options: [
+                'To make the internet faster',
+                'To delete suspicious files',
+                'To secure data by making it unreadable to unauthorized users',
+                'To bypass hardware firewalls'
+            ],
+            correct: 2
+        },
+        {
+            interest: 'networking',
+            question: 'What does a Router do in a network?',
+            options: [
+                'It stores all the website passwords',
+                'It directs data packets between different networks',
+                'It increases the physical screen resolution',
+                'It acts as the main power supply'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'building_robots',
+            question: 'Which component acts as the "muscles" of a robot to create movement?',
+            options: [
+                'Sensors',
+                'Microcontrollers',
+                'Actuators/Servos',
+                'Batteries'
+            ],
+            correct: 2
+        },
+        {
+            interest: 'data_analytics',
+            question: 'What is the primary goal of Data Visualization?',
+            options: [
+                'To make data look pretty but unreadable',
+                'To help identify patterns, trends, and outliers',
+                'To hide errors in the dataset',
+                'To increase the storage size of a file'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'ui_ux_designer',
+            question: 'What is wireframing mainly used for?',
+            options: [
+                'Visual layout planning',
+                'Writing code',
+                'Testing performance',
+                'Deploying apps'
+            ],
+            correct: 0
+        },
+        {
+            interest: 'videographer',
+            question: 'What does "FPS" (Frames Per Second) affect in a video?',
+            options: [
+                'The brightness of the image',
+                'The smoothness of motion',
+                'The volume of the audio',
+                'The file name'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'editor',
+            question: 'In video editing, what is "Color Grading"?',
+            options: [
+                'Fixing the sound levels',
+                'The process of enhancing or altering the color of a motion picture',
+                'The speed at which the video exports',
+                'Organizing clips in alphabetical order'
+            ],
+            correct: 1
+        },
+        {
+            interest: 'graphic_design',
+            question: 'Which principle relates to text readability?',
+            options: [
+                'Typography',
+                'Contrast',
+                'Balance',
+                'Proximity'
+            ],
+            correct: 0
+        },
+        {
+            interest: 'ai_ml',
+            question: 'What is "Machine Learning"?',
+            options: [
+                'Building a computer from scratch',
+                'Giving computers the ability to learn from data without explicit programming',
+                'A way to make robots move faster',
+                'Repairing broken hard drives'
+            ],
+            correct: 1
+        }
+    ];
+
+    let genericMiniTest = [];
+
+    genericMiniTest = [
+        {
+            question: 'How do you usually approach learning a new technical skill?',
+            options: [
+                'I wait for formal instruction',
+                'I follow tutorials step-by-step',
+                'I experiment and practice',
+                'I research and build projects'
+            ]
+        },
+        {
+            question: 'When facing a problem you don’t understand, what do you do first?',
+            options: [
+                'Skip it',
+                'Ask for help immediately',
+                'Search for information',
+                'Break it into smaller parts'
+            ]
+        },
+        {
+            question: 'What kind of work environment do you prefer?',
+            options: [
+                'Working alone on deep tasks',
+                'Collaborating in a fast-paced team',
+                'Leading and organizing projects',
+                'Creative brainstorming sessions'
+            ]
+        },
+        {
+            question: 'Which part of a project is most satisfying to you?',
+            options: [
+                'The initial planning and logic',
+                'Designing how it looks and feels',
+                'Solving the technical bugs',
+                'Seeing the final finished product'
+            ]
+        },
+        {
+            question: 'How do you handle repetitive tasks?',
+            options: [
+                'I do them manually and carefully',
+                'I try to find a way to automate them',
+                'I delegate them to others',
+                'I prefer to avoid them entirely'
+            ]
+        }
+    ];
+
+
 
     function getRandomItems(array, count) {
         const shuffled = [...array].sort(() => 0.5 - Math.random());
@@ -239,23 +424,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function collectSkillRatings() {
-    assessmentState.skills = {};
+        assessmentState.skills = {};
 
-    document
-        .querySelectorAll('input[type="radio"]:checked')
-        .forEach(input => {
-            const match = input.name.match(/skills\[(.*?)\]\[(.*?)\]/);
-            if (!match) return;
+        document
+            .querySelectorAll('input[type="radio"]:checked')
+            .forEach(input => {
+                const match = input.name.match(/skills\[(.*?)\]\[(.*?)\]/);
+                if (!match) return;
 
-            const interest = match[1];
-            const skill = match[2];
+                const interest = match[1];
+                const skill = match[2];
 
-            if (!assessmentState.skills[interest]) {
-                assessmentState.skills[interest] = {};
-            }
+                if (!assessmentState.skills[interest]) {
+                    assessmentState.skills[interest] = {};
+                }
 
-            assessmentState.skills[interest][skill] = Number(input.value);
-        });
+                assessmentState.skills[interest][skill] = Number(input.value);
+            });
     }
 
     function validatePreMiniTest() {
@@ -336,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const scale = document.createElement('div');
                 scale.className = 'likert-scale';
 
-                
+
                 const scaleConfig = getScaleForInterest(interest);
 
                 scaleConfig.values.forEach((value, index) => {
@@ -364,63 +549,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    let miniTestQuestions = [];
-
-    miniTestQuestions = [
-        {
-            interest: 'coding',
-            question: 'What does a loop do?',
-            options: ['Repeat code', 'End program', 'Store data'],
-            correct: 0 // optional, backend can keep this
-        },
-        {
-            interest: 'ui_ux_designer',
-            question: 'What is wireframing mainly used for?',
-            options: [
-                'Visual layout planning',
-                'Writing code',
-                'Testing performance',
-                'Deploying apps'
-            ],
-            correct: 0
-        },
-        {
-
-            interest: 'graphic_design',
-            question: 'Which principle relates to text readability?',
-            options: [
-                'Typography',
-                'Contrast',
-                'Balance',
-                'Proximity'
-            ],
-            correct: 0
-        }
-    ];
-
-    let genericMiniTest = [];
-
-    genericMiniTest = [
-        {
-            question: 'How do you usually approach learning a new technical skill?',
-            options: [
-                'I wait for formal instruction',
-                'I follow tutorials step-by-step',
-                'I experiment and practice',
-                'I research and build projects'
-            ]
-        },
-        {
-            question: 'When facing a problem you don’t understand, what do you do first?',
-            options: [
-                'Skip it',
-                'Ask for help immediately',
-                'Search for information',
-                'Break it into smaller parts'
-            ]
-        }
-    ];
-
 
     function collectMiniTestAnswers() {
         assessmentState.miniTest = [];
@@ -431,10 +559,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 assessmentState.miniTest.push({
                     interest: input.dataset.interest,
                     question_id: input.dataset.questionId,
-                    selected: Number(input.value)
+                    selected: Number(input.value),
+                    correct: input.dataset.correct === '' ? null : Number(input.dataset.correct)
                 });
                 console.log("interest: " + input.dataset.interest,
-                "selected: " + Number(input.value))
+                    "selected: " + Number(input.value))
             });
 
     }
@@ -443,13 +572,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function generateMiniTestQuestions(interests) {
         const selected = [];
+        const correctAns = [];
 
         interests.forEach(interest => {
             // Try to find a matching question
             const match = miniTestQuestions.find(q => q.interest === interest);
 
             if (match) {
-                selected.push(match);
+                selected.push({...match, id: `${interest}-core`});
             } else {
                 // 👇 OTHER INTEREST → generic question
                 const generic = genericMiniTest[
@@ -485,7 +615,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="radio"
                             name="minitest[${idx}]"
                             data-question-id="${q.id}"
-                            data-interest="${q.interest}"
+                            data-interest="${q.interest}",
+                            data-correct="${q.correct ?? ''}",
                             value="${i}"
                             required>
                         ${opt}
@@ -530,7 +661,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // inject JSON into hidden input
         document.getElementById('minitest-input').value =
-        JSON.stringify(assessmentState.miniTest);
+            JSON.stringify(assessmentState.miniTest);
 
 
 
@@ -572,27 +703,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function startPolling(jobId) {
         const interval = setInterval(() => {
-        fetch(`/exam/status/${jobId}`)
-            .then(res => res.json())
-            .then(job => {
-                if (job.status == null || job.message == null) {
-                    statusText.textContent = "Getting Ready..."
-                } else if (job.status === 'null' || job.message === 'null') {
-                    statusText.textContent = "Getting Ready..."
-                }
-                statusText.textContent = job.message + " " + job.progress + "%";
-                console.log('Polling job status:', job.message || job.status);
-                if (job.status === 'done') {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        window.location.href = `/show-exam/${job.id}`;
-                    }, 500)
-                }
-                if (job.status === 'failed') {
-                    clearInterval(interval);
-                            statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
-                }
-            });
+            fetch(`/exam/status/${jobId}`)
+                .then(res => res.json())
+                .then(job => {
+                    if (job.status == null || job.message == null) {
+                        statusText.textContent = "Getting Ready..."
+                    } else if (job.status === 'null' || job.message === 'null') {
+                        statusText.textContent = "Getting Ready..."
+                    }
+                    statusText.textContent = job.message + " " + job.progress + "%";
+                    console.log('Polling job status:', job.message || job.status);
+                    if (job.status === 'done') {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            window.location.href = `/show-exam/${job.id}`;
+                        }, 500)
+                    }
+                    if (job.status === 'failed') {
+                        clearInterval(interval);
+                        statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
+                    }
+                });
         }, 2000);
     }
 
