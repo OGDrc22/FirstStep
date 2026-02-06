@@ -570,16 +570,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
+
     function generateMiniTestQuestions(interests) {
         const selected = [];
-        const correctAns = [];
-
         interests.forEach(interest => {
             // Try to find a matching question
             const match = miniTestQuestions.find(q => q.interest === interest);
 
             if (match) {
-                selected.push({...match, id: `${interest}-core`});
+                selected.push({
+                    ...match,
+                    question_id: `${interest}`});
             } else {
                 // 👇 OTHER INTEREST → generic question
                 const generic = genericMiniTest[
@@ -589,14 +591,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 selected.push({
                     ...generic,
                     interest: 'other',
-                    original_interest: interest
+                    original_interest: interest,
+                    question_id: 'generic',
+                    correct: null
                 });
             }
         });
 
         return selected;
     }
-
 
 
 
@@ -613,10 +616,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${q.options.map((opt, i) => `
                     <label>
                         <input type="radio"
-                            name="minitest[${idx}]"
-                            data-question-id="${q.id}"
-                            data-interest="${q.interest}",
-                            data-correct="${q.correct ?? ''}",
+                            name="minitest_answers[${idx}]"
+                            data-interest="${q.interest}"
+                            data-question-id="${q.question_id}"
+                            data-correct="${q.correct ?? ''}"
                             value="${i}"
                             required>
                         ${opt}
@@ -625,6 +628,8 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
 
             container.appendChild(block);
+            console.log('Rendering:', q.question_id);
+
         });
     }
 

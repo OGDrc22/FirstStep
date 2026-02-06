@@ -42,7 +42,7 @@
             </div>
 
             
-            <input type="hidden" name="minitest" id="minitest-input">
+            <input type="hidden" name="minitest_json" id="minitest-input">
 
             <!-- Steps -->
             <div class="forms-data-collection">

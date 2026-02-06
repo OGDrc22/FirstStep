@@ -24,13 +24,11 @@ class AssessmentController extends Controller
         session(['requestData' => $requestData]);
 
 
-        $miniTest = $request->minitest; // [ "0" ]
-        // $miniTest = json_decode($request->minitest, true) ?? [];
-        
+        // $miniTest = $request->minitest; // [ "0" ]
+        $miniTest = json_decode($request->minitest_json, true) ?? [];
         $score = 0;
 
         foreach ($miniTest as $answer) {
-            dd($answer['correct']);
             if (
                 isset($answer['correct']) &&
                 $answer['correct'] !== null &&
@@ -41,23 +39,20 @@ class AssessmentController extends Controller
             }
         }
 
+        
+        $otherMiniTest = collect($miniTest)->firstWhere('interest', 'other');
+        
+        $rawInterests = array_map('trim', explode(',', $request->input('interest', '')));
+
+        // remove "other"
+        $interests = array_values(array_filter($rawInterests, fn ($i) => $i !== 'other'));
+
+        $otherContext = $otherMiniTest
+            ? 'User selected an additional unspecified interest and answered a general aptitude question.'
+            : null;
 
 
-        session([
-            'miniTest' => [
-                'answers' => $miniTest,
-                'score'   => $score,
-                'total'   => count($miniTest),
-            ]
-        ]);
-
-
-        $interestWeight = match (true) {
-            $score >= 3 => 1.2,
-            $score == 2 => 1.0,
-            default     => 0.8,
-        };
-
+        dd($requestData, $miniTest, $answer, $score);
 
         // Check if student exists
         $student = student_tb::firstOrCreate(
@@ -68,14 +63,36 @@ class AssessmentController extends Controller
         // Log the student in
         Auth::guard('web')->login($student);
 
+
+        $payload = [
+            'user' => [
+                'name' => $request->name,
+                'email' => $request->email,
+            ],
+
+            'interests' => $interests,
+
+            'self_ratings' => $request->skills,
+
+            'mini_test' => [
+                'answers' => collect($miniTest)
+                    ->reject(fn ($a) => $a['interest'] === 'other')
+                    ->values()
+                    ->toArray(),
+
+                'score' => session('miniTest.score'),
+                'total' => session('miniTest.total'),
+            ],
+
+            'other_interest_context' => $otherContext,
+        ];
+
         
 
         try {
             $job = ExamJob::create([
                 'student_id' => $student->id,
-                'payload' => [
-                    'interest' => explode(',', $request->input('interest', '')),
-                ],
+                'payload' => $payload,
                 'status' => 'pending',
             ]);
     
