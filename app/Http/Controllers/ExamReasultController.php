@@ -19,9 +19,11 @@ class ExamReasultController extends Controller
         // dd("hit");
         $studentAnswer = $request->input('answer');
         $keyAns = session('answer_keys');
-        $questionData = json_decode($request->input('questionData'), true);
+        $exam_qd = json_decode($request->input('questionData'), true);
 
-        // dd($studentAnswer, $keyAns, $questionData);
+        // dd($exam_qd);
+
+        // dd($studentAnswer, $keyAns, $exam_qd);
         // Get the student from session / "logged in" from Assessment Entry
         $student = Auth::guard('web')->user();
 
@@ -39,23 +41,24 @@ class ExamReasultController extends Controller
         // dd($job, $assessmentPayload);
 
 
-        $qData = [];
+        $questions = [];
         
-        foreach ($questionData as $i => $q) {
-            $qData[$i] = $q['questionText'];
+        foreach ($exam_qd as $i => $q) {
+            $questions[$i] = $q['questionText'];
         }
 
-        // dd($qData);
+        // dd($questions);
 
 
         $totalQuestions = count($keyAns);
         $correct = 0;
 
         foreach ($studentAnswer as $i => $ans) {
-            if (isset($keyAns[$i]) && (int)$ans === (int)$keyAns[$i]) {
+            if (isset($keyAns[$i]) && $ans === $keyAns[$i]) {
                 $correct++;
             }
         }
+        // dd($studentAnswer, $keyAns, $correct);
 
         $accuracy = $totalQuestions > 0
             ? $correct / $totalQuestions
@@ -66,7 +69,7 @@ class ExamReasultController extends Controller
 
         $acc_per_category = [];
 
-        foreach ($questionData as $i => $q) {
+        foreach ($exam_qd as $i => $q) {
             $cat = $q['category'] ?? 'unknown';
 
             if (!isset($acc_per_category[$cat])) {
@@ -85,10 +88,11 @@ class ExamReasultController extends Controller
 
         $duration_per_category = [];
 
-        foreach ($questionData as $q) {
+        foreach ($exam_qd as $q) {
             $cat = $q['category'] ?? 'unknown';
             $dur = $q['duration'] ?? 0;
 
+            // dd($cat, $dur);
             $duration_per_category[$cat] =
                 ($duration_per_category[$cat] ?? 0) + $dur;
         }
@@ -97,6 +101,19 @@ class ExamReasultController extends Controller
         foreach ($acc_per_category as &$c) {
             $c = $c['total'] > 0 ? $c['correct'] / $c['total'] : 0;
         }
+
+
+    
+        $questionsData = [];
+        foreach ($exam_qd as $i => $ex) {
+            $questionsData[] = [
+                'answer' => $ex['answer'],
+                'duration' => $ex['duration'] ?? null, 
+                'keyAns' => $keyAns[$i] ?? null
+                ];
+        }
+
+        // dd($questionsData, $exam_qd, $keyAns);
 
 
         // Prepare payload for Python script
@@ -149,10 +166,10 @@ class ExamReasultController extends Controller
             return back()->withErrors('Exam evaluation failed. Please try again.');
         }
 
-        // dd($questionData);
+        // dd($exam_qd);
 
         // $correct
-        foreach ($questionData as $index => &$qItem) {
+        foreach ($exam_qd as $index => &$qItem) {
             // dd($keyAns[$index], $qItem['answer']);
             if (isset($keyAns[$index])) {
                 $qItem['keyAnswer'] = $keyAns[$index];
@@ -160,7 +177,7 @@ class ExamReasultController extends Controller
             }
         }
 
-        // dd($questionData, $keyAns);
+        // dd($exam_qd, $keyAns);
         $predictedTrack = $resData['predicted_track'];
         $trackPercentage = $resData['track_percentage'];
 
@@ -169,8 +186,9 @@ class ExamReasultController extends Controller
         // dd($duration_per_category);
         // dd($accuracy);
 
+        // dd($keyAns);
         // Save results
-        DB::transaction(function () use ($student, $correct, $predictedTrack, $trackPercentage, $accuracy, $duration_per_category, $studentAnswer, $qData, $acc_per_category) {
+        DB::transaction(function () use ($student, $correct, $predictedTrack, $trackPercentage, $accuracy, $duration_per_category, $studentAnswer, $questions, $questionsData, $acc_per_category) {
             $student->examResults()->create([
                 'score' => $correct,
                 'predicted_track' => $predictedTrack,
@@ -179,17 +197,18 @@ class ExamReasultController extends Controller
                 'accuracy_per_category' => $acc_per_category,
                 'duration_per_category' => $duration_per_category,
                 'answers' => $studentAnswer,
-                'questions' => $qData,
+                'questionsData' => $questionsData,
+                'questions' => $questions,
             ]);
         });
 
-        // dd($acc_per_category);
+        dd($acc_per_category);
         $accuracy = $resData['sys_accuracy'] * 100 . "%";
 
-        return view('exam_result', compact('resData', 'qData', 'questionData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions'));
+        return view('exam_result', compact('resData', 'questions', 'questionsData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions', 'duration_per_category'));
         // return response()->json([
         //     'resData' => $resData,
-        //     'qData' => $qData,
+        //     'questions' => $questions,
         //     'keyAns' => $keyAns,
         //     'predictedTrack' => $predictedTrack,
         //     'trackPercentage' => $trackPercentage,

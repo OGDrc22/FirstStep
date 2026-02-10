@@ -40,20 +40,26 @@ class RetrieveResultController extends Controller
 
             // dd($examResult);
 
-            $qData = $examResult ? $examResult->questions : null;
+            $questions = $examResult ? $examResult->questions : null;
+            // dd($questions);
             // $keyAns = $examResult ? array_map(function($q) {
             //     return $q['correct_answer'];
-            // }, $qData ?? []) : null;
+            // }, $questions ?? []) : null;
             $username = $examResult ? $examResult->student->name : null;
             $predictedTrack = $examResult ? $examResult->predicted_track : null;
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
+            $acc_per_category = $examResult ? $examResult->accuracy_per_category : null;
+            $questionsData = $examResult['questionsData'];
+            // dd($keyAns, $examResult);
             // $accuracy = $examResult ? $examResult->accuracy : null;
             if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username', 'qData', 'predictedTrack', 'trackPercentage'));
+                return view('retrieve_result', compact('action', 'examResult', 'username', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'questionsData'));
             } else {
                 return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
             }
         } elseif ($action === 'all') {
+
+            // TODO Fix
             $action = $request->input('action');
             $request->validate([
                 'email' => 'required|email'
@@ -70,6 +76,7 @@ class RetrieveResultController extends Controller
                     ->withErrors(['email' => 'No exam results found for ' . $request->email]);
             }
 
+            // dd($examResult);
             
             // $username = "TRY";
 
@@ -191,14 +198,14 @@ class RetrieveResultController extends Controller
     public function getSpecificExam($id)
     {
         $examResult = ExamResult::with('student')->findOrFail($id);
-        $qData = $examResult ? $examResult->questions : null;
+        $questions = $examResult ? $examResult->questions : null;
         $predictedTrack = $examResult ? $examResult->predicted_track : null;
         $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
         
         $username = $examResult ? $examResult->student->name : null;
 
-        return view('retrieve_specific_result', compact('username', 'examResult', 'qData', 'predictedTrack', 'trackPercentage'));
+        return view('retrieve_specific_result', compact('username', 'examResult', 'questions', 'predictedTrack', 'trackPercentage'));
         
     }
 }
