@@ -68,28 +68,28 @@
                                         <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
                                     </td>
                                     <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['CE'] * 100 }}%</td>
+                                    <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
                                     </td>
                                     <td>{{ $trackPercentage['Computer Science'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['CS'] * 100 }}%</td>
+                                    <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
                                     </td>
                                     <td>{{ $trackPercentage['Information Technology'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['IT'] * 100 }}%</td>
+                                    <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
                                     </td>
                                     <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
-                                    <td>{{ $examResult['accuracy_per_category']['MMA'] * 100 }}%</td>
+                                    <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -114,18 +114,18 @@
         
             <h2>Question Review</h2>
 
-            @foreach ($qData as $index => $q)
+            @foreach ($questions as $index => $q)
                     <div class="question-review-card">
-                        <h4 class="question-review">{{ $q['questionText'] }}</h4>
+                        <h4 class="question-review">{{ $q }}</h4>
                         <p>Your Answer: 
-                            @if (isset($q['answer']))
-                                {{ $q['answer'] }}
+                            @if (isset($questionsData[$index]['answer']))
+                                {{ $questionsData[$index]['answer'] }}
                             @else
                                 No Answer
                             @endif
                         </p>
-                        <p>Correct Answer: {{ $q['keyAnswer'] }}</p>
-                        <p>Duration: {{ $q['duration'] }}s</p>
+                        <p>Correct Answer: {{ $questionsData[$index]['keyAns'] }}</p>
+                        <p>Duration: {{ $questionsData[$index]['duration'] }}s</p>
                     </div>
                 @endforeach
 

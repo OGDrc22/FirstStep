@@ -53,7 +53,7 @@
                                 </div>
                             </td>
                             <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                            <td>{{ $examResult['accuracy_per_category']['CE'] * 100 }}%</td>
+                            <td>{{ $accuracy_per_category['CE'] * 100 }}%</td>
                         </tr>
                         <tr>
                             <td>
@@ -110,7 +110,7 @@
 
     <h2>Question Review</h2>
 
-    @foreach ($qData as $index => $q)
+    @foreach ($questions as $index => $q)
         <div class="question-review-card">
             <h4 class="question-review">{{ $q['questionText'] }}</h4>
             <p>Your Answer:

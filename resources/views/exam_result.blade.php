@@ -15,18 +15,18 @@
         <div class="questions-review">
 
         <!-- Can be used as Answer Review -->
-            @foreach ($questionData as $index => $q)
+            @foreach ($questions as $index => $q)
                 <div class="question-review-card">
-                    <h4 class="question-review">{{ $q['questionText'] }}</h4>
+                    <h4 class="question-review">{{ $q }}</h4>
                     <p>Your Answer: 
-                        @if (isset($q['answer']))
-                            {{ $q['answer'] }}
+                        @if (isset($questionsData[$index]['answer']))
+                            {{  $questionsData[$index]['answer']  }}
                         @else
                             No Answer
                         @endif
                     </p>
-                    <p>Correct Answer: {{ $q['keyAnswer'] }}</p>
-                    <p>Duration: {{ $q['duration'] }}</p>
+                    <p>Correct Answer: {{ $questionsData[$index]['keyAns'] }}</p>
+                    <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
                 </div>
             @endforeach
         <h3>Recommended Track: {{ $predictedTrack }}</h3>
@@ -56,6 +56,7 @@
                                 <th>Category</th>
                                 <th>Track Percentage</th>
                                 <th>Accuracy</th>
+                                <th>Duration</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,6 +66,7 @@
                                 </td>
                                 <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
                                 <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
+                                <td>{{ $duration_per_category['Computer Engineering']}} s</td>
                             </tr>
                             <tr>
                                 <td>
@@ -72,6 +74,7 @@
                                 </td>
                                 <td>{{ $trackPercentage['Computer Science'] }}%</td>
                                 <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
+                                <td>{{ $duration_per_category['Computer Science']}} s</td>
                             </tr>
                             <tr>
                                 <td>
@@ -79,6 +82,7 @@
                                 </td>
                                 <td>{{ $trackPercentage['Information Technology'] }}%</td>
                                 <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
+                                <td>{{ $duration_per_category['Information Technology']}} s</td>
                             </tr>
                             <tr>
                                 <td>
@@ -86,6 +90,7 @@
                                 </td>
                                 <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
                                 <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
+                                <td>{{ $duration_per_category['Multimedia Arts']}} s</td>
                             </tr>
                         </tbody>
                     </table>
