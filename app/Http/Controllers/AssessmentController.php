@@ -10,10 +10,43 @@ use Illuminate\Support\Facades\Session;
 
 class AssessmentController extends Controller
 {
-    public function showAssessmentEntryForm() {
+    public function showAssessmentEntryForm()
+    {
         return view('assessment_entry');
     }
-    public function generateExam(Request $request)  {
+
+
+    private function scoreSkills(array $skills, string $scaleType): array
+    {
+        $MAX_LIKERT = 5;
+
+        $weight = match ($scaleType) {
+            'exposure' => 0.6,
+            default => 1.0, // skill_based
+        };
+
+        $normalized = [];
+        $sum = 0;
+        $count = 0;
+
+        foreach ($skills as $skill => $value) {
+            $score = ((int) $value / $MAX_LIKERT) * $weight;
+            $normalized[$skill] = round($score, 3);
+            $sum += $score;
+            $count++;
+        }
+
+        return [
+            'scale_type' => $scaleType,
+            'weight' => $weight,
+            'average_score' => $count ? round($sum / $count, 3) : null,
+            'skills' => $normalized
+        ];
+    }
+
+
+    public function generateExam(Request $request)
+    {
 
         $request->validate([
             'name' => 'required|string',
@@ -33,19 +66,19 @@ class AssessmentController extends Controller
                 isset($answer['correct']) &&
                 $answer['correct'] !== null &&
                 isset($answer['selected']) &&
-                (int)$answer['selected'] === (int)$answer['correct']
+                (int) $answer['selected'] === (int) $answer['correct']
             ) {
                 $score++;
             }
         }
 
-        
+
         $otherMiniTest = collect($miniTest)->firstWhere('interest', 'other');
-        
+
         $rawInterests = array_map('trim', explode(',', $request->input('interest', '')));
 
         // remove "other"
-        $interests = array_values(array_filter($rawInterests, fn ($i) => $i !== 'other'));
+        $interests = array_values(array_filter($rawInterests, fn($i) => $i !== 'other'));
 
         $otherContext = $otherMiniTest
             ? 'User selected an additional unspecified interest and answered a general aptitude question.'
@@ -60,7 +93,7 @@ class AssessmentController extends Controller
                 'question_id' => $answer['question_id'],
                 'is_correct' => (
                     $answer['correct'] !== null &&
-                    (int)$answer['selected'] === (int)$answer['correct']
+                    (int) $answer['selected'] === (int) $answer['correct']
                 )
             ];
         }
@@ -85,16 +118,31 @@ class AssessmentController extends Controller
             }
         }
 
-        $payloadInterests = [];
+        $scaleTypes = $request->input('scale_type', []);
 
+                    // Arrray       //Key        //Value
         foreach ($interestSignals as $interest => $mini) {
+
+            $rawSkills = $request->skills[$interest] ?? null;
+            $scaleType = $scaleTypes[$interest] ?? 'skill_based';
+
+            $skillScore = $rawSkills
+                ? $this->scoreSkills($rawSkills, $scaleType)
+                : null;
+
             $payloadInterests[] = [
                 'interest' => $interest,
-                'skills' => $request->skills[$interest] ?? null,
+
+                'skills' => $skillScore,
+
                 'mini_test' => [
                     'correct' => $mini['mini_test_correct'],
-                    'total'   => $mini['mini_test_total'],
+                    'total' => $mini['mini_test_total'],
+                    'accuracy' => $mini['mini_test_total']
+                        ? round($mini['mini_test_correct'] / $mini['mini_test_total'], 3)
+                        : null
                 ],
+
                 'type' => $interest === 'other' ? 'generic' : 'known'
             ];
         }
@@ -109,15 +157,16 @@ class AssessmentController extends Controller
         );
 
         // Log the student in
-        Auth::guard('web')->login($student);        
+        Auth::guard('web')->login($student);
 
         try {
             $job = ExamJob::create([
                 'student_id' => $student->id,
                 'payload' => $payloadInterests,
+                'rf_features' => $payloadInterests,
                 'status' => 'pending',
             ]);
-    
+
 
             // WINDOWS-SAFE background execution
             $pythonPath = 'C:\Users\admin\AppData\Local\Programs\Python\Python312\python.exe';
@@ -129,7 +178,7 @@ class AssessmentController extends Controller
                 $job->id,
             );
 
-            // ⬇️ RUN IN BACKGROUND (THIS IS CRITICAL)
+            // RUN IN BACKGROUND 
             pclose(popen($command, "r"));
             // $command = "\"$pythonPath\" \"$scriptPath\" {$job->id}";
             // exec($command);
@@ -148,29 +197,14 @@ class AssessmentController extends Controller
         }
     }
 
-    // public function examStatus() {
-    //     $file = storage_path('app/exam_' . session()->getId() . '.json');
-
-    //     if (file_exists($file)) {
-    //         $data = json_decode(file_get_contents($file), true);
-
-    //         return response()->json($data);  // returns current status
-    //     }
-
-    //     // file not created yet
-    //     return response()->json([
-    //         'status' => 'processing',
-    //         'message' => 'Exam generation is starting...'
-    //     ]);
-    // }
 
 
 
-
-    public function showExam(ExamJob $job){
+    public function showExam(ExamJob $job)
+    {
 
         $student = Auth::guard('web')->user();
-      
+
         if ($job->student_id !== $student->id) {
             abort(403, 'Unauthorized access to this exam.');
         }
@@ -182,11 +216,11 @@ class AssessmentController extends Controller
         $questions = $job->output;
         // dd($questions);
 
-        
+
         if (!is_array($questions)) {
             abort(500, 'Exam output is missing or invalid.');
         }
-        
+
         $keys = [];
 
         foreach ($questions['questions'] as $qSet) {
@@ -204,7 +238,8 @@ class AssessmentController extends Controller
         return view('exam_page', [
             'data' => [
                 'data' => $questions
-            ]
+            ],
+            'job' => $job
         ]);
     }
 

@@ -15,11 +15,13 @@ class ExamJob extends Model
         'status',
         'message',
         'error_message',
-        'progress'
+        'progress',
+        'rf_features'
     ];
 
     protected $casts = [
         'payload' => 'array',
         'output' => 'array',
+        'rf_features' => 'array',
     ];
 }

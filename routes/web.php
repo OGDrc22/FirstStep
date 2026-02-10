@@ -14,6 +14,7 @@ Route::get('/', function () {
 })->name('welcome');
 
 
+
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('asessment-entry');
 Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
 Route::post('/logout', [AssessmentController::class, 'logout'])->name('logout');
@@ -27,7 +28,7 @@ Route::middleware(['web'])->group(function () {
     // Route::get('/exam-status', [AssessmentController::class, 'examStatus'])->name('exam-status');
     
     Route::get('/show-exam/{job}', [AssessmentController::class, 'showExam'])
-    ->name('show-exam');
+    ->name('show-exam')->whereNumber('job');
 
     Route::get('/exam/status/{job}',  function (ExamJob $job) {
         return response()->json($job);
@@ -38,5 +39,8 @@ Route::middleware(['web'])->group(function () {
     
     // Protected route
     Route::post('/submit-exam', [ExamReasultController::class, 'submitExam'])
-        ->name('submit-exam');
+        ->name('submit.exam');
+    // Route::post('/submit-exam', function () {
+    //     dd("heellooo");;
+    // })->name('submit.exam');
 });

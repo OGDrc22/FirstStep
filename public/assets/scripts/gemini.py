@@ -181,10 +181,12 @@ def main():
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
         f.write(f"📦 Payload parsed: {json.dumps(payload_, indent=2)}\n")
 
-    # Normalize interest
-        
+    # Normalize interest 
     if isinstance(payload_, dict):
         interests = payload_.get("interest")
+
+        with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(interests, indent=2))
 
     elif isinstance(payload_, list):
         # Case 1: list of interests directly
@@ -214,6 +216,9 @@ def main():
     interest_text = ", ".join(interests)
 
 
+
+
+
     update_job(
         'processing',
         message="Generating questions...",
@@ -228,16 +233,17 @@ def main():
     based on the following interests: {interest_text}
 
     Divide the questions into these categories:
-    - Questions 1–5: Information Technology
-    - Questions 6–10: Computer Science
-    - Questions 11–15: Computer Engineering
-    - Questions 16–20: Multimedia Arts
+    - Information Technology
+    - Computer Science
+    - Computer Engineering
+    - Multimedia Arts
 
     STRICT OUTPUT RULES:
     - Output ONLY valid JSON
     - Do NOT include explanations
     - Do NOT include extra text
     - Follow the schema exactly
+    - Include category label for each queations
 
     JSON SCHEMA:
     {{
@@ -252,7 +258,8 @@ def main():
             "C": "choice",
             "D": "choice"
         }},
-        "answer": "A"
+        "answer": "A",
+        "category": "Category"
         }}
     ]
     }}

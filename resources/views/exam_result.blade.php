@@ -11,12 +11,11 @@
 
 <body>
     @if (isset($resData))
-        <h3>Score: {{ $resData['score'] }}</h3>
-        <h3>Total: {{ $resData['total'] }}</h3>
+        <h3>Score: {{ $correct }} / {{ $totalQuestions }}</h3>
         <div class="questions-review">
 
         <!-- Can be used as Answer Review -->
-            @foreach ($qData as $index => $q)
+            @foreach ($questionData as $index => $q)
                 <div class="question-review-card">
                     <h4 class="question-review">{{ $q['questionText'] }}</h4>
                     <p>Your Answer: 
@@ -65,28 +64,28 @@
                                     <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
                                 </td>
                                 <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['CE'] * 100 }}%</td>
+                                <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
                             </tr>
                             <tr>
                                 <td>
                                     <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
                                 </td>
                                 <td>{{ $trackPercentage['Computer Science'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['CS'] * 100 }}%</td>
+                                <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
                             </tr>
                             <tr>
                                 <td>
                                     <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
                                 </td>
                                 <td>{{ $trackPercentage['Information Technology'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['IT'] * 100 }}%</td>
+                                <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
                             </tr>
                             <tr>
                                 <td>
                                     <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
                                 </td>
                                 <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
-                                <td>{{ $resData['accuracy_per_category']['MMA'] * 100 }}%</td>
+                                <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
                             </tr>
                         </tbody>
                     </table>

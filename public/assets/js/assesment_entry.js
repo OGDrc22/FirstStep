@@ -807,6 +807,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             likrt_interest.appendChild(scaleHint);
 
+            const hidden_inp = document.createElement('input');
+            // hidden_inp.type = 'hidden';
+            hidden_inp.name = `scale_type[${interest}]`;
+            hidden_inp.value = INTEREST_SCALE_TYPE[interest] ?? 'skill_based';
+            likrt_interest.appendChild(hidden_inp);
+
+
 
             // Interest title
             const title = document.createElement('h4');
@@ -834,6 +841,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const input = document.createElement('input');
                     input.type = 'radio';
                     input.name = `skills[${interest}][${skill}]`;
+                    input.dataset = INTEREST_SCALE_TYPE[interest] ?? 'skill_based'
                     input.value = value;
                     input.id = radioId;
                     input.required = true;
@@ -1026,12 +1034,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: formData
             });
 
-            const data = await res.json();
+            const isJson = (res.headers.get('content-type') || '').includes('application/json');
+            const data = isJson ? await res.json() : await res.text();
+
+
             console.log('Generate exam response:', data);
 
-            if (!data.job_id) {
-                throw new Error('Job ID not returned from server');
-            }
 
             startPolling(data.job_id);
 

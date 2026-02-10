@@ -27,15 +27,26 @@
     <div class="main-container">
         <div class="left">
             <div id="timerD"></div>
-            <form action="{{ route('submit-exam') }}" method="POST" id="examForm">
+            <form action="{{ route('submit.exam') }}" method="POST" id="examForm">
                 @csrf
                 @if (isset($data))
                     <div class="questions">
+                        <input type="hidden" name="job_id" value="{{ $job->id }}">
+
                         <input type="hidden" name="questionData" id="questionData">
-                                <input type="hidden" name="questionText" id="questionText">
+                        <input type="hidden" name="questionText" id="questionText">
+                        <input type="hidden" name="category" id="try">
                         @foreach ($data['data']['questions'] as $q)
                             <div class="question-card" data-index="{{ $loop->index }}">
                                 <h3 class="question">{{ $loop->index + 1 }}. {{ $q['question'] }}</h3>
+                                <h3 class="text">{{ $q['category'] }}</h3>
+                                
+                                
+                                <input type="hidden"
+                                    data-category="category[{{ $loop->index }}]"
+                                    value="{{ $q['category'] }}" class="category-input">
+
+
                                 <ul class="choices-holder">
                                     @foreach ($q['choices'] as $letter => $text)
                                         <li class="choices">

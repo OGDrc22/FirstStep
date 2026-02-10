@@ -17,11 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
         startTime: null,
         endTime: null,
         duration: null,
+        category: qCard[index].querySelector(".text").innerText
     }));
 
     if (questionData == null) {
         console.log("Question data is!")
     }
+
+
     let currentQuestionIndex = 0;
 
     let seconds = 0;
@@ -263,11 +266,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById("examForm").addEventListener("submit", async function (e) {
         stopTimer();
+        // e.preventDefault();
         document.getElementById("questionData").value = JSON.stringify(questionData);
         const questionTexts = questionData.map(q => q.questionText);
         document.getElementById("questionText").value = JSON.stringify(questionTexts);
-
+        const qCat = questionData.map(q => q.category);
+        document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
+        console.log(questionData)
         
     });
 
