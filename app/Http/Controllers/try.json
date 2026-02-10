@@ -1,0 +1,23 @@
+[
+    {
+        "interest": "coding",
+        "skills": {
+            "Problem Solving": "4",
+            "Programming Logic": "4"
+        },
+        "mini_test": {
+            "correct": 1,
+            "total": 1
+        },
+        "type": "known"
+    },
+    {
+        "interest": "other",
+        "skills": null,
+        "mini_test": {
+            "correct": 0,
+            "total": 1
+        },
+        "type": "generic"
+    }
+]

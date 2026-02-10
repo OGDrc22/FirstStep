@@ -6,9 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import json, sys
 
+# df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
 df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
 
-X = df[['score_IT', 'score_CS', 'score_CE', 'score_MMA', 'accuracy_score', 'interest_score', 'performance_encoded']]
+X = df[['score_IT', 'score_CS', 'score_CE', 'score_MMA', 'accuracy_score', 'interest_score', 'performance_encoded', ]]
 y = df['track_encoded']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -34,6 +35,7 @@ except Exception as e:
 answers = payload["answers"]
 keys = payload["keys"]
 data = payload["questionsData"]
+
 total_questions = len(keys)
 
 has_err = False
@@ -47,6 +49,7 @@ if isinstance(answers, dict):
             continue
 
     answers = [temp.get(i, None) for i in range(total_questions)]
+    
 if answers is None:
     has_err = True
     print(json.dumps({
