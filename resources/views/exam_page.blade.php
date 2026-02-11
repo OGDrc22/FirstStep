@@ -52,6 +52,7 @@
                                         <li class="choices">
                                             <label>
                                                 <input class="radio" type="radio" name="answer[{{ $loop->parent->index }}]" value="{{ $letter }}">
+                                                <input class="ansText" type="hidden" name="answerText" value="{{ $text }}">
                                                 {{ $letter }}. {{ $text }}
                                             </label>
                                         </li>                         

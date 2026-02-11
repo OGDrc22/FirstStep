@@ -170,7 +170,7 @@
 
 
             <h3>....</h3>
-            <p>{{ $averageDuration['IT'] }}</p> -->
+            <p>{{ $averageDuration['Information Technology'] }}</p> -->
 
             <h3>Recommended track based on all exam attempt:</h3>
             <h4>{{ $recommendedTrack }}</h4>
@@ -199,10 +199,10 @@
                     {
                         label: 'Average Accuracy (%)',
                         data: [
-                            {{ $averageAcc['IT'] }},
-                            {{ $averageAcc['CE'] }},
-                            {{ $averageAcc['CS'] }},
-                            {{ $averageAcc['MMA'] }}
+                            {{ $averageAcc['Information Technology'] }},
+                            {{ $averageAcc['Computer Engineering'] }},
+                            {{ $averageAcc['Computer Science'] }},
+                            {{ $averageAcc['Multimedia Arts'] }}
                         ],
                         borderWidth: 2,
                         tension: 0.3,
@@ -211,10 +211,10 @@
                     {
                         label: 'Average Time Taken (sec)',
                         data: [
-                            {{ $averageDuration['IT'] }},
-                            {{ $averageDuration['CE'] }},
-                            {{ $averageDuration['CS'] }},
-                            {{ $averageDuration['MMA'] }}
+                            {{ $averageDuration['Information Technology'] }},
+                            {{ $averageDuration['Computer Engineering'] }},
+                            {{ $averageDuration['Computer Science'] }},
+                            {{ $averageDuration['Multimedia Arts'] }}
                         ],
                         borderWidth: 2,
                         tension: 0.3,

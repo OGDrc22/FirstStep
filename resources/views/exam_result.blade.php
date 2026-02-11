@@ -20,7 +20,7 @@
                     <h4 class="question-review">{{ $q }}</h4>
                     <p>Your Answer: 
                         @if (isset($questionsData[$index]['answer']))
-                            {{  $questionsData[$index]['answer']  }}
+                            {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
                         @else
                             No Answer
                         @endif

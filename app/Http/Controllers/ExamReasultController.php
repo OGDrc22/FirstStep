@@ -80,12 +80,17 @@ class ExamReasultController extends Controller
 
             if (
                 isset($studentAnswer[$i], $keyAns[$i]) &&
-                (int)$studentAnswer[$i] === (int)$keyAns[$i]
+                $studentAnswer[$i] === $keyAns[$i]
             ) {
                 $acc_per_category[$cat]['correct']++;
             }
         }
-
+        
+        //TODO FIX
+        foreach ($acc_per_category as &$c) {
+            $c = $c['total'] > 0 ? $c['correct'] / $c['total'] : 0;
+        }
+        
         $duration_per_category = [];
 
         foreach ($exam_qd as $q) {
@@ -98,9 +103,7 @@ class ExamReasultController extends Controller
         }
 
 
-        foreach ($acc_per_category as &$c) {
-            $c = $c['total'] > 0 ? $c['correct'] / $c['total'] : 0;
-        }
+        
 
 
     
@@ -202,7 +205,7 @@ class ExamReasultController extends Controller
             ]);
         });
 
-        dd($acc_per_category);
+        // dd($acc_per_category);
         $accuracy = $resData['sys_accuracy'] * 100 . "%";
 
         return view('exam_result', compact('resData', 'questions', 'questionsData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions', 'duration_per_category'));
