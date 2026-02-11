@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         index: index,
         questionText: qCard[index].querySelector('.question').innerText,
         keyAnswer: null,
-        answer: null,
+        answer: [],
         startTime: null,
         endTime: null,
         duration: null,
@@ -48,14 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    function onAnswerSelected(index, value) {
-        questionData[index].answer = value;
+    function onAnswerSelected(index, rvalue, textvalue) {
+        questionData[index].answer = [rvalue, textvalue];
         questionData[index].endTime = seconds;
 
         if (questionData[index].startTime !== null) {
             questionData[index].duration = questionData[index].endTime - questionData[index].startTime;
         }
-        console.log(`Answered Q${index}:`, questionData[index]);
+        // console.log(`Answered Q${index}:`, questionData[index]);
     }
 
 
@@ -111,6 +111,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!choiceLi) return;
             const radio = choiceLi.querySelector('.radio');
             if (!radio) return;
+            const textAns = choiceLi.querySelector('.ansText')
+            if (!textAns) return;
 
             // toggle active on siblings
             const siblingLis = card.querySelectorAll('.choices');
@@ -121,8 +123,8 @@ document.addEventListener('DOMContentLoaded', function() {
             radio.checked = true;
             answers[cardIndex] = radio.value;
 
-            onAnswerSelected(cardIndex, radio.value)
-            // debug
+            onAnswerSelected(cardIndex, radio.value, textAns.value)
+            // console.log(textAns.value)
             // console.log('Stored answer for', cardIndex, answers[cardIndex]);
             setCheck(cardIndex, answers[cardIndex])
             // recordAnswerTime(cardIndex);

@@ -59,7 +59,6 @@ class RetrieveResultController extends Controller
             }
         } elseif ($action === 'all') {
 
-            // TODO Fix
             $action = $request->input('action');
             $request->validate([
                 'email' => 'required|email'
@@ -113,10 +112,10 @@ class RetrieveResultController extends Controller
             // dd($averageAcc);
 
             $durationTotals = [
-                'IT' => 0,
-                'CE' => 0,
-                'CS' => 0,
-                'MMA' => 0,
+                'Information Technology' => 0,
+                'Computer Engineering' => 0,
+                'Computer Science' => 0,
+                'Multimedia Arts' => 0,
             ];
 
             $attemptCount = 0;
@@ -126,10 +125,10 @@ class RetrieveResultController extends Controller
 
 
             $trackTotals = [
-                'CE' => 0,
-                'IT' => 0,
-                'CS' => 0,
-                'MMA' => 0
+                'Information Technology' => 0,
+                'Computer Engineering' => 0,
+                'Computer Science' => 0,
+                'Multimedia Arts' => 0,
             ];
 
             // dd($examResult);
@@ -155,7 +154,8 @@ class RetrieveResultController extends Controller
             $tracks = ['', '', '', ''];
             $scorePerTrack = [];
 
-            foreach (['IT', 'CE', 'CS', 'MMA'] as $track) {
+            foreach ([
+                'Information Technology', 'Computer Engineering', 'Computer Science', 'Multimedia Arts'] as $track) {
                 $accuracy = $averageAcc[$track];               // e.g. 92
                 $time     = $averageDuration[$track];          // e.g. 55
 
@@ -167,17 +167,10 @@ class RetrieveResultController extends Controller
             }
 
 
-            $recommended = collect($scorePerTrack)
+            $recommendedTrack = collect($scorePerTrack)
                 ->sortDesc()
                 ->keys()
                 ->first();
-
-            $recommendedTrack = match ($recommended) {
-                'IT' => 'Information Technology',
-                'CE' => 'Computer Engineering',
-                'CS' => 'Computer Science',
-                'MMA' => 'Multimedia Arts',
-            };
 
 
 
@@ -201,11 +194,15 @@ class RetrieveResultController extends Controller
         $questions = $examResult ? $examResult->questions : null;
         $predictedTrack = $examResult ? $examResult->predicted_track : null;
         $trackPercentage = $examResult ? $examResult->track_percentage : null;
+        $acc_per_category = $examResult ? $examResult->accuracy_per_category : null;
+        $questionsData = $examResult['questionsData'];
 
         
         $username = $examResult ? $examResult->student->name : null;
 
-        return view('retrieve_specific_result', compact('username', 'examResult', 'questions', 'predictedTrack', 'trackPercentage'));
+        // dd($questionsData);
+
+        return view('retrieve_specific_result', compact('username', 'examResult', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'questionsData'));
         
     }
 }
