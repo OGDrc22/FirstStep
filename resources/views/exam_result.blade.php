@@ -25,7 +25,7 @@
                             No Answer
                         @endif
                     </p>
-                    <p>Correct Answer: {{ $questionsData[$index]['keyAns'] }}</p>
+                    <p>Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
                     <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
                 </div>
             @endforeach

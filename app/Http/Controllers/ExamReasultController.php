@@ -19,6 +19,7 @@ class ExamReasultController extends Controller
         // dd("hit");
         $studentAnswer = $request->input('answer');
         $keyAns = session('answer_keys');
+        $keyAnsText = session('answer_keys_text');
         $exam_qd = json_decode($request->input('questionData'), true);
 
         // dd($exam_qd);
@@ -86,7 +87,6 @@ class ExamReasultController extends Controller
             }
         }
         
-        //TODO FIX
         foreach ($acc_per_category as &$c) {
             $c = $c['total'] > 0 ? $c['correct'] / $c['total'] : 0;
         }
@@ -109,10 +109,11 @@ class ExamReasultController extends Controller
     
         $questionsData = [];
         foreach ($exam_qd as $i => $ex) {
+            // dd($ex['answer']);
             $questionsData[] = [
                 'answer' => $ex['answer'],
                 'duration' => $ex['duration'] ?? null, 
-                'keyAns' => $keyAns[$i] ?? null
+                'keyAns' => [$keyAns[$i] ?? null, $keyAnsText[$i] ?? null]
                 ];
         }
 
@@ -171,14 +172,6 @@ class ExamReasultController extends Controller
 
         // dd($exam_qd);
 
-        // $correct
-        foreach ($exam_qd as $index => &$qItem) {
-            // dd($keyAns[$index], $qItem['answer']);
-            if (isset($keyAns[$index])) {
-                $qItem['keyAnswer'] = $keyAns[$index];
-                // dd($qItem);
-            }
-        }
 
         // dd($exam_qd, $keyAns);
         $predictedTrack = $resData['predicted_track'];
@@ -191,7 +184,7 @@ class ExamReasultController extends Controller
 
         // dd($keyAns);
         // Save results
-        DB::transaction(function () use ($student, $correct, $predictedTrack, $trackPercentage, $accuracy, $duration_per_category, $studentAnswer, $questions, $questionsData, $acc_per_category) {
+        DB::transaction(function () use ($student, $correct, $predictedTrack, $trackPercentage, $accuracy, $duration_per_category, $questions, $questionsData, $acc_per_category) {
             $student->examResults()->create([
                 'score' => $correct,
                 'predicted_track' => $predictedTrack,
@@ -199,7 +192,6 @@ class ExamReasultController extends Controller
                 'accuracy' => $accuracy,
                 'accuracy_per_category' => $acc_per_category,
                 'duration_per_category' => $duration_per_category,
-                'answers' => $studentAnswer,
                 'questionsData' => $questionsData,
                 'questions' => $questions,
             ]);
@@ -208,7 +200,7 @@ class ExamReasultController extends Controller
         // dd($acc_per_category);
         $accuracy = $resData['sys_accuracy'] * 100 . "%";
 
-        return view('exam_result', compact('resData', 'questions', 'questionsData', 'keyAns', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions', 'duration_per_category'));
+        return view('exam_result', compact('resData', 'questions', 'questionsData', 'keyAns', 'keyAnsText', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions', 'duration_per_category'));
         // return response()->json([
         //     'resData' => $resData,
         //     'questions' => $questions,

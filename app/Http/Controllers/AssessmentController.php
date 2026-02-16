@@ -227,10 +227,19 @@ class AssessmentController extends Controller
             $keys[] = $qSet['answer'];
         }
 
+        $keysText = [];
+
+        foreach ($questions['questions'] as $i => $q) {
+            if (array_key_exists($q['answer'], $q['choices'])) {
+                $keysText[$i] = $q['choices'][$q['answer']];
+            }
+        }
+
         session(['answer_keys' => $keys]);
+        session(['answer_keys_text' => $keysText]);
 
 
-        // dd($keys, $questions);
+        // dd($keys, $keysText);
 
         // OPTIONAL: cleanup after loading
         // unlink($file);

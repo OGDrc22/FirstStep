@@ -87,9 +87,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getAnsweredIndexes() {
-        return questionData
-            .map((q, i) => q.answer !== null ? i : null)
-            .filter(i => i !== null);
+        return questionData.reduce((acc, q, i) => {
+            // Check if answer exists and isn't empty
+            if (q.answer && q.answer.length > 0) {
+                acc.push(i);
+            }
+            return acc;
+        }, []);
     }
 
     function updateNavButtonsStatus() {
@@ -97,7 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
         navBtn.forEach((li, i) => {
             if (answeredIndex.includes(i)) {
                 li.classList.add('q-done');
-                console.log("called")
             } else {
                 li.classList.remove('q-done');
             }
