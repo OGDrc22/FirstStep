@@ -113,15 +113,21 @@
     @foreach ($questions as $index => $q)
         <div class="question-review-card">
             <h4 class="question-review">{{ $q }}</h4>
-            <p>Your Answer:
+            @php
+                $studentAns = $questionsData[$index]['answer'][0] ?? null;
+                $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
+                $isCorrect = $studentAns === $correctAns;
+            @endphp
+            <p class="{{ $isCorrect ? 'bg-correct-a' : 'bg-danger-a' }} stdntAnswer">
+                Your Answer: 
                 @if (isset($questionsData[$index]['answer']))
-                    {{ $questionsData[$index]['answer'] }}
+                    {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
                 @else
                     No Answer
                 @endif
             </p>
-            <p>Correct Answer: {{ $questionsData[$index]['keyAns'] }}</p>
-            <p>Duration: {{ $questionsData[$index]['duration'] }}s</p>
+            <p class="bg-success-a correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
+            <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
         </div>
     @endforeach
     

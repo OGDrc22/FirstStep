@@ -85,3 +85,8 @@ body {
     display: flex;
     gap: 4px;
 }
+
+.stdntAnswer,
+.correctAnswer {
+    width: max-content;
+}

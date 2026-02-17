@@ -9,7 +9,17 @@ import json, sys
 # df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
 df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
 
-X = df[['score_IT', 'score_CS', 'score_CE', 'score_MMA', 'accuracy_score', 'interest_score', 'performance_encoded', ]]
+X = df[
+    [
+        'score_IT',
+        'score_CS',
+        'score_CE',
+        'score_MMA',
+        'accuracy_score',
+        'interest_score',
+        'performance_encoded'
+    ]
+]
 y = df['track_encoded']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -90,7 +100,9 @@ new_student = pd.DataFrame({
     "score_CE": [score_CE],
     "score_MMA": [score_MMA],
     "accuracy_score": [accuracy_score_student],
+
     "interest_score": [interest_score],
+    
     "performance_encoded": [performance_encoded]
 })
 
