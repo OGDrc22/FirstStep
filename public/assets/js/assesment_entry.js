@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let selectedInterest = [];
     let otherInterest = [];
+    let min = 60 * 3;
+    let timer = 0;
+    let timeInterval;
 
     interestCards.forEach(card => {
         card.addEventListener('click', function () {
@@ -32,9 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.classList.contains('selected')) {
                 this.classList.remove('selected');
                 selectedInterest = selectedInterest.filter(item => item !== inputValue);
+
+                timer -= min;
             } else {
                 this.classList.add('selected');
                 selectedInterest.push(inputValue);
+                
+                timer += min;
             }
 
             // if (interestOther.value.trim() !== '') {
@@ -43,7 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
             //     }
             // }
             interestInput.value = selectedInterest.join(', ');
-            console.log('Selected: ', selectedInterest);
+            console.log('Selected: ', selectedInterest, timer);
+            // countInterest = selectedInterest.length + otherInterest.length
+            // console.log('interest count', countInterest);
 
         });
     });
@@ -70,7 +79,9 @@ document.addEventListener('DOMContentLoaded', function () {
             li.title = 'Click to remove';
             otherInterestList.appendChild(li);
             interestOther.value = '';
-            console.log('Other Interests: ', otherInterest);
+
+            timer += min
+            console.log('Other Interests: ', otherInterest, timer);
         }
     });
 
@@ -79,7 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const valueToRemove = event.target.textContent;
             otherInterest = otherInterest.filter(item => item !== valueToRemove);
             otherInterestList.removeChild(event.target);
-            console.log('Other Interests: ', otherInterest);
+
+            timer -= min
+            console.log('Other Interests: ', otherInterest, timer);
         }
     });
 
@@ -101,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         assessmentState.interests = getAllInterest();
     }
-
-
 
     const prevBtns = document.querySelectorAll('.prev-btn');
     const nextBtns = document.querySelectorAll('.next-btn');
@@ -135,6 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
                 getInputs();
+                autoSubmit();
+                startCountDown();
+                document.getElementById('seconds').innerText = timer;
             }
         })
     })
@@ -881,9 +895,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
-
-
     function generateMiniTestQuestions(interests) {
         const selected = [];
 
@@ -951,7 +962,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
     function renderMiniTest(questions) {
         const container = document.getElementById('mini-test-container');
         container.innerHTML = '';
@@ -983,7 +993,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-
     function showLoadingScreen() {
         console.log('Showing loading screen...');
         const loadingScreen = document.getElementById('loading-screen');
@@ -997,14 +1006,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // }, 500);
     }
 
+
     const loadingScreen = document.getElementById('loading-screen');
     const statusText = loadingScreen.querySelector('p');
     const form = document.getElementById('assessment-form')
 
 
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
+    async function handleFormSubmit() {
         showLoadingScreen();
 
         collectBasicInfo();
@@ -1019,8 +1027,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         const formData = new FormData(form);
-
-
         getInputs();
         try {
             const res = await fetch('/generate-exam', {
@@ -1047,9 +1053,37 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error starting exam generation:', err);
             alert('Error', err);
         }
+    }
+    
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        handleFormSubmit();        
     });
 
+    function autoSubmit() {
+        if (timer > 0) {
+            setTimeout(() => {
+                console.log("Times up!")
+                handleFormSubmit()
+            }, timer * 1000);
+        }
+    }
 
+    function startCountDown() {
+        if (!timeInterval) {
+            timeInterval = setInterval(() => {
+                timer--
+                updateDisplayTime();
+            }, 1000)
+        }
+    }
+
+    function updateDisplayTime() {
+        const minutes = Math.floor(timer / 60);
+        const remainingSeconds = timer % 60;
+        document.getElementById('seconds').innerText = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    
     function startPolling(jobId) {
         const interval = setInterval(() => {
             fetch(`/exam/status/${jobId}`)

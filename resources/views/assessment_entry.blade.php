@@ -160,7 +160,10 @@
                 <!-- Mini Test -->
                 <div class="form-step" id="diagnostic-mini-test">
                     <div class="form-container">
-                        <h3>Mini Test</h3>
+                        <div class="inf">
+                            <h3>Mini Test</h3>
+                            <h3 id="timer-display">Submit in: <span id="seconds">0</span>s</h3>
+                        </div>
                         <div class="mini-test-container" id="mini-test-container">
                         </div>
                     </div>
