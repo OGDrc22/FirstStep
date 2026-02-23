@@ -49,9 +49,26 @@ body {
     border-radius: 0 8px 8px 0;
 }
 
+
+.result-container-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.results-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+}
+
 .pie-container {
     display: flex;
     justify-content: center;
+    flex: 1;
 }
 
 .chart {
@@ -89,4 +106,21 @@ body {
 .stdntAnswer,
 .correctAnswer {
     width: max-content;
+}
+
+table thead tr th {
+    padding: 8px 16px;
+    text-align: left;
+    width: 100%;
+}
+
+table tbody {
+    gap: 8px;
+}
+table tbody tr td {
+    padding: 8px 16px;
+}
+table tbody tr td div {
+    display: flex;
+    align-items: center;
 }

@@ -49,11 +49,12 @@ class RetrieveResultController extends Controller
             $predictedTrack = $examResult ? $examResult->predicted_track : null;
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
             $acc_per_category = $examResult ? $examResult->accuracy_per_category : null;
+            $avg_time_per_category = $examResult ? $examResult->duration_per_category : null;
             $questionsData = $examResult['questionsData'];
             // dd($keyAns, $examResult);
             // $accuracy = $examResult ? $examResult->accuracy : null;
             if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'questionsData'));
+                return view('retrieve_result', compact('action', 'examResult', 'username', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'avg_time_per_category', 'questionsData'));
             } else {
                 return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
             }

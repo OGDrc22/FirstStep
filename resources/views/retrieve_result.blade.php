@@ -32,69 +32,79 @@
 
     @if (isset($examResult))
         @if ($action === 'latest')
-            <h2>Exam Result for {{ $username }}</h2>
-            <h3>Score: {{ $examResult->score }}</h3>
-            <h3>Recommended Track: {{ $predictedTrack }}</h3>
-            <h3>Track Percentage:</h3>
+            <div class="result-container-info">
+                <div class="results-header">  
+                    <h2>Exam Result for {{ $username }}</h2>
+                    <p>Score: {{ $examResult->score }}</p>
+                    <p>Recommended Track: {{ $predictedTrack }}</p>
+                </div>  
 
-            <div class="pie-container">
-                <div class="chart">
-                    <figure class="pie-chart" style="background:
-                        conic-gradient(
-                            from 0deg,
-                            violet 0,
-                            violet calc({{ $trackPercentage['Computer Engineering'] }}%),
-                            yellow calc({{ $trackPercentage['Computer Engineering'] }}%),
-                            yellow calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
-                            blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
-                            blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
-                            lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
-                            lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}% + {{ $trackPercentage['Multimedia Arts'] }}%)
+                <div class="pie-container">
+                    <div class="chart-info">
+                        <div class="info">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Track Percentage</th>
+                                        <th>Accuracy</th>
+                                        <th>Average Time (seconds)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
+                                        </td>
+                                        <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
+                                        <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
+                                        <td>{{ $avg_time_per_category['Computer Engineering'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
+                                        </td>
+                                        <td>{{ $trackPercentage['Computer Science'] }}%</td>
+                                        <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
+                                        <td>{{ $avg_time_per_category['Computer Science'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
+                                        </td>
+                                        <td>{{ $trackPercentage['Information Technology'] }}%</td>
+                                        <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
+                                        <td>{{ $avg_time_per_category['Information Technology'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
+                                        </td>
+                                        <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
+                                        <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
+                                        <td>{{ $avg_time_per_category['Multimedia Arts'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="chart">
+                        <canvas id="doughnutChart" width="400" height="400"></canvas>
+                        <!-- <figure class="pie-chart" style="background:
+                            conic-gradient(
+                                from 0deg,
+                                violet 0,
+                                violet calc({{ $trackPercentage['Computer Engineering'] }}%),
+                                yellow calc({{ $trackPercentage['Computer Engineering'] }}%),
+                                yellow calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
+                                blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
+                                blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
+                                lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
+                                lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}% + {{ $trackPercentage['Multimedia Arts'] }}%)
 
-                        );">
-                        </figure>
-                </div>
-                <div class="chart-info">
-                    <div class="info">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Track Percentage</th>
-                                    <th>Accuracy</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
-                                    </td>
-                                    <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
-                                    <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
-                                    </td>
-                                    <td>{{ $trackPercentage['Computer Science'] }}%</td>
-                                    <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
-                                    </td>
-                                    <td>{{ $trackPercentage['Information Technology'] }}%</td>
-                                    <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
-                                    </td>
-                                    <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
-                                    <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            );">
+                        </figure> -->
                     </div>
                 </div>
             </div>
@@ -143,7 +153,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Date</th>
                         <th>Score</th>
                         <th>Track Percentage</th>
@@ -154,7 +164,7 @@
                 <tbody>
                     @foreach($examResult as $exam)
                         <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
-                            <td>{{ $exam->id }}</td>
+                            <!-- <td>{{ $exam->id }}</td> -->
                             <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
                             <td>{{ $exam->score }}</td>
                             <td>
@@ -270,6 +280,40 @@
                     }
                 }
             }
+        });
+    </script>
+    @elseif (isset($examResult) && $action === 'latest')
+    <script>
+        
+        const ctx2 = document.getElementById('doughnutChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data:  {
+                labels: [
+                    'Red',
+                    'Blue',
+                    'Yellow'
+                ],
+                datasets: [{
+                    label: 'My First Dataset',
+                    data: [300, 50, 100],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+             options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Track Percentage Distribution'
+                    }
+                }
+             }
         });
     </script>
     @endif
