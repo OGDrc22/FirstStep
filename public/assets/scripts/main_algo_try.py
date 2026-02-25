@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 import json, sys
 
 # df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
-df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
+df = pd.read_csv('public\assets\scripts\files\processed_data.csv')
 
 X = df[
     [

@@ -1,0 +1,9 @@
+API Getter import
+pip install python-dotenv
+
+Gemini import:
+pip install --upgrade google-generativeai
+(Update): python.exe -m pip install --upgrade pip
+
+SQL Connector
+pip install PyMySQL

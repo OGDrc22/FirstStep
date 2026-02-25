@@ -6,7 +6,6 @@
     <title>Result</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
 </head>
 
 
@@ -93,7 +92,7 @@
                     $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
                     $isCorrect = $studentAns === $correctAns;
                 @endphp
-                <p class="{{ $isCorrect ? 'bg-correct-a' : 'bg-danger-a' }} stdntAnswer">
+                <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
                     Your Answer: 
                     @if (isset($questionsData[$index]['answer']))
                         {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}

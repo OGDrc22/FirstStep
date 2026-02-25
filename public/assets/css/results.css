@@ -3,8 +3,39 @@
     --secondary-color: #000A21;
     --bg-color: #F5F5F5;
     --font-family: 'Poppins', sans-serif;
+
+    
+    --bg-success: hsl(120, 100%, 70%);
+    --bg-success-a: hsla(120, 100%, 70%, 0.4);
+    --bg-danger: hsa(0, 100%, 70%);
+    --bg-danger-a: hsla(0, 100%, 70%, 0.4);
+    --bg-correct: hsl(200, 70%, 70%);
+    --bg-correct-a: hsla(200, 70%, 70%, 0.4);
 }
 
+
+.bg-success {
+    background-color: var(--bg-success);
+}
+.bg-success-alpha {
+    background-color: var(--bg-success-a);
+}
+
+
+.bg-danger {
+    background-color: var(--bg-danger);
+}
+.bg-danger-alpha {
+    background-color: var(--bg-danger-a);
+}
+
+
+.bg-correct {
+    background-color: var(--bg-correct);
+}
+.bg-correct-alpha {
+    background-color: var(--bg-correct-a);
+}
 
 * {
     box-sizing: border-box;
@@ -108,19 +139,65 @@ body {
     width: max-content;
 }
 
-table thead tr th {
+.info table thead tr th {
     padding: 8px 16px;
     text-align: left;
     width: 100%;
 }
 
-table tbody {
+.info table tbody {
     gap: 8px;
 }
-table tbody tr td {
+.info table tbody tr td {
     padding: 8px 16px;
 }
-table tbody tr td div {
+.info table tbody tr td div {
     display: flex;
     align-items: center;
+}
+
+
+.all-result-tb {
+    margin-top: 16px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0px 16px 16px 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #dddddd;
+    height: 60vh;
+    overflow-y: auto;
+}
+
+.all-result-tb table {
+    width: 100%;
+    border-collapse: collapse;
+    scroll-snap-type: mandatory;
+}
+
+.all-result-tb table thead {
+    position: sticky;
+    top: 0;
+    background-color: #dddddd;
+    box-shadow: 0 8px 4px -4px rgba(0, 0, 0, 0.1);
+}
+
+.all-result-tb table thead tr th {
+    padding: 8px 16px;
+    text-align: left;
+    width: max-content;
+}
+
+.all-result-tb table tbody {
+    gap: 8px;
+}
+.all-result-tb table tbody tr td {
+    padding: 8px 16px;
+}
+.all-result-tb table tbody tr td div {
+    display: flex;
+    align-items: center;
+}
+
+.all-result-tb table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

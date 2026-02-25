@@ -6,7 +6,6 @@
     <title>Retrieve Result</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
 </head>
 <body>
     
@@ -35,7 +34,7 @@
             <div class="result-container-info">
                 <div class="results-header">  
                     <h2>Exam Result for {{ $username }}</h2>
-                    <p>Score: {{ $examResult->score }}</p>
+                    <p>Score: {{ $examResult->score }} / {{ count($questionsData) }}</p>
                     <p>Recommended Track: {{ $predictedTrack }}</p>
                 </div>  
 
@@ -134,7 +133,7 @@
                             $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
                             $isCorrect = $studentAns === $correctAns;
                         @endphp
-                        <p class="{{ $isCorrect ? 'bg-correct-a' : 'bg-danger-a' }} stdntAnswer">
+                        <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
                             Your Answer: 
                             @if (isset($questionsData[$index]['answer']))
                                 {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
@@ -150,37 +149,39 @@
 
         @elseif($action === 'all')
             <h2>All Exam Attempt Results for {{ $username }}</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <!-- <th>ID</th> -->
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Track Percentage</th>
-                        <th>Predicted Track</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($examResult as $exam)
-                        <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
-                            <!-- <td>{{ $exam->id }}</td> -->
-                            <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
-                            <td>{{ $exam->score }}</td>
-                            <td>
-                                @php
-                                    $sorted = collect($exam->track_percentage)->sortDesc();
-                                @endphp
-                                @foreach ($sorted as $track => $percentage)
-                                    {{ $track }}: {{ $percentage }}% <br>
-                                @endforeach
-                            </td>
-                            <td>{{ $exam->predicted_track }}</td>
-                            
+            <div class="all-result-tb">
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- <th>ID</th> -->
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Track Percentage</th>
+                            <th>Predicted Track</th>
+                            <!-- <th>Remarks</th> -->
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($examResult as $exam)
+                            <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
+                                <!-- <td>{{ $exam->id }}</td> -->
+                                <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
+                                <td>{{ $exam->score }}</td>
+                                <td>
+                                    @php
+                                        $sorted = collect($exam->track_percentage)->sortDesc();
+                                    @endphp
+                                    @foreach ($sorted as $track => $percentage)
+                                        {{ $track }}: {{ $percentage }}% <br>
+                                    @endforeach
+                                </td>
+                                <td>{{ $exam->predicted_track }}</td>
+                                
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
             <!-- @foreach ($averageAcc as $ac_p)
                 <p>{{ $ac_p }}</p>
