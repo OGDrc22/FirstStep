@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headsUPMessage.style.opacity = '0';
             setTimeout(() => {
                 headsUPMessage.remove();
+                console.log('Flash message removed from DOM');
             }, 800); // Match the CSS transition duration
         }, 5000); // Display for 3 seconds
     }
@@ -17,5 +18,5 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnSecondary = document.querySelector('.btn-secondary');
     const btnMiddle = document.querySelector('.btn-middle');
 
-    
+
 });

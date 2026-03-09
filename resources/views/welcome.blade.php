@@ -18,9 +18,11 @@
         </div>
     @endif
 
-    <div class="alert heads-up-message hum-error">
+
+    <!-- Sample Modal Messages -->
+    <!-- <div class="alert heads-up-message hum-error">
         <p class="p p-danger">Sample Error Message</p>
-    </div>
+    </div> -->
 
     <!-- <div class="alert-bg">
         <div class="alert">
@@ -34,7 +36,7 @@
             </div>
         </div>
     </div> -->
-    <div class="alert-bg">
+    <!-- <div class="alert-bg">
         <div class="alert">
             <div class="alert-form">
                 <p>Feedback Form</p>
@@ -46,20 +48,9 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    
-    <!-- <div class="alert-bg">
-        <div class="alert alert-danger">
-            Sample Error Message
-        </div>
     </div> -->
-    
-    <!-- <div class="">
-        <div class="heads-up-message">
-            Sample Error Message
-        </div>
-    </div> -->
+    <!-- End of Sample Modal Messages -->
+
 
     <div class="header-pcu">
         <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="" srcset="">

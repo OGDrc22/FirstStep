@@ -6,7 +6,7 @@
     <title>Exam</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/exam_page.css')}}">
-    <!-- <link rel="stylesheet" href="{{asset('assets/css/exam_style.css')}}"> -->
+    <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
 
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -31,6 +31,8 @@
                 @csrf
                 @if (isset($data))
                     <div class="questions">
+                        <input type="hidden" name="feedback-input" id="feedback-input-hidden">
+
                         <input type="hidden" name="job_id" value="{{ $job->id }}">
 
                         <input type="hidden" name="questionData" id="questionData">
@@ -66,12 +68,39 @@
                     <div id="controls">
                         <button class="btn-controls" id="prevBtn" type="button">Prev</button>
                         <button class="btn-controls" id="nextBtn" type="button">Next</button>
-                        <button class="btn-controls" id="submit" type="submit">Submit</button>
+                        <button class="btn-controls" id="btn-submit" type="submit">Submit</button>
                     </div>
                 @else
                     <p>No data available.</p>
                 @endif
             </form>
+        </div>
+
+        <div class="alert-bg simple-flash hidden">
+            <div class="alert">
+                <div class="simple-flash-message">
+                    <span class="icon-danger"></span>
+                    <h2>Are you sure you want to submit the exam?</h2>
+                    <div class="alert-button-container">
+                        <button class="btn btn-secondary"><span class="icon-arrow-right"></span> Cancel</button>
+                        <button class="btn btn-primary">Submit <span class="icon-send"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-bg feedback-form hidden">
+            <div class="alert">
+                <div class="alert-form">
+                    <p>Feedback Form</p>
+                    <textarea type="text" class="feedback-input" name="feedback" placeholder="Enter your feedback here..."></textarea>
+                    <div class="alert-button-container">
+                        <button class="btn btn-secondary"><span class="icon-arrow-right"></span> Cancel</button>
+                        <button class="btn btn-middle">Skip <span class="icon-arrow-right"></span></button>
+                        <button class="btn btn-primary">Submit <span class="icon-send"></span></button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="right">

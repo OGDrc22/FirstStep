@@ -141,7 +141,7 @@
                                 No Answer
                             @endif
                         </p>
-                        <p class="bg-success-a correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
+                        <p class="bg-success-alpha correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
                         <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
                     </div>
                 @endforeach

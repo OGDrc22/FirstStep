@@ -1,9 +1,24 @@
-API Getter import
+==== UPDATE PIP ====
+python.exe -m pip install --upgrade pip
+
+==== API Getter import ====
 pip install python-dotenv
 
-Gemini import:
+==== Gemini import ====
 pip install --upgrade google-generativeai
-(Update): python.exe -m pip install --upgrade pip
 
-SQL Connector
+==== SQL Connector ====
 pip install PyMySQL
+
+==== RUN MIGRATION ====
+php artisan migrate
+
+pip install scikit-learn
+pip install numpy
+python -m pip install pandas
+
+
+
+CHANGE PATH
+AssesmentController.php (python.exe)
+Gemini.py (debug.txt)

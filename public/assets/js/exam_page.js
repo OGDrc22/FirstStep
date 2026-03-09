@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let seconds = 0;
     let timerInterval;
-    // const timerDisplay = document.getElementById('timerD');
-    const displayF = document.getElementById('timerDF');
+    const timerDisplay = document.getElementById('timerD');
+    // const displayF = document.getElementById('timerDF');
 
     function onQuestionViewed(index) {
         console.log('Viewing index:', index);
@@ -78,6 +78,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function stopTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
+    }
+
+    function continueTimer() {
+        if (!timerInterval) {
+            timerInterval = setInterval(() => {
+                seconds++
+                updateDisplay();
+            }, 1000);
+        }
     }
 
     function resetTimer() {
@@ -269,9 +278,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    document.getElementById("examForm").addEventListener("submit", async function (e) {
+    // document.getElementById("examForm").addEventListener("submit", async function (e) {
+    //     stopTimer();
+    //     // e.preventDefault();
+    //     document.getElementById("questionData").value = JSON.stringify(questionData);
+    //     const questionTexts = questionData.map(q => q.questionText);
+    //     document.getElementById("questionText").value = JSON.stringify(questionTexts);
+    //     const qCat = questionData.map(q => q.category);
+    //     document.getElementById("try").value = JSON.stringify(qCat);
+    //     console.log('Clicked submit');
+    //     console.log(questionData)
+    // });
+
+    const alertBgSimpleFlash = document.querySelector('.alert-bg.simple-flash');
+    const alert_SFM = alertBgSimpleFlash.querySelector('.alert');
+    const alertMessage_SFM = alert_SFM.querySelector('.simple-flash-message');
+    const btnContainer_SFM = alertMessage_SFM.querySelector('.alert-button-container');
+    const btnPrimary_SFM = btnContainer_SFM.querySelector('.btn-primary');
+    const btnSecondary_SFM = btnContainer_SFM.querySelector('.btn-secondary');
+    // const btnMiddle = btnContainer_SFM.querySelector('.btn-middle');
+    document.getElementById('btn-submit').addEventListener('click', function(e) {
+        e.preventDefault();
         stopTimer();
-        // e.preventDefault();
+        alertBgSimpleFlash.style.display = 'flex';
+    });
+
+
+    btnSecondary_SFM.addEventListener('click', function() {
+        continueTimer();
+        alertBgSimpleFlash.style.display = 'none';
+    });
+
+    btnPrimary_SFM.addEventListener('click', function() {
+        alertBgSimpleFlash.style.display = 'none';
+
+        const alertBgFeedback = document.querySelector('.alert-bg.feedback-form');
+        alertBgFeedback.style.display = 'flex';
+
+    });
+
+    const alertBgFeedback = document.querySelector('.alert-bg.feedback-form');
+    const feedbackForm = alertBgFeedback.querySelector('.alert');
+    const feedbackInput = feedbackForm.querySelector('.feedback-input');
+    const feedBackSkip = feedbackForm.querySelector('.btn-middle');
+    const feedbackCancel = feedbackForm.querySelector('.btn-secondary');
+    const feedbackSubmit = feedbackForm.querySelector('.btn-primary');
+
+    feedbackCancel.addEventListener('click', function() {
+        alertBgFeedback.style.display = 'none';
+        continueTimer();
+    });
+
+    feedBackSkip.addEventListener('click', function() {
+        alertBgFeedback.style.display = 'none';
+        
         document.getElementById("questionData").value = JSON.stringify(questionData);
         const questionTexts = questionData.map(q => q.questionText);
         document.getElementById("questionText").value = JSON.stringify(questionTexts);
@@ -279,8 +339,27 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
         console.log(questionData)
-        
     });
+
+    feedbackSubmit.addEventListener('click', function(e) {
+        e.preventDefault();
+        alertBgFeedback.style.display = 'none';
+
+        let feedbackHiddenInput = document.getElementById("feedback-input-hidden");
+        feedbackHiddenInput.value = feedbackInput.value;
+
+
+        document.getElementById("questionData").value = JSON.stringify(questionData);
+        const questionTexts = questionData.map(q => q.questionText);
+        document.getElementById("questionText").value = JSON.stringify(questionTexts);
+        const qCat = questionData.map(q => q.category);
+        document.getElementById("try").value = JSON.stringify(qCat);
+        console.log('Clicked submit');
+        console.log(questionData)
+        console.log("Feedback: ", feedbackInput.value)        
+        document.getElementById("examForm").submit();
+    });
+
 
 
     function showLoadingScreen() {

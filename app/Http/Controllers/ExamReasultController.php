@@ -39,7 +39,7 @@ class ExamReasultController extends Controller
         // dd($student);
         $job = ExamJob::findOrFail($request->job_id);
         $assessmentPayload = $job->payload;
-        // dd($job, $assessmentPayload);
+        // dd($request->job_id, $assessmentPayload);
 
 
         $questions = [];
@@ -200,15 +200,45 @@ class ExamReasultController extends Controller
         // dd($acc_per_category);
         $accuracy = $resData['sys_accuracy'] * 100 . "%";
 
-        return view('exam_result', compact('resData', 'questions', 'questionsData', 'keyAns', 'keyAnsText', 'predictedTrack', 'trackPercentage', 'accuracy', 'acc_per_category', 'correct', 'totalQuestions', 'duration_per_category'));
-        // return response()->json([
-        //     'resData' => $resData,
-        //     'questions' => $questions,
-        //     'keyAns' => $keyAns,
-        //     'predictedTrack' => $predictedTrack,
-        //     'trackPercentage' => $trackPercentage,
-        //     'accuracy' => $accuracy
-        // ]);
+
+        // FEEDBACK DATA
+
+        $feedback = null;
+        
+
+        if ($request->input('feedback-input')) {
+            $feedback = $request->input('feedback-input');
+            // dd($feedback);
+
+            DB::transaction(function () use ($student, $request, $feedback) {
+                $student->feedbacks()->create([
+                    'feedback_text' => $feedback, // MATCHES the Model and Database
+                    'job_id' => $request->job_id
+                ]);
+            });
+        }
+
+        $redirect = view('exam_result', compact(
+            'resData',
+            'questions',
+            'questionsData',
+            'keyAns',
+            'keyAnsText',
+            'predictedTrack',
+            'trackPercentage',
+            'accuracy',
+            'acc_per_category',
+            'correct',
+            'totalQuestions',
+            'duration_per_category'
+        ));
+
+        if ($feedback) {
+            return $redirect->with('success', 'Thank you! Your feedback has been submitted successfully.');
+        }
+
+        return $redirect;
+    
     }
     
 

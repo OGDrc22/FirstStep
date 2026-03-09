@@ -6,10 +6,17 @@
     <title>Result</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/flash_message.css') }}">
 </head>
 
 
 <body>
+    @if (isset($success))
+        <div class="alert heads-up-message hum-success">
+            <p class="p p-success">Your feedback has been submitted successfully!</p>
+        </div>
+    @endif
+
     @if (isset($resData))
         <h3>Score: {{ $correct }} / {{ $totalQuestions }}</h3>
         <div class="questions-review">
@@ -100,7 +107,7 @@
                         No Answer
                     @endif
                 </p>
-                <p class="bg-success-a correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
+                <p class="bg-success-alpha correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
                 <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
             </div>
         @endforeach       
@@ -110,6 +117,8 @@
 
     
 <a href="{{ route('welcome') }}">Home</a>
+
+<script src="{{ asset('assets/js/flash_message.js') }}"></script>
 
     
 </body>

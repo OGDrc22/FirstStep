@@ -1,11 +1,11 @@
 :root {
     --primary-color: #19429C;
-    --secondary-color: #000A21;
+    --primary-color-light: #3498db;
+    --secondbry-color: #000A21;
     --bg-color: #F5F5F5;
     --font-family: 'Poppins', sans-serif;
-    --bg-color-alt: #E0E0E0;
+    --bg-color-alt: hsl(0, 0%, 92%);
     --bg-color-dark: #171718;
-
 
     --grid-size: 30px;
     --base-grid-color: rgba(255, 255, 255, 0.08);
@@ -13,78 +13,108 @@
     --glow-color: rgba(52, 152, 219, 0.6);
 
     --light-gray: #bbbbbb;
-}
 
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    --glass-bg: rgba(255, 255, 255, 0.85); 
+    --glass-border: rgba(220, 220, 220, 0.5);
+    --glass-blur: 10px;
 }
 
 body {
-    background-color: var(--bg-color);
+    margin: 0;
+    min-height: 100vh;
     font-family: var(--font-family);
     color: var(--secondary-color);
-    line-height: 1.6;
-    padding: 16px;
-}
-
-body {
-    background-color: var(--bg-color);
-    opacity: 1;
-    background-image: radial-gradient(var(--primary-color) 2px, var(--bg-color) 2px);
-    background-size: 40px 40px;
-}
-
-
-/* body {
-    margin: 0;
     background-color: var(--bg-color-dark);
-    /* Ensures the pseudo-elements cover the whole page 
-    position: relative;
-}*/
-/*
-body::before {
-    position: fixed;
-    background-color: var(--bg-color-dark);
-    content: "";
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-
-    background-image:
-        linear-gradient(var(--base-grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--base-grid-color) 1px, transparent 1px);
-    background-size: var(--grid-size) var(--grid-size);
+    /* This creates the radial dot pattern from your code */
+    background-image: radial-gradient(var(--primary-color) 1px, transparent 1px);
+    background-size: 30px 30px;
+    display: flex;
+    flex-direction: column;
 }
 
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
+.bg-overlay {
+    /* Keeping your specific background image logic */
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-    border-radius: inherit;
-    background:
-        radial-gradient(
-            250px circle at var(--mouse-x, -100%) var(--mouse-y, -100%),
-            var(--glow-color),
-            transparent 100%);
-    -webkit-mask-image:
-        linear-gradient(black var(--grid-strength), transparent var(--grid-strength)),
-        linear-gradient(90deg, black var(--grid-strength), transparent var(--grid-strength));
-    mask-image:
-        linear-gradient(black var(--grid-strength), transparent var(--grid-strength)),
-        linear-gradient(90deg, black var(--grid-strength), transparent var(--grid-strength));
+/* Modern Header */
+.header-pcu {
+    position: sticky; /* Keeps it at the top while scrolling */
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur)); 
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    border-bottom: 1px solid var(--glass-border);
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
 
-    -webkit-mask-size: var(--grid-size) var(--grid-size);
-    mask-size: var(--grid-size) var(--grid-size);
-} */
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
+.pcu-home-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 8px;
+}
 
+.pcu-logo {
+    height: 45px; /* Consistent height for both logos */
+    width: auto;
+    object-fit: contain;
+}
 
+.pcu-coi-logo {
+   height: 45px; /* Consistent height for both logos */
+    width: auto;
+    object-fit: contain;
+}
+
+.pcu-text-small, .coi-text {
+    font-weight: 700; /* Matching 'nav-text-bold' */
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    white-space: nowrap;
+}
+
+/* Main Content */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.assessment-card {
+    background-color: var(--card-bg);
+    width: 90%;
+    max-width: 950px;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #333;
+}
 
 .loading-screen {
     position: fixed;
@@ -126,48 +156,97 @@ body::after {
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
+/* Stacks and centers the Name and Email boxes */
+.input-stacked-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    margin: 40px auto;
+    width: 100%;
+}
+/* Styles the actual white input boxes */
+.pcu-field {
+    width: 100%;
+    max-width: 500px; /* Forces them to stay within a clean width */
+    padding: 16px 20px;
+    border: 1px solid #dcdcdc; 
+    border-radius: 4px; 
+    background-color: #ffffff;
+    font-size: 1rem;
+    color: #333333;
+    outline: none;
+    transition: border-color 0.3s;
+}
 
+.pcu-field:focus {
+    border-color: var(--primary-color-light); /* Blue outline when active */
+}
 
 /* ----General Design */
 .buttons {
     display: flex;
-    flex-direction: row;
-    gap: 24px;
-    width: 100%;
+    justify-content: space-between; 
+    width: 100%; 
+    margin-bottom: 20px;
 }
+
 .btn {
-    display: block;
-    width: 50%;
-    text-align: center;
-    background-color: var(--primary-color);
-    border-radius: 8px;
-    color: var(--bg-color);
+    width: auto;
+    padding: 12px 35px;
+    border-radius: 50px; 
+    background-color: var(--primary-color-light); 
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
-.ml-50 {
-    margin-left: auto;
+
+.next-btn {
+    margin-left: auto; 
+    padding: 12px 40px;
+    background-color: var(--primary-color-light);
+    color: #ffffff;
+    border: none;
+}
+.next-btn i {
+    background-color: var(--bg-color);
 }
 
+.next-btn:hover {
+    background-color: var(--primary-color); 
+}
 
+.prev-btn {
+    padding: 12px 35px; /* Matches the next button padding */
+    background-color: var(--primary-color-light);
+    color: #ffffff; /* Changes text to white */
+    border: none; /* Removes the gray border */
+    border-radius: 50px; 
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+.prev-btn i {
+    background-color: var(--bg-color);
+}
 
-
-
-
+.prev-btn:hover {
+    background-color: var(--primary-color) !important; /* Darker blue on hover */
+    color: #ffffff !important;
+}
 form {
     background-color: var(--bg-color-alt);
     padding: 16px;
     margin: 24px 16%;
+    border-radius: 16px;
 }
-
-
 
 /* ProgressBar */
 .progressbar {
@@ -224,124 +303,135 @@ form {
     transition: 0.3s ease-in-out;
 }
 
-
 /* Form Step */
 .form-step {
+    width: 100%;
+    max-width: 900px; 
+    margin: 0 auto; 
     display: none;
-    margin-top: 24px;
 }
 
+/* 2. Remove invisible width limits on whatever step is currently active */
 .form-step.active {
-    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column;
+    /* This makes Step 2, 3, and 4 use the full width */
+    align-items: stretch !important; 
 }
 
+#step-1.active {
+    /* This overrides the global 'stretch' ONLY for the first step */
+    align-items: center !important; 
+}
+
+/* 1. Force the main data collection wrapper to stretch fully */
 .forms-data-collection {
+    width: 100% !important;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: stretch !important; /* 👈 THE FIX: Forces all steps to fill the entire left-to-right space */
 }
 
-
-.interest-selection {
-    /* margin-inline: 20%; */
-    padding: 16px;
+.form-step.active#diagnostic-mini-test {
+    align-items: flex-start !important; /* Keeps the text aligned to the left edge */
 }
 
+/* --- 1. THE GRID (Fixed to 5 columns and centered) --- */
 .interest-options {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 16px; 
+    width: 100%;
+    margin: 20px 0;
 }
 
+/* --- 3. THE CARDS --- */
 .interest-card {
-    background-color: #FFFFFF;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 8px; 
+    padding: 20px 10px;
     text-align: center;
-    flex: 1;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #dcdcdc; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+    transition: all 0.2s ease;
 }
 
 .interest-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color-light);
 }
 
 .interest-card.selected {
-    background-color: var(--primary-color);
-    color: #FFFFFF;
-    border-color: var(--primary-color);
+    border: 2px solid var(--primary-color-light); 
+    background-color: #f4f9fd; 
 }
 
 .interest-card img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 12px;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin: 0 auto 15px auto;
+    display: block;
 }
 
 .interest-card h3 {
     font-size: 0.9rem;
-    margin-bottom: 8px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+    line-height: 1.2;
 }
 
-.interest-other {
-    text-align: center;
-    width: 100%;
-    margin-top: 16px;
+/* --- 4. THE 'OTHER' INPUT BAR --- */
+.interest-other-container {
+    width: 100% !important;
+    /* Use padding to align the text, but use border-box to keep width at 100% */
+    padding: 0 !important; 
+    margin: 30px 0 !important;
+    box-sizing: border-box !important;
     position: relative;
 }
-
-.interest-other #other-interest-input {
-    width: 100%;
-    padding: 8px;
-    border: none;
-    border: 2px solid var(--primary-color);
-    border-radius: 9999px;
-    background: none;
+#other-interest-input {
+    width: 100% !important; /* Forces it to stay exactly 100% of the parent */
+    max-width: 100% !important;
+    padding: 16px 50px 16px 20px !important; /* Right padding (50px) protects the '+' button area */
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
     font-size: 1rem;
+    box-sizing: border-box !important; /* 👈 THE FIX: Prevents padding from making the box wider */
     outline: none;
 }
 
-.interest-other #other-interest-input:focus {
-    /* border: none; */
-    border: 2px solid var(--primary-color);
-    background: none;
-    border-radius: 9999px;
-    outline: none;
+#other-interest-input:focus {
+    border-color: var(--primary-color-light);
 }
 
-
-.interest-other .add-other-interest {
+.add-other-interest {
     position: absolute;
-    right: 0;
+    right: 15px; /* Keeps the button inside the far-right edge of the bar */
     top: 50%;
     transform: translateY(-50%);
-    background-color: transparent;
-    color: var(--primary-color);
+    background: none;
     border: none;
-    border-radius: 50%;
-    height: 100%;
-    aspect-ratio: 1 / 1;
+    color: var(--primary-color);
+    font-size: 1.8rem;
     cursor: pointer;
-    font-size: 1.2rem;
-    line-height: 1;
+    z-index: 5;
 }
-
-
-.interest-other-list #other-interest {
-    margin-top: 8px;
-    display: grid;
-    padding: 4px 8px;
-    /* grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); */
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+#diagnostic-interest-test.active {
+    width: 100% !important;
+    max-width: 100% !important;
+    align-items: stretch !important; /* 👇 Forces contents to fill card width */
 }
 
 .interest-other-list #other-interest li {
     list-style: none;
     width: fit-content;
-    padding: 0px 8px;
+    padding: 8px;
     background-color: var(--bg-color-alt);
     border-radius: 32px;
     border: 2px solid var(--primary-color);
@@ -352,99 +442,427 @@ form {
     content: '×';
     margin-left: 16px;
 }
+/* =========================================
+   STEP 3: SELF SKILL RATING (INLINE LABELS)
+   ========================================= */
 
-
-
-.loader {
-    width: 150px;
-    height: 150px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 0 30px 4px rgba(0, 0, 0, 0.5) inset,
-        0 5px 12px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-}
-
-.loader:before,
-.loader:after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 45%;
-    top: -50%;
-    left: 0;
-    background-color: #fff;
-    animation: wave 5s linear infinite;
-}
-
-.loader:before {
-    border-radius: 30%;
-    background: rgba(255, 255, 255, 0.4);
-    animation: wave 5s linear infinite;
-}
-
-@keyframes wave {
-    0% {
-        transform: rotate(0);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-
-
-
-
-
+/* =========================================
+   STEP 3: SELF SKILL RATING (LEFT ALIGNED)
+   ========================================= */
 
 #diagnostic-skill-test {
     width: 100%;
 }
 
+#likert-container {
+    margin: 10px 0 40px 0;
+    width: 100%;
+}
 
-.labels {
+/* --- Category Grouping --- */
+.skill-category {
+    margin-bottom: 40px;
+}
+
+.category-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    padding-left: 5px;
+    border-bottom: 2px solid #dcdcdc;
+    padding-bottom: 8px;
+}
+
+/* --- 1. The Main Row Layout --- */
+.likert-interest .interest-header {
     display: flex;
-    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
-    background-color: var(--bg-color);
-    margin-bottom: 4px;
+    padding: 4px 0 4px 0;
 }
-
-.labels .skill-text {
-    flex: 1;
-}
-
-.labels .scale-text {
-    flex: 3;
-    display: flex;
-}
-
-.labels .scale-text label {
-    flex: 1;
-}
-
-
-.likert-interest {
-    background-color: var(--bg-color);
-    margin-bottom: 4px;
-    padding: 16px;
+.interest-header .scale-hint {
+    justify-content: flex-end;
 }
 
 .likert-row {
-    margin-bottom: 16px;
     display: flex;
-    flex-direction: row;
-}
-.likert-row label {
-    flex: 1;
+    align-items: center;
+    /* 👇 THE FIX: This forces the question to the far left and options to the far right */
+    justify-content: space-between !important; 
+    padding: 18px 20px;
+    background-color: #ffffff; 
+    margin-bottom: 8px; 
+    border-radius: 6px; 
+    border: 1px solid #eeeeee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02); 
 }
 
+/* --- 2. The Question Text (Left Side) --- */
+.likert-question {
+    width: 30%; 
+    /* This padding acts as the buffer between the question and the first radio button */
+    padding-right: 30px !important; 
+    font-size: 0.95rem;
+    color: #333333;
+    font-weight: 600;
+    box-sizing: border-box;
+}
+
+/* --- 3. The Choices Container (NOW LEFT ALIGNED) --- */
 .likert-scale {
-    flex: 3;
+    flex: 1; /* Tells the container to stretch and fill the empty space */
     display: flex;
-    gap: 12px;
+    align-items: center;
+    justify-content: flex-end; /* Packs the buttons to the right inside the container */
+    margin-left: auto !important; /* 👇 THE BULLETPROOF FIX: Forces this entire block to the right edge */
+    flex-wrap: wrap; 
+    gap: 24px;
+}
+
+.likert-choices {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* --- 4. Custom Minimalist Radio Buttons --- */
+.radio-cell {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    margin: 0 !important; 
+}
+
+/* Hide the default HTML radio button */
+.radio-cell input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* The custom circle */
+.checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #fafafa;
+    border-radius: 50%;
+    border: 2px solid #cccccc; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0; 
+    /* This keeps the 8px gap between the circle and its text label */
+    margin-right: 8px !important; 
+}
+
+/* The text label ("Novice", "Beginner", etc.) */
+.choice-text {
+    font-size: 0.85rem;
+    color: #555555;
+    font-weight: 500;
+    user-select: none;
+    transition: color 0.2s ease;
+}
+
+/* Hover effect */
+.radio-cell:hover input ~ .checkmark {
+    border-color: var(--primary-color-light);
+    background-color: #f4f9fd;
+}
+.radio-cell:hover .choice-text {
+    color: var(--primary-color-light);
+}
+
+/* Checked state (When selected) */
+.radio-cell input:checked ~ .checkmark {
+    background-color: #ffffff;
+    border-color: var(--primary-color-light); 
+}
+.radio-cell input:checked ~ .choice-text {
+    color: #000000;
+    font-weight: 700;
+}
+
+/* Inner blue dot when checked */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--primary-color-light); 
+}
+
+.radio-cell input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* =========================================
+   STEP 4: MINI TEST (Final Updated Layout)
+   ========================================= */
+
+/* 1. Visibility & Progress Bar Spacing */
+.form-step#diagnostic-mini-test {
+    display: none !important;
+    width: 100% !important;
+    margin-top: 50px !important; /* 👈 THE FIX: Creates space between progress bar and test */
+}
+
+.form-step.active#diagnostic-mini-test {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important; /* 👈 THE FIX: Maximizes space to full card width */
+}
+
+/* 2. Header: Title Left, Timer Right, Full Width Line */
+#diagnostic-mini-test .inf {
+    display: flex !important;
+    flex-direction: row !important; /* 👈 THE FIX: Title Left, Timer Right */
+    justify-content: space-between !important; /* Pushes to far edges */
+    align-items: center !important;
+    width: 100% !important;
+    padding-bottom: 15px !important;
+    margin-bottom: 30px !important;
+    border-bottom: 2px solid #dddddd !important; /* Full width line */
+}
+
+#diagnostic-mini-test .inf h3 {
+    margin: 0 !important;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+/* Timer Pill styling */
+#timer-display {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e74c3c;
+    background-color: #fdf0ed;
+    padding: 6px 16px;
+    border-radius: 50px;
+}
+
+/* 3. Main Container & Questions (Maximized & Left-Aligned) */
+#mini-test-container {
+    width: 100% !important;
+    max-width: 100% !important; /* 👈 Maximizes the space */
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left;
+}
+
+.mini-question {
+    width: 100% !important;
+    counter-reset: option-letters;
+    margin-bottom: 35px !important;
+}
+
+.mini-question p {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #222222;
+    margin: 0 0 15px 0 !important;
+}
+
+/* 4. Options Formatting (a, b, c, d) */
+.mini-question label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    margin-bottom: 12px !important;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: fit-content !important; /* Keeps clickable area on text only */
+}
+
+.mini-question label::before {
+    counter-increment: option-letters;
+    content: counter(option-letters, lower-alpha) "."; 
+    font-weight: 700;
+    color: #19429C;
+    margin-right: 8px !important;
+    min-width: 15px;
+}
+
+.mini-question input[type="radio"] {
+    margin: 0 10px 0 0 !important;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.mini-question br {
+    display: none !important;
+}
+
+/* 5. Buttons (Far Left and Far Right) */
+#diagnostic-mini-test .buttons {
+    display: flex !important;
+    justify-content: space-between !important; /* 👈 Pushes buttons to far corners */
+    width: 100% !important;
+    margin-top: 40px !important;
+    padding: 0 !important;
+}
+
+
+/* =========================================
+   MOBILE RESPONSIVENESS (Phones & Tablets)
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+    /* 1. Stack the row vertically instead of side-by-side */
+    .likert-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 15px;
+    }
+
+    /* 2. Let the question take up the full width, with space below it */
+    .likert-question {
+        width: 100%;
+        padding-right: 0 !important;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    /* 3. Let the options take up the full width and align to the left */
+    .likert-options, 
+    .likert-scale {
+        width: 100%;
+        justify-content: flex-start !important; /* Moves buttons to the left on mobile for easy reading */
+        margin-left: 0 !important;
+        gap: 15px !important; /* Shrinks the massive 30px gap so they fit on a small screen */
+    }
+
+    /* 4. Ensure the grid from Step 2 also stacks nicely on mobile */
+    .interest-options {
+        grid-template-columns: repeat(2, 1fr); /* Shows 2 items per row instead of 6 on phones */
+    }
+}
+
+/* For extremely small phones */
+@media screen and (max-width: 480px) {
+    .interest-options {
+        grid-template-columns: 1fr; /* Stacks interest cards 1-by-1 on tiny screens */
+    }
+}
+
+/* =========================================
+   LOADING SCREEN (Figma Design)
+   ========================================= */
+
+/* 1. The Full-Screen Overlay */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(248, 250, 252, 0.7); 
+    backdrop-filter: blur(8px); 
+    z-index: 10000;
+    display: none; /* Completely hides it from the browser until needed */
+    justify-content: center;
+    align-items: center;
+}
+
+/* When JavaScript adds this class, it WILL appear */
+.loading-screen.active {
+    display: flex !important; 
+}
+
+/* 2. The White Card */
+.loader-container {
+    background-color: #ffffff;
+    padding: 40px 65px;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 3. The Blue Gradient Spinner */
+.loader {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e0f2fe 10%, var(--primary-color) 70%);
+    box-shadow: 0 4px 15px rgba(25, 66, 156, 0.2);
+    animation: pulseSpinner 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseSpinner {
+    0% { transform: scale(0.85); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.85); opacity: 0.8; }
+}
+
+/* 4. The Text */
+#text-loader {
+    font-family: var(--font-family);
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.home-btn-container {
+    display: flex;
+    justify-content: center;
+}
+.home-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0 40px 0; /* Breathing room below the form */
+    color: var(--primary-color-light);
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none; /* Removes the ugly default underline */
+    letter-spacing: 0.5px;
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
+    width: max-content;
+    padding: 8px;
+}
+.home-link i {
+    background-color: var(--primary-color-light);
+}
+
+/* Hover State - Changes color and lifts slightly */
+.home-link:hover {
+    color: var(--primary-color-light); /* Uses the light gray from your :root */
+    transform: translateY(-2px);
+}
+
+/* The Magic Underline Animation */
+.home-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1.5px;
+    display: block;
+    margin-top: 26px;
+    right: 0;
+    background: #ffffff;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Expands the underline smoothly when hovered */
+.home-link:hover::after {
+    width: 100%;
+    left: 0;
+    background: var(--primary-color); /* The underline turns your PCU blue */
 }

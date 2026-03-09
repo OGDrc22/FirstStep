@@ -128,10 +128,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     nextBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            formStepsNum++;
-            updateFormSteps();
-            updateProgressStep();
             if (btn === interest_next_btn) {
+                if (!isInterestEmpty()) return;
                 allInterest = getAllInterest();
                 console.log(allInterest);
                 createLikertScale();
@@ -142,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 collectSkillRatings();
 
                 if (!validatePreMiniTest()) return;
+                console.log("validating ")
                 const interest = getAllInterest()
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
@@ -150,6 +149,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 startCountDown();
                 document.getElementById('seconds').innerText = timer;
             }
+            formStepsNum++;
+            updateFormSteps();
+            updateProgressStep();
         })
     })
 
@@ -761,14 +763,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    function countSkillRating() {
+        const radio = document.querySelectorAll('.likert-row');
+        return radio.length;
+    }
+    function countSkillRatingChecked() {
+        const checked = document.querySelectorAll('input[type="radio"]:checked');
+        return checked.length;
+    }
     function validatePreMiniTest() {
-        if (!assessmentState.interests.length) {
-            alert('Please select at least one interest.');
-            return false;
-        }
-
-        if (!Object.keys(assessmentState.skills).length) {
-            alert('Please rate your skills.');
+        console.log(countSkillRating(), + " " + countSkillRatingChecked());
+        if (countSkillRatingChecked() !== countSkillRating()) {
+            showToast('Please rate your skills.');
             return false;
         }
 
@@ -795,6 +801,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // console.log('Final Interests on Submit: ', interestInput.value);
     }
 
+    function isInterestEmpty() {
+        console.log(getAllInterest().length);
+        if (!getAllInterest().length) {
+            // alert('Please select at least one interest.');
+            showToast('Please select at least one interest.');
+            return false;
+        }
+        return true;
+    }
+
 
     function createLikertScale() {
         const container = document.getElementById('likert-container');
@@ -810,8 +826,16 @@ document.addEventListener('DOMContentLoaded', function () {
             likrt_interest.classList.add('likert-interest');
             container.appendChild(likrt_interest);
 
+            const header = document.createElement('div');
+            header.className = 'interest-header';
+            likrt_interest.appendChild(header);
 
-            const scaleHint = document.createElement('small');
+            // Interest title
+            const title = document.createElement('h4');
+            title.textContent = interest.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+            header.appendChild(title);
+
+            const scaleHint = document.createElement('p');
             scaleHint.className = 'scale-hint';
 
             scaleHint.textContent =
@@ -819,20 +843,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? 'Scale based on familiarity and exposure'
                     : 'Scale based on skill level';
 
-            likrt_interest.appendChild(scaleHint);
+            header.appendChild(scaleHint);
 
             const hidden_inp = document.createElement('input');
-            // hidden_inp.type = 'hidden';
+            hidden_inp.type = 'hidden';
             hidden_inp.name = `scale_type[${interest}]`;
             hidden_inp.value = INTEREST_SCALE_TYPE[interest] ?? 'skill_based';
             likrt_interest.appendChild(hidden_inp);
-
-
-
-            // Interest title
-            const title = document.createElement('h4');
-            title.textContent = interest.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-            likrt_interest.appendChild(title);
 
 
             skills.forEach(skill => {
@@ -852,10 +869,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 scaleConfig.values.forEach((value, index) => {
                     const radioId = `${interest}-${skill}-${value}`.replace(/\s+/g, '-');
 
+                    const likert_c = document.createElement('div');
+                    likert_c.className = 'likert-choices';
+
                     const input = document.createElement('input');
                     input.type = 'radio';
                     input.name = `skills[${interest}][${skill}]`;
-                    input.dataset = INTEREST_SCALE_TYPE[interest] ?? 'skill_based'
+                    input.dataset.scaleType = INTEREST_SCALE_TYPE[interest] ?? 'skill_based'
                     input.value = value;
                     input.id = radioId;
                     input.required = true;
@@ -864,8 +884,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     radioLabel.setAttribute('for', radioId);
                     radioLabel.textContent = scaleConfig.labels[index];
 
-                    scale.appendChild(input);
-                    scale.appendChild(radioLabel);
+                    scale.appendChild(likert_c);
+                    likert_c.appendChild(input);
+                    likert_c.appendChild(radioLabel);
                 });
 
                 skillRow.appendChild(scale);
@@ -1108,4 +1129,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }, 2000);
     }
+
+    let toastQueue = [];
+    let toastActive = false;
+    let hideTimer = null;
+
+    function showToast(errMessage) {
+        const box = document.querySelector('.heads-up-message');
+        const msg = box?.querySelector('p'); // not '.p' unless your class is literally "p"
+        if (!box || !msg) return;
+
+        toastQueue.push(errMessage);
+        if (!toastActive) processToastQueue(box, msg);
+    }
+
+    function processToastQueue(box, msg) {
+        if (!toastQueue.length) {
+            toastActive = false;
+            return;
+        }
+
+        toastActive = true;
+        msg.textContent = toastQueue.shift();
+
+        box.style.display = 'flex';
+        requestAnimationFrame(() => {
+            box.style.opacity = '1';
+        });
+
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            box.style.opacity = '0';
+            setTimeout(() => {
+                box.style.display = 'none';
+                processToastQueue(box, msg); // show next toast
+            }, 800); // match CSS transition
+        }, 5000);
+    }
+
 });

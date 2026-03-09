@@ -5,9 +5,12 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import json, sys
+from pathlib import Path
 
 # df = pd.read_csv('C:/xampp/htdocs/first-step/public/assets/scripts/files/processed_data.csv')
-df = pd.read_csv('public\assets\scripts\files\processed_data.csv')
+SCRIPT_DIR = Path(__file__).parent
+data_path = SCRIPT_DIR / 'files' / 'processed_data.csv'
+df = pd.read_csv(data_path)
 
 X = df[
     [

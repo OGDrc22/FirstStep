@@ -19,4 +19,8 @@ class student_tb extends Authenticatable
         return $this->hasMany(ExamResult::class, 'student_id');
     }
 
+    public function feedbacks() {
+        return $this->hasMany(Feedback::class, 'student_id');
+    }
+
 }

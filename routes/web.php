@@ -15,9 +15,9 @@ Route::get('/', function () {
 
 
 
-Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('asessment-entry');
-Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
-Route::post('/logout', [AssessmentController::class, 'logout'])->name('logout');
+Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
+// Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
+// Route::post('/logout', [AssessmentController::class, 'logout'])->name('logout');
 Route::get('/retrieve-result', [RetrieveResultController::class, 'showForm']);
 Route::post('/get-result', [RetrieveResultController::class, 'getResult']);
 // Route::post('/get-all-result', [RetrieveResultController::class, 'getAllResult']);
