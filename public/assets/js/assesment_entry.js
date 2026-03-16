@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(key, value);
         }
     }
-
+    
 
 
 
@@ -96,6 +96,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    interestOther.addEventListener('keypress', function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById('add-other').click();
+            console.log('enter')
+        }
+    })
+
 
     const assessmentState = {
         basicInfo: {},
@@ -123,6 +131,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const interest_next_btn = document.getElementById('interest-next-btn');
     const skill_next_btn = document.getElementById('skill-next-btn')
+    const basic_info = document.getElementById('basic-info-next-btn');
+
+    
+    const emailInput = document.getElementById('email');
+    const nameInput = document.getElementById('name');
+
+    nameInput.addEventListener('keypress', function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (nameInput.value.trim() !== "" && emailInput.value.trim() !== "") {
+                basic_info.click();
+                console.log("next btn clicked! 1")
+            }
+        }
+    });
+
+    emailInput.addEventListener('keypress', function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (nameInput.value.trim() !== "" && emailInput.value.trim() !== "") {
+                basic_info.click();
+                console.log("next btn clicked! 2")
+            }
+        }
+    });
 
     let formStepsNum = 0;
 

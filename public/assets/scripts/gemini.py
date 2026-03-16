@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import pymysql
 import time
 
-DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\debug.txt"
+DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\gemini_debug.txt"
 db = None
 cursor = None
 job_id = None
@@ -226,45 +226,170 @@ def main():
     )
     time.sleep(div3)
 
+    # prompt = f"""
+        # You are an exam content generator for a career aptitude assessment
+        # similar to the National Career Assessment Examination (NCAE).
+
+        # TARGET:
+        # Grade 10 students who have NOT yet chosen a specialization or college course.
+
+        # GOAL:
+        # Measure interest, reasoning ability, and basic familiarity with technology-related fields.
+
+        # Generate EXACTLY 20 multiple-choice questions based on the interests: {interest_text}.
+
+        # CATEGORIES:
+        # Distribute the questions across these categories:
+        # - Information Technology
+        # - Computer Science
+        # - Computer Engineering
+        # - Multimedia Arts
+
+        # QUESTION STYLE (VERY IMPORTANT):
+        # - Questions must be understandable by Grade 10 students
+        # - Avoid advanced programming or engineering terminology
+        # - Focus on:
+        # • basic computing knowledge
+        # • logical thinking
+        # • simple technology concepts
+        # • everyday technology scenarios
+        # • creativity and digital media concepts
+        # - Use situational or problem-based questions when possible
+
+        # EXAMPLES OF APPROPRIATE DIFFICULTY:
+        # - basic computer parts
+        # - simple logic problems
+        # - identifying digital tools
+        # - recognizing programming concepts (very basic)
+        # - multimedia creativity or design thinking
+
+        # QUESTION FORMAT:
+        # - 4 choices (A–D)
+        # - only ONE correct answer
+        # - clear and concise wording
+
+        # CATEGORY BALANCE:
+        # Try to distribute questions evenly among the four categories.
+
+        # STRICT OUTPUT RULES:
+        # - Output ONLY valid JSON
+        # - Do NOT include explanations
+        # - Do NOT include extra text
+        # - Follow the schema EXACTLY
+
+        # JSON SCHEMA:
+        # {{
+        # "questions": [
+        #     {{
+        #     "number": 1,
+        #     "category": "Information Technology",
+        #     "question": "Question text",
+        #     "choices": {{
+        #         "A": "choice",
+        #         "B": "choice",
+        #         "C": "choice",
+        #         "D": "choice"
+        #     }},
+        #     "answer": "A"
+        #     }}
+        # ]
+        # }}
+        # """
+
     prompt = f"""
-    You are an exam content generator.
+        You are an exam content generator for a career aptitude assessment
+        similar to the National Career Assessment Examination (NCAE).
 
-    Generate EXACTLY 20 multiple-choice questions in NCAE format
-    based on the following interests: {interest_text}
+        TARGET PARTICIPANTS:
+        Grade 10 students who have NOT yet chosen a specialization or college course.
 
-    Divide the questions into these categories:
-    - Information Technology
-    - Computer Science
-    - Computer Engineering
-    - Multimedia Arts
+        GOAL:
+        Measure interest, reasoning ability, and basic familiarity with
+        technology-related fields.
 
-    STRICT OUTPUT RULES:
-    - Output ONLY valid JSON
-    - Do NOT include explanations
-    - Do NOT include extra text
-    - Follow the schema exactly
-    - Include category label for each queations
+        Generate EXACTLY 20 multiple-choice questions based on the interests: {interest_text}.
 
-    JSON SCHEMA:
-    {{
-    "questions": [
+        CATEGORIES:
+        Distribute questions across these categories:
+        - Information Technology
+        - Computer Science
+        - Computer Engineering
+        - Multimedia Arts
+
+        IMPORTANT QUESTION TYPES:
+        The exam should include a mix of the following question styles:
+
+        - Situational or scenario-based questions (real-life technology situations)
+        - Logical reasoning questions
+        - Basic technology knowledge questions
+        - Problem-solving questions
+        - Interest or preference questions
+        - Creativity or multimedia-related questions
+        - Classification questions about technology concepts
+        - Process or step-based questions
+
+        Ensure questions remain appropriate for Grade 10 students with minimal technical background.
+
+        Avoid:
+        - advanced programming terms
+        - complex algorithms
+        - college-level engineering topics
+
+        Focus on:
+        - basic computing concepts
+        - logical thinking
+        - everyday technology use
+        - simple design or creativity tasks
+        - basic hardware familiarity
+
+        QUESTION RULES:
+        - Each question must have 4 choices (A–D)
+        - Only ONE correct answer
+        - Questions must be clear and concise
+
+        CATEGORY DISTRIBUTION:
+        Try to distribute questions evenly across the four categories.
+
+        Allowed competencies:
+        - logical_reasoning
+        - syntax_analysis
+        - algorithmic_thinking
+        - hardware_systems
+        - networking_systems
+        - system_organization
+        - digital_creativity
+        - ui_design
+        - problem_solving
+        - attention_to_detail
+
+
+        STRICT OUTPUT RULES:
+        - Select 2 to 3 competencies
+        - Choose competencies only from the Allowed competencies list
+        - Output ONLY valid JSON
+        - Do NOT include explanations
+        - Do NOT include extra text
+        - Follow the schema EXACTLY
+
+        JSON SCHEMA:
         {{
-        "number": 1,
-        "category": "Information Technology",
-        "question": "Question text",
-        "choices": {{
-            "A": "choice",
-            "B": "choice",
-            "C": "choice",
-            "D": "choice"
-        }},
-        "answer": "A",
-        "category": "Category"
+        "questions": [
+            {{
+            "number": 1,
+            "category": "Information Technology",
+            "competencies": ["competency1","competency2"],
+            "question": "Question text",
+            "choices": {{
+                "A": "choice",
+                "B": "choice",
+                "C": "choice",
+                "D": "choice"
+            }},
+            "answer": "A"
+            }}
+        ]
         }}
-    ]
-    }}
-    """
-
+        """
 
     response = model.generate_content(prompt)
 

@@ -7,16 +7,22 @@
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/exam_page.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}">
 
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body>
-    <div class="header-pcu">
-        <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="" srcset="">
-        <a class="pcu-text">PCU - COI First Step</a>
-        <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="" srcset="">
-    </div>
+<body  class="bg-overlay">
+    <header class="header-pcu">
+        <div class="header-left">
+            <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="PCU Logo">
+            <span class="pcu-text-small">Philippine Christian University</span>
+        </div>
+        <div class="header-right">
+            <span class="coi-text">COI First Step</span>
+            <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="COI Logo">
+        </div>
+    </header>
 
 
     <!-- <div id="loading-screen">
@@ -39,9 +45,9 @@
                         <input type="hidden" name="questionText" id="questionText">
                         <input type="hidden" name="category" id="try">
                         @foreach ($data['data']['questions'] as $q)
-                            <div class="question-card" data-index="{{ $loop->index }}">
+                            <div class="question-card" data-index="{{ $loop->index }}" data-competencies='@json($q["competencies"])'>
+                                <h3 class="text_h cat_text">{{ $q['category'] }}</h3>
                                 <h3 class="question">{{ $loop->index + 1 }}. {{ $q['question'] }}</h3>
-                                <h3 class="text">{{ $q['category'] }}</h3>
                                 
                                 
                                 <input type="hidden"
@@ -66,9 +72,9 @@
                     </div>
 
                     <div id="controls">
-                        <button class="btn-controls" id="prevBtn" type="button">Prev</button>
-                        <button class="btn-controls" id="nextBtn" type="button">Next</button>
-                        <button class="btn-controls" id="btn-submit" type="submit">Submit</button>
+                        <button class="btn-controls" id="prevBtn" type="button"><i class="icon-arrow-left"></i> Prev</button>
+                        <button class="btn-controls" id="nextBtn" type="button">Next  <i class="icon-arrow-right"></i></button>
+                        <!--<button class="btn-controls" id="btn-submit" type="submit">Submit</button>-->
                     </div>
                 @else
                     <p>No data available.</p>
@@ -104,11 +110,12 @@
         </div>
 
         <div class="right">
-            <h3>Question Navigator</h3>
+            <h3></h3>
             <div class="question-navigator">
                 @foreach ($data['data']['questions'] as $q)
                     <button type="button" class="nav-q-btn" data-index="{{ $loop->index }}">{{ $loop->index + 1 }} Question</button>
                 @endforeach
+                <button class="btn-controls" id="btn-submit" type="submit">Submit</button>
             </div>
         </div>
 

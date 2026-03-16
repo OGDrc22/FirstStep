@@ -93,7 +93,7 @@ class RetrieveResultController extends Controller
 
             foreach ($examResult as $attempt) {
                 foreach ($attempt->accuracy_per_category as $track => $accuracy) {
-
+                    // dd($attempt->accuracy_per_category);
                     // Sum accuracy per track
                     $totalsAcc[$track] = ($totalsAcc[$track] ?? 0) + $accuracy;
 

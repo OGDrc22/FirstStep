@@ -7,61 +7,55 @@
     <title>PCU First Step</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/welcome.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
 </head>
 
-<body>
+<body class="bg-overlay">
 
     @if (session('error'))
-        <div class="alert heads-up-message hum-error">
-            <p class="p p-danger">{{ session('error') }}</p>
+        <div class="heads-up-message">
+            {{ session('error') }}
         </div>
     @endif
-
-
-    <!-- Sample Modal Messages -->
-    <!-- <div class="alert heads-up-message hum-error">
-        <p class="p p-danger">Sample Error Message</p>
-    </div> -->
-
     <!-- <div class="alert-bg">
-        <div class="alert">
-            <div class="simple-flash-message">
-                <span class="icon-danger"></span>
-                <h2>Sample Error Message</h2>
-                <div class="alert-button-container">
-                    <button class="btn btn-secondary">Cancel</button>
-                    <button class="btn btn-primary">OK</button>
-                </div>
-            </div>
+        <div class="alert alert-danger">
+            Sample Error Message
         </div>
     </div> -->
-    <!-- <div class="alert-bg">
-        <div class="alert">
-            <div class="alert-form">
-                <p>Feedback Form</p>
-                <textarea type="text" class="feedback-input" name="feedback" id="feedback" placeholder="Enter your feedback here..."></textarea>
-                <div class="alert-button-container">
-                    <button class="btn btn-secondary"><span class="icon-arrow-right"></span> Cancel</button>
-                    <button class="btn btn-middle">Skip <span class="icon-arrow-right"></span></button>
-                    <button class="btn btn-primary">Submit <span class="icon-send"></span></button>
-                </div>
-            </div>
+    
+    <!-- <div class="">
+        <div class="heads-up-message">
+            Sample Error Message
         </div>
     </div> -->
-    <!-- End of Sample Modal Messages -->
 
+    
+<header class="header-pcu">
+        <div class="header-left">
+            <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="PCU Logo">
+            <span class="pcu-text-small">Philippine Christian University</span>
+        </div>
+        <div class="header-right">
+            <span class="coi-text">COI First Step</span>
+            <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="COI Logo">
+        </div>
+    </header>
 
-    <div class="header-pcu">
-        <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="" srcset="">
-        <a class="pcu-text">PCU - COI First Step</a>
-        <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="" srcset="">
-    </div>
-
-    <div class="container-btn">
-        <a href="{{ url("/assessment-entry") }}" class="btn-start-exam">Start Exam</a>
-        <a href="{{ url("/retrieve-result") }}" class="btn-retrieve-result">Retrieve Result</a>
-    </div>
+<div class="page-center-container">
+        <div class="action-container-wrapper">
+            <div class="container-btn">
+                <a href="{{ url("/assessment-entry") }}" class="btn-action">
+                    <i class="btn-icon icon-book"></i>
+                    <span>Start Exam</span>
+                </a>
+                <a href="{{ url("/retrieve-result") }}" class="btn-action">
+                    <i class="btn-icon icon-search-status" alt="Search Icon"></i>
+                    <span>See Results</span>
+                </a>
+            </div>
+        </div>
+</div>
 
     <script src="{{ asset('assets/js/flash_message.js') }}"></script>
 </body>

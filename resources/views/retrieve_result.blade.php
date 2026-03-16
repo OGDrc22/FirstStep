@@ -4,184 +4,223 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retrieve Result</title>
-
     <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/global.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/flash_message.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/nav_bar.css') }}">
 </head>
-<body>
-    
+<body class="bg-overlay">
 
-    @if ($errors->has('email'))
+<header class="header-pcu">
+        <div class="header-left">
+            <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="PCU Logo">
+            <span class="pcu-text-small">Philippine Christian University</span>
+        </div>
+        <div class="header-right">
+            <span class="coi-text">COI First Step</span>
+            <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="COI Logo">
+        </div>
+    </header>
+
+ @if ($errors->has('email'))
         <div class="alert alert-danger">{{ $errors->first('email') }}</div>
     @endif
 
+
     @if (!isset($examResult))
-        <div class="login-container">
-            <h2>Login</h2>
-            <form method="POST" action="/get-result">
-                @csrf
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" >
+    <!--entering -->
+        <div class="page-Cencontainer">
+            <div class="login-card-wrapper">
+                <div class="login-card">
+                    <h2 class="form-title">Enter your credentials</h2>
+                    
+                    <form method="POST" action="/get-result">
+                        @csrf
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Email@gmail.com" required>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="submit" name="action" value="latest" class="btn-result">
+                                <i class="btn-icon icon-search-status" alt="Search Icon"></i>
+                                <span>Get Latest Result</span>
+                            </button>
+                            
+                            <button type="submit" name="action" value="all" class="btn-result">
+                                <i class="btn-icon icon-search-status" alt="Search Icon"></i>
+                                <span>See All Result</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <button type="submit" class="" name="action" value="latest">Get Latest Result</button>
-                <button type="submit" class="" name="action" value="all">Get All My Result</button>
-            </form>
+            </div>
+            <div class="home-btn-container">
+                <a href="{{ route('welcome') }}" class="home-link"><i class="icon-home"></i> Back to Home</a>
+            </div>
         </div>
     @endif
 
-    @if (isset($examResult))
-        @if ($action === 'latest')
-            <div class="result-container-info">
-                <div class="results-header">  
-                    <h2>Exam Result for {{ $username }}</h2>
-                    <p>Score: {{ $examResult->score }} / {{ count($questionsData) }}</p>
-                    <p>Recommended Track: {{ $predictedTrack }}</p>
-                </div>  
 
-                <div class="pie-container">
-                    <div class="chart-info">
-                        <div class="info">
-                            <table>
+    
+    <div class="dashboard-row">
+
+    <!-- score board> --> 
+
+        @if (isset($examResult))
+            @if ($action === 'latest')
+                <div class="result-display-card">
+                    <h3 class="card-user-title">Exam result for {{ $username }}</h3>
+                    
+                    <div class="card-data-row">
+                        <span class="card-label">Score:</span>
+                        <span class="card-value">{{ $examResult->score }}</span>
+                    </div>
+                    
+                    <div class="card-data-row">
+                        <span class="card-label">Recommended Track:</span>
+                        <span class="card-value highlight" style="color: #2D79C1;">{{ $predictedTrack }}</span>
+                    </div>
+                </div>
+
+
+    <!-- percentage container> --> 
+
+                    <div class="track-stats-card">
+                        <div class="stats-table-wrapper">
+                            <h3 class="card-title">Track Percentage Distribution</h3>
+                            <table class="custom-stats-table">
                                 <thead>
                                     <tr>
                                         <th>Category</th>
-                                        <th>Track Percentage</th>
+                                        <th>Track %</th>
                                         <th>Accuracy</th>
-                                        <th>Average Time (seconds)</th>
+                                        <th>Avg Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>
-                                            <div><div style="background-color: violet; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Engineering</div>
-                                        </td>
+                                        <td><span class="dot violet"></span> Computer Engineering</td>
                                         <td>{{ $trackPercentage['Computer Engineering'] }}%</td>
                                         <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
-                                        <td>{{ $avg_time_per_category['Computer Engineering'] }}</td>
+                                        <td>{{ $avg_time_per_category['Computer Engineering'] }}s</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div><div style="background-color: yellow; width: 32px; height: 16px; border-radius: 4px;"></div>Computer Science</div>
-                                        </td>
+                                        <td><span class="dot yellow"></span> Computer Science</td>
                                         <td>{{ $trackPercentage['Computer Science'] }}%</td>
                                         <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
-                                        <td>{{ $avg_time_per_category['Computer Science'] }}</td>
+                                        <td>{{ $avg_time_per_category['Computer Science'] }}s</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div><div style="background-color: blue; width: 32px; height: 16px; border-radius: 4px;"></div>Information Technology</div>
-                                        </td>
+                                        <td><span class="dot blue"></span> Information Technology</td>
                                         <td>{{ $trackPercentage['Information Technology'] }}%</td>
                                         <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
-                                        <td>{{ $avg_time_per_category['Information Technology'] }}</td>
+                                        <td>{{ $avg_time_per_category['Information Technology'] }}s</td>
                                     </tr>
                                     <tr>
-                                        <td>
-                                            <div><div style="background-color: lightgreen; width: 32px; height: 16px; border-radius: 4px;"></div>Multimedia Arts</div>
-                                        </td>
+                                        <td><span class="dot green"></span> Multimedia Arts</td>
                                         <td>{{ $trackPercentage['Multimedia Arts'] }}%</td>
                                         <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
-                                        <td>{{ $avg_time_per_category['Multimedia Arts'] }}</td>
+                                        <td>{{ $avg_time_per_category['Multimedia Arts'] }}s</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    
-                    <div class="chart">
-                        <canvas id="doughnutChart" width="400" height="400"></canvas>
-                        <!-- <figure class="pie-chart" style="background:
-                            conic-gradient(
-                                from 0deg,
-                                violet 0,
-                                violet calc({{ $trackPercentage['Computer Engineering'] }}%),
-                                yellow calc({{ $trackPercentage['Computer Engineering'] }}%),
-                                yellow calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
-                                blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}%),
-                                blue calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
-                                lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}%),
-                                lightgreen calc({{ $trackPercentage['Computer Engineering'] }}% + {{ $trackPercentage['Computer Science'] }}% + {{ $trackPercentage['Information Technology'] }}% + {{ $trackPercentage['Multimedia Arts'] }}%)
 
-                            );">
-                        </figure> -->
+                        <div class="chart-wrapper">
+                                <canvas id="doughnutChart"></canvas>
+                        </div>
                     </div>
-                </div>
-            </div>
+        </div>
+    </div>
 
-            <!-- <div class="progress-flex" style="background-color: gray">
-                <div class="percent" style="width: {{ $trackPercentage['Computer Engineering'] }}%; background-color: violet;">
-                    <h3>Computer Engineering: {{ $trackPercentage['Computer Engineering'] }}%</h3>
-                </div>
-                <div class="percent" style="width: {{ $trackPercentage['Computer Science'] }}%; background-color: yellow;">
-                    <h3>Computer Science: {{ $trackPercentage['Computer Science'] }}%</h3>
-                </div>
-                <div class="percent" style="width: {{ $trackPercentage['Information Technology'] }}%; background-color: blue;">
-                    <h3>Information Technology: {{ $trackPercentage['Information Technology'] }}%</h3>
-                </div>
-                <div class="percent" style="width: {{ $trackPercentage['Multimedia Arts'] }}%; background-color: lightgreen;">
-                    <h3>Multimedia Arts: {{ $trackPercentage['Multimedia Arts'] }}%</h3>
-                </div>
-            </div> -->
+
+
+   <!-- student score> --> 
         
-            <h2>Question Review</h2>
+    <div class="results-card-container">
+        <h2 class="question-review-title">Question Review</h2>
+        <div class="results-sub-card"> 
 
             @foreach ($questions as $index => $q)
-                    <div class="question-review-card">
-                        <h4 class="question-review">{{ $q }}</h4>
-                        @php
-                            $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                            $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                            $isCorrect = $studentAns === $correctAns;
-                        @endphp
-                        <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
-                            Your Answer: 
-                            @if (isset($questionsData[$index]['answer']))
-                                {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
+                <div class="question-item">
+                    <h4 class="question-text">{{ $q }}</h4>
+                    
+                    @php
+                        $studentAns = $questionsData[$index]['answer'][0] ?? null;
+                        $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
+                        $isCorrect = $studentAns === $correctAns;
+                    @endphp
+                    
+                    <div class="answer-box">
+                        <p class="{{ $isCorrect ? 'bg-correct-a' : 'bg-danger-a' }} answer-line">
+                            <strong>Your Answer:</strong> 
+                            @if (isset($questionsData[$index]['answer'][0]))
+                                {{ $questionsData[$index]['answer'][0] }}. {{ $questionsData[$index]['answer'][1] }}
                             @else
                                 No Answer
                             @endif
                         </p>
-                        <p class="bg-success-alpha correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}</p>
-                        <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
+                        
+                        <p class="bg-success-a answer-line">
+                            <strong>Correct Answer:</strong> {{ $questionsData[$index]['keyAns'][0] }}. {{ $questionsData[$index]['keyAns'][1] }}
+                        </p>
+                        
+                        <p class="duration-text">Duration: {{ $questionsData[$index]['duration'] }}s</p>
                     </div>
-                @endforeach
+                    
+                    @if(!$loop->last)
+                    @endif
+                </div>
+            @endforeach
 
+                
+        </div>
+
+                <div class="home-button-wrapper">
+                    <a href="{{ route('welcome') }}" class="btn-home">
+                        <i class="btn-icon icon-home" alt="Search Icon"></i>
+                        <span>Home</span>
+                    </a>
+                </div>
+                
+    </div>
+
+
+                        <!-- see all -->
 
         @elseif($action === 'all')
             <h2>All Exam Attempt Results for {{ $username }}</h2>
-            <div class="all-result-tb">
-                <table>
-                    <thead>
-                        <tr>
-                            <!-- <th>ID</th> -->
-                            <th>Date</th>
-                            <th>Score</th>
-                            <th>Track Percentage</th>
-                            <th>Predicted Track</th>
-                            <!-- <th>Remarks</th> -->
+            <table>
+                <thead>
+                    <tr>
+                        <!-- <th>ID</th> -->
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Track Percentage</th>
+                        <th>Predicted Track</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($examResult as $exam)
+                        <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
+                            <!-- <td>{{ $exam->id }}</td> -->
+                            <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
+                            <td>{{ $exam->score }}</td>
+                            <td>
+                                @php
+                                    $sorted = collect($exam->track_percentage)->sortDesc();
+                                @endphp
+                                @foreach ($sorted as $track => $percentage)
+                                    {{ $track }}: {{ $percentage }}% <br>
+                                @endforeach
+                            </td>
+                            <td>{{ $exam->predicted_track }}</td>
+                            
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($examResult as $exam)
-                            <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
-                                <!-- <td>{{ $exam->id }}</td> -->
-                                <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
-                                <td>{{ $exam->score }}</td>
-                                <td>
-                                    @php
-                                        $sorted = collect($exam->track_percentage)->sortDesc();
-                                    @endphp
-                                    @foreach ($sorted as $track => $percentage)
-                                        {{ $track }}: {{ $percentage }}% <br>
-                                    @endforeach
-                                </td>
-                                <td>{{ $exam->predicted_track }}</td>
-                                
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
 
             <!-- @foreach ($averageAcc as $ac_p)
                 <p>{{ $ac_p }}</p>
@@ -200,123 +239,114 @@
         @endif
     @endif
 
-    
-    <a href="{{ route('welcome') }}">
-        Home
-    </a>
 
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 
 
     @if (isset($examResult) && $action === 'all')
-    <script>
-        const ctx = document.getElementById('stackedLineChart').getContext('2d');
+        <script>
+            const ctx = document.getElementById('stackedLineChart').getContext('2d');
 
-        Chart.defaults.font.size = 16;
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['IT', 'CPE', 'CS', 'MMA'],
-                datasets: [
-                    {
-                        label: 'Average Accuracy (%)',
-                        data: [
-                            {{ $averageAcc['Information Technology'] }},
-                            {{ $averageAcc['Computer Engineering'] }},
-                            {{ $averageAcc['Computer Science'] }},
-                            {{ $averageAcc['Multimedia Arts'] }}
-                        ],
-                        borderWidth: 2,
-                        tension: 0.3,
-                        yAxisID: 'yAccuracy'
-                    },
-                    {
-                        label: 'Average Time Taken (sec)',
-                        data: [
-                            {{ $averageDuration['Information Technology'] }},
-                            {{ $averageDuration['Computer Engineering'] }},
-                            {{ $averageDuration['Computer Science'] }},
-                            {{ $averageDuration['Multimedia Arts'] }}
-                        ],
-                        borderWidth: 2,
-                        tension: 0.3,
-                        yAxisID: 'yDuration'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Average Accuracy vs Average Time per Track'
-                    }
+            Chart.defaults.font.size = 16;
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['IT', 'CPE', 'CS', 'MMA'],
+                    datasets: [
+                        {
+                            label: 'Average Accuracy (%)',
+                            data: [
+                                {{ $averageAcc['Information Technology'] }},
+                                {{ $averageAcc['Computer Engineering'] }},
+                                {{ $averageAcc['Computer Science'] }},
+                                {{ $averageAcc['Multimedia Arts'] }}
+                            ],
+                            borderWidth: 2,
+                            tension: 0.3,
+                            yAxisID: 'yAccuracy'
+                        },
+                        {
+                            label: 'Average Time Taken (sec)',
+                            data: [
+                                {{ $averageDuration['Information Technology'] }},
+                                {{ $averageDuration['Computer Engineering'] }},
+                                {{ $averageDuration['Computer Science'] }},
+                                {{ $averageDuration['Multimedia Arts'] }}
+                            ],
+                            borderWidth: 2,
+                            tension: 0.3,
+                            yAxisID: 'yDuration'
+                        }
+                    ]
                 },
-                scales: {
-                    x: {
-                        stacked: false
-                    },
-                    yAccuracy: {
-                        type: 'linear',
-                        position: 'left',
-                        beginAtZero: true,
+                options: {
+                    responsive: true,
+                    plugins: {
                         title: {
                             display: true,
-                            text: 'Average Accuracy (%)'
-                        },
-                        max: 100
+                            text: 'Average Accuracy vs Average Time per Track'
+                        }
                     },
-                    yDuration: {
-                        type: 'linear',
-                        position: 'right',
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Average Time (seconds)'
+                    scales: {
+                        x: {
+                            stacked: false
                         },
-                        grid: {
-                            drawOnChartArea: false // 👈 VERY important
+                        yAccuracy: {
+                            type: 'linear',
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Average Accuracy (%)'
+                            },
+                            max: 100
+                        },
+                        yDuration: {
+                            type: 'linear',
+                            position: 'right',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Average Time (seconds)'
+                            },
+                            grid: {
+                                drawOnChartArea: false // 👈 VERY important
+                            }
                         }
                     }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
     @elseif (isset($examResult) && $action === 'latest')
-    <script>
-        
-        const ctx2 = document.getElementById('doughnutChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'doughnut',
-            data:  {
-                labels: [
-                    'Red',
-                    'Blue',
-                    'Yellow'
-                ],
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: [300, 50, 100],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-             options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Track Percentage Distribution'
+        <script>
+            
+                // Inside your <script> at the bottom
+                const ctx2 = document.getElementById('doughnutChart').getContext('2d');
+                new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['CpE', 'CS', 'IT', 'MMA'],
+                        datasets: [{
+                            data: [
+                                {{ $trackPercentage['Computer Engineering'] }},
+                                {{ $trackPercentage['Computer Science'] }},
+                                {{ $trackPercentage['Information Technology'] }},
+                                {{ $trackPercentage['Multimedia Arts'] }}
+                            ],
+                            backgroundColor: ['#8b5cf6', '#facc15', '#3b82f6', '#4ade80'],
+                            borderWidth: 0,
+                            hoverOffset: 10
+                        }]
+                    },
+                    options: {
+                        cutout: '70%', // Makes it a thin, professional ring
+                        plugins: {
+                            legend: { display: false } // We use our table as the legend
+                        }
                     }
-                }
-             }
-        });
-    </script>
+                });
+        </script>
     @endif
 
 </body>

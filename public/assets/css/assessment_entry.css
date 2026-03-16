@@ -1,6 +1,6 @@
 :root {
     --primary-color: #19429C;
-    --primary-color-light: #3498db;
+    --accent-blue: #3498db;
     --secondbry-color: #000A21;
     --bg-color: #F5F5F5;
     --font-family: 'Poppins', sans-serif;
@@ -43,55 +43,6 @@ body {
     flex-direction: column;
 }
 
-/* Modern Header */
-.header-pcu {
-    position: sticky; /* Keeps it at the top while scrolling */
-    top: 0;
-    z-index: 999;
-    width: 100%;
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(var(--glass-blur)); 
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 40px;
-    border-bottom: 1px solid var(--glass-border);
-    box-sizing: border-box; /* Ensures padding doesn't break width */
-}
-
-.header-left,
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.pcu-home-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    gap: 8px;
-}
-
-.pcu-logo {
-    height: 45px; /* Consistent height for both logos */
-    width: auto;
-    object-fit: contain;
-}
-
-.pcu-coi-logo {
-   height: 45px; /* Consistent height for both logos */
-    width: auto;
-    object-fit: contain;
-}
-
-.pcu-text-small, .coi-text {
-    font-weight: 700; /* Matching 'nav-text-bold' */
-    font-size: 1.1rem;
-    color: var(--secondary-color);
-    white-space: nowrap;
-}
 
 /* Main Content */
 .container {
@@ -184,7 +135,7 @@ body {
 }
 
 .pcu-field:focus {
-    border-color: var(--primary-color-light); /* Blue outline when active */
+    border-color: var(--accent-blue); /* Blue outline when active */
 }
 
 /* ----General Design */
@@ -199,7 +150,7 @@ body {
     width: auto;
     padding: 12px 35px;
     border-radius: 50px; 
-    background-color: var(--primary-color-light); 
+    background-color: var(--accent-blue); 
     color: #ffffff;
     font-weight: 600;
     font-size: 1rem;
@@ -211,7 +162,7 @@ body {
 .next-btn {
     margin-left: auto; 
     padding: 12px 40px;
-    background-color: var(--primary-color-light);
+    background-color: var(--accent-blue);
     color: #ffffff;
     border: none;
 }
@@ -225,7 +176,7 @@ body {
 
 .prev-btn {
     padding: 12px 35px; /* Matches the next button padding */
-    background-color: var(--primary-color-light);
+    background-color: var(--accent-blue);
     color: #ffffff; /* Changes text to white */
     border: none; /* Removes the gray border */
     border-radius: 50px; 
@@ -362,11 +313,11 @@ form {
 .interest-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    border-color: var(--primary-color-light);
+    border-color: var(--accent-blue);
 }
 
 .interest-card.selected {
-    border: 2px solid var(--primary-color-light); 
+    border: 2px solid var(--accent-blue); 
     background-color: #f4f9fd; 
 }
 
@@ -407,7 +358,7 @@ form {
 }
 
 #other-interest-input:focus {
-    border-color: var(--primary-color-light);
+    border-color: var(--accent-blue);
 }
 
 .add-other-interest {
@@ -573,17 +524,17 @@ form {
 
 /* Hover effect */
 .radio-cell:hover input ~ .checkmark {
-    border-color: var(--primary-color-light);
+    border-color: var(--accent-blue);
     background-color: #f4f9fd;
 }
 .radio-cell:hover .choice-text {
-    color: var(--primary-color-light);
+    color: var(--accent-blue);
 }
 
 /* Checked state (When selected) */
 .radio-cell input:checked ~ .checkmark {
     background-color: #ffffff;
-    border-color: var(--primary-color-light); 
+    border-color: var(--accent-blue); 
 }
 .radio-cell input:checked ~ .choice-text {
     color: #000000;
@@ -598,7 +549,7 @@ form {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--primary-color-light); 
+    background: var(--accent-blue); 
 }
 
 .radio-cell input:checked ~ .checkmark:after {
@@ -826,7 +777,7 @@ form {
     align-items: center;
     gap: 8px;
     margin: 20px 0 40px 0; /* Breathing room below the form */
-    color: var(--primary-color-light);
+    color: var(--accent-blue);
     font-family: var(--font-family);
     font-size: 0.95rem;
     font-weight: 500;
@@ -838,12 +789,12 @@ form {
     padding: 8px;
 }
 .home-link i {
-    background-color: var(--primary-color-light);
+    background-color: var(--accent-blue);
 }
 
 /* Hover State - Changes color and lifts slightly */
 .home-link:hover {
-    color: var(--primary-color-light); /* Uses the light gray from your :root */
+    color: var(--accent-blue); /* Uses the light gray from your :root */
     transform: translateY(-2px);
 }
 

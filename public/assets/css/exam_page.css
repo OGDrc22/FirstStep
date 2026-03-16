@@ -1,8 +1,22 @@
 :root {
     --primary-color: #19429C;
-    --secondary-color: #000A21;
+    --accent-blue: #3498db;
+    --secondbry-color: #000A21;
     --bg-color: #F5F5F5;
     --font-family: 'Poppins', sans-serif;
+    --bg-color-alt: hsl(0, 0%, 92%);
+    --bg-color-dark: #171718;
+
+    --grid-size: 30px;
+    --base-grid-color: rgba(255, 255, 255, 0.08);
+    --grid-strength: 1px;
+    --glow-color: rgba(52, 152, 219, 0.6);
+
+    --light-gray: #bbbbbb;
+
+    --glass-bg: rgba(255, 255, 255, 0.85); 
+    --glass-border: rgba(220, 220, 220, 0.5);
+    --glass-blur: 10px;
 }
 
 
@@ -12,61 +26,62 @@
     padding: 0;
 }
 
+/* --- 1. Background Setup --- */
 body {
-    background-color: var(--bg-color);
+    margin: 0;
+    min-height: 100vh;
     font-family: var(--font-family);
-    color: var(--secondary-color);
-    line-height: 1.6;
-}
+    background-color: var(--bg-color); 
+    overflow-x: hidden; 
+    position: relative;
+    color: #333333;
+} 
 
-
-
-
-.header-pcu {
-    margin: auto;
+.bg-overlay {
+    /* Keeping your specific background image logic */
+    background-image: url('../images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    flex-grow: 1;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.pcu-logo {
-    width: 92px;
-    height: auto;
-    margin: 16px;
-}
-
-.pcu-coi-logo {
-    width: 120px;
-    height: auto;
-    margin: 16px;
-}
-
- .pcu-text {
-    color: var(--primary-color);
-    font-family: 'Poppins', sans-serif;
-    font-size: 2em;
-    font-weight: bold;
-    margin: 16px;
+    flex-direction: column;
 }
 
 
+
+/* --- Main Layout (Two Columns) --- */
 .main-container {
     display: flex;
     flex-direction: row;
-    /* align-items: center; */
     justify-content: center;
+    width: 90%;
+    max-width: 1300px;
+    margin: 50px auto;
+    gap: 40px; /* Space between questions and navigator */
+    z-index: 1;
 }
 
+/* --- 4. Left Column: Questions & Choices --- */
 .left {
     flex: 3;
+    padding: 20px;
+    background: var(--glass-bg); /* No solid box, blends with background */
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+.text_h {
+    display: none;
 }
 
 .question {
-    margin: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    font-family: var(--font-family);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 25px;
+    line-height: 1.6;
 }
 
 .question-card {
@@ -76,70 +91,220 @@ body {
     display: block;
 }
 
+/* Choices Layout */
 .choices-holder {
     list-style-type: none;
-    margin: 10px 20px;
+    margin: 0 0 40px 10px;
     padding: 0;
 }
+
 .choices {
-    background-color: #e0e0e0;
-    margin: 8px 0;
-    padding: 10px;
+    background-color: transparent;
+    margin: 12px 0;
+    padding: 8px 10px;
     border-radius: 8px;
-    border: solid 1px #ccc;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--bg-color-dark);
+    transition: background-color 0.2s;
 }
 
 .choices:hover {
-    background-color: #d0d0d0;
-    border: solid 2px var(--primary-color);
+    background-color: rgba(52, 152, 219, 0.1); /* Subtle blue hover */
+}
+.choices label {
+    display: flex;
+    align-items: center;
+}
+
+/* Native Radio Button Styling */
+.choices input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 15px;
+    cursor: pointer;
+    accent-color: var(--accent-blue); /* Turns the radio button blue when clicked */
 }
 
 .active-choice {
-    background-color: #d0d0d0;
-    border: solid 2px var(--primary-color);
+    font-weight: 700;
+    color: var(--primary-color);
 }
 
+#controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* 👈 This is the magic rule that pushes them apart */
+    align-items: center;
+    width: 100%; /* Ensures the container stretches across the whole left column */
+    margin-top: 40px; /* Gives some breathing room below the choices */
+}
 
+.btn-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 50px; /* Pill shape from your design */
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    transition: background-color 0.3s, transform 0.1s;
+}
+.btn-controls i {
+    background-color: var(--bg-color);
+}
+
+.btn-controls:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%; 
+    margin-top: 30px; 
+}
+
+.left button, 
+.action-buttons button {
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 50px; /* Fully rounded pill shape */
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.left button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+/* --- 5. Right Column: Question Navigator --- */
 .right {
     flex: 1;
-    margin-inline: 16px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #e0e0e0;
-    /* display: none; */
+    background-color: rgba(255, 255, 255, 0.85); /* Frosty white card */
+    backdrop-filter: blur(8px);
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-height: 70vh; /* Prevents it from getting too long */
+    overflow-y: auto; /* Makes the list scrollable */
+}
+
+/* Custom Scrollbar for Navigator */
+.right::-webkit-scrollbar {
+    width: 6px;
+}
+.right::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+    border-radius: 10px;
 }
 
 .question-navigator {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
+/* Outline style buttons for inactive questions */
 .question-navigator .nav-q-btn {
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    background-color: #ccc;
-    color: var(--secondary-color);
+    background-color: transparent;
+    color: var(--accent-blue);
+    border: 1.5px solid var(--accent-blue);
+    padding: 10px 15px;
+    border-radius: 8px; /* Slightly rounded rectangles */
     font-family: var(--font-family);
-    font-weight: bold;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: all 0.3s;
 }
 
-.question-navigator .nav-q-btn:hover {
-    background-color: var(--primary-color);
-    color: #fff;
+.question-navigator .nav-q-btn.q-done {
+    background-color: var(--primary-color) !important; /* Fills it with solid PCU Dark Blue */
+    color: #ffffff !important; /* Changes text to white */
+    border: 1.5px solid var(--primary-color) !important;
+    box-shadow: 0 2px 5px rgba(25, 66, 156, 0.3); /* Adds a slight shadow so it pops */
+    transition: all 0.3s ease;
 }
 
+/* Solid blue for the active question */
 .question-navigator .nav-q-btn.active {
-    background-color: var(--primary-color);
-    color: #fff;
+    background-color: var(--accent-blue);
+    color: #ffffff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
 }
 
-.nav-q-btn.q-done {
-    border: 2px solid var(--primary-color);
+
+
+/* --- Final Submit Button (Inside Navigator) --- */
+#btn-submit {
+    background-color: var(--primary-color); /* PCU Dark Blue to stand out */
+    color: #ffffff;
+    border: none;
+    padding: 14px 20px;
+    margin-top: 30px; /* Creates a clear visual break from the question list */
+    border-radius: 8px; /* Matches the slightly rounded edges of your nav buttons */
+    font-family: var(--font-family);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%; /* Forces it to stretch across the entire right panel */
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(25, 66, 156, 0.3); /* Soft glowing drop-shadow */
+    transition: all 0.3s ease;
+    display: block; 
+}
+
+/* Hover State - Slight lift and darker color */
+#btn-submit:hover {
+    background-color: var(--secondary-color); /* Deepest blue/black */
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 15px rgba(25, 66, 156, 0.4);
+}
+
+/* Active State - Physically presses down when clicked */
+#btn-submit:active {
+    transform: translateY(0); 
+    box-shadow: 0 2px 6px rgba(25, 66, 156, 0.3);
+}
+
+/* --- TIMER DESIGN --- */
+#timerD {
+    background-color: #ffffff;
+    color: var(--primary-color); /* Uses your PCU Dark Blue so the numbers pop */
+    font-family: var(--font-family);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 50px; /* Fully rounded pill shape */
+    border: 1px solid #eeeeee; /* Extremely subtle outline */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); /* Ultra-soft floating shadow */
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 1px;
+    
+    /* 👈 THE MAGIC FIX: Keeps the numbers perfectly still while counting down */
+    font-variant-numeric: tabular-nums; 
 }

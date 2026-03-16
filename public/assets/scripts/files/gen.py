@@ -1,71 +1,77 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
-# Number of synthetic students
-N = 5000
+np.random.seed(42)
 
-# ---- STEP 1: Generate Interest scores (0 to 1) ----
-interest_scores = np.round(np.random.uniform(0, 1, N), 3)
+FEATURE_COLUMNS = [
+"logic","syntax","algorithm","hardware","networking",
+"system_org","creativity","ui_design","attention_detail","problem_solving",
 
+"logic_speed","syntax_speed","algorithm_speed","hardware_speed","networking_speed",
+"system_org_speed","creativity_speed","ui_design_speed","attention_detail_speed","problem_solving_speed",
 
-# ---- STEP 2: Derive performance group based on interest score ----
-def derive_perf(interest):
-    if interest < 0.4:
-        return 'Low'
-    elif interest < 0.7:
-        return 'Average'
-    else:
-        return 'High'
+"logic_confidence","syntax_confidence","algorithm_confidence","hardware_confidence","networking_confidence",
+"system_org_confidence","creativity_confidence","ui_design_confidence","attention_detail_confidence","problem_solving_confidence",
 
-performance_groups = [derive_perf(x) for x in interest_scores]
+"IT_accuracy","CS_accuracy","CE_accuracy","MMA_accuracy",
+
+"IT_time_ratio","CS_time_ratio","CE_time_ratio","MMA_time_ratio"
+]
 
 
-# ---- STEP 3: Assign Track Based on Interest Level ----
-tracks = []
+rows = 10000
 
-for interest in interest_scores:
-    
-    if interest >= 0.7:
-        # High interest → Mostly CS, IT, CE
-        choices = ["Computer Science", "Information Technology", "Computer Engineering", "Multimedia Arts"]
-        probs   = [0.40,                 0.40,                    0.15,                    0.05]
-    
-    elif interest >= 0.4:
-        # Average interest → balanced
-        choices = ["Computer Science", "Information Technology", "Computer Engineering", "Multimedia Arts"]
-        probs   = [0.25,                 0.25,                    0.25,                    0.25]
-    
-    else:
-        # Low interest → Mostly Multimedia Arts
-        choices = ["Computer Science", "Information Technology", "Computer Engineering", "Multimedia Arts"]
-        probs   = [0.10,                 0.10,                    0.10,                    0.70]
+tracks = [
+    "Information Technology",
+    "Computer Science",
+    "Computer Engineering",
+    "Multimedia Arts"
+]
 
-    tracks.append(np.random.choice(choices, p=probs))
+data = []
 
+for i in range(rows):
 
-# ---- STEP 4: Encode Labels ----
-le_perf = LabelEncoder()
-le_track = LabelEncoder()
+    # -------- competency accuracy --------
+    accuracy = np.random.uniform(0.3,1.0,10)
 
-performance_encoded = le_perf.fit_transform(performance_groups)
-track_encoded = le_track.fit_transform(tracks)
+    # -------- speed scores --------
+    speed = np.random.uniform(0.5,2.0,10)
 
+    # -------- confidence --------
+    confidence = accuracy * speed
 
-# ---- STEP 5: Create DataFrame ----
-df = pd.DataFrame({
-    "Interest_in_IT": interest_scores,
-    "performance_group": performance_groups,
-    "performance_encoded": performance_encoded,
-    "Track": tracks,
-    "track_encoded": track_encoded
-})
+    # -------- category accuracy --------
+    cat_acc = np.random.uniform(0.4,1.0,4)
 
-# ---- STEP 6: Save ----
-# df.to_csv("processed_interest_data.csv", index=False)
+    # -------- time ratios --------
+    time = np.random.dirichlet(np.ones(4))
 
-# print("Dataset generated: processed_interest_data.csv")
-print(df.head())
-#%%
-print(df['Track'].unique())
-# %%
+    row = list(accuracy) + list(speed) + list(confidence) + list(cat_acc) + list(time)
+
+    # ----- simple rule to assign track -----
+    cs_score = accuracy[0] + accuracy[2] + accuracy[9]
+    ce_score = accuracy[3] + accuracy[4] + accuracy[5]
+    mma_score = accuracy[6] + accuracy[7] + accuracy[8]
+    it_score = accuracy[1] + accuracy[4] + accuracy[9]
+
+    scores = {
+        "Computer Science": cs_score,
+        "Computer Engineering": ce_score,
+        "Multimedia Arts": mma_score,
+        "Information Technology": it_score
+    }
+
+    track = max(scores, key=scores.get)
+
+    row.append(track)
+
+    data.append(row)
+
+columns = FEATURE_COLUMNS + ["Track"]
+
+df = pd.DataFrame(data, columns=columns)
+
+df.to_csv("ai_training_dataset_10000_rows.csv", index=False)
+
+print("Dataset generated:", df.shape)

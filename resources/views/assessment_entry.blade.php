@@ -9,6 +9,7 @@
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
     <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/assessment_entry.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}">
 </head>
 
 <body class="bg-overlay">
@@ -61,8 +62,8 @@
 
                 <div class="form-step active" id="step-1">
                     <div class="input-stacked-container">
-                        <input type="text" id="name" name="name" placeholder="Name" class="pcu-field">
-                        <input type="email" id="email" name="email" placeholder="Email@gmail.com" class="pcu-field">
+                        <input type="text" id="name" name="name" placeholder="Name" class="pcu-field" required>
+                        <input type="email" id="email" name="email" placeholder="Email@gmail.com" class="pcu-field" required>
                     </div>
 
                     <div class="buttons" style="justify-content: flex-end;">
@@ -138,7 +139,7 @@
 
                             <div class="interest-other-container">
                                 <input type="text" id="other-interest-input" placeholder="Other Interest">
-                                <button type="button" class="add-other-interest">+</button>
+                                <button type="button" id="add-other" class="add-other-interest">+</button>
                             </div>
                         </div>
                     </div>

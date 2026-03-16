@@ -1,0 +1,102 @@
+:root {
+    --primary-color: #19429C;
+    --accent-blue: #3498db;
+    --secondbry-color: #000A21;
+    --bg-color: #F5F5F5;
+    --font-family: 'Poppins', sans-serif;
+    --bg-color-alt: hsl(0, 0%, 92%);
+    --bg-color-dark: #171718;
+
+    --grid-size: 30px;
+    --base-grid-color: rgba(255, 255, 255, 0.08);
+    --grid-strength: 1px;
+    --glow-color: rgba(52, 152, 219, 0.6);
+
+    --light-gray: #bbbbbb;
+
+    --glass-bg: rgba(255, 255, 255, 0.85); 
+    --glass-border: rgba(220, 220, 220, 0.5);
+    --glass-blur: 10px;
+    --bg-success: hsl(120, 100%, 70%);
+    --bg-success-a: hsla(120, 100%, 70%, 0.4);
+    --bg-danger: hsa(0, 100%, 70%);
+    --bg-danger-a: hsla(0, 100%, 70%, 0.4);
+    --bg-correct: hsl(200, 70%, 70%);
+    --bg-correct-a: hsla(200, 70%, 70%, 0.4);
+    /* --bg-success: hsl(120, 100%, 70%); */
+
+}
+
+.bg-success {
+    background-color: var(--bg-success);
+}
+.bg-success-a {
+    background-color: var(--bg-success-a);
+}
+
+
+.bg-danger {
+    background-color: var(--bg-danger);
+}
+.bg-danger-a {
+    background-color: var(--bg-danger-a);
+}
+
+
+.bg-correct {
+    background-color: var(--bg-correct);
+}
+.bg-correct-a {
+    background-color: var(--bg-correct-a);
+}
+
+
+
+.header-pcu {
+    position: sticky; /* Keeps it at the top while scrolling */
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(var(--glass-blur)); 
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    border-bottom: 1px solid var(--glass-border);
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pcu-home-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.pcu-logo {
+    height: 45px; /* Consistent height for both logos */
+    width: auto;
+    object-fit: contain;
+}
+
+.pcu-coi-logo {
+   height: 45px; /* Consistent height for both logos */
+    width: auto;
+    object-fit: contain;
+}
+
+.pcu-text-small, .coi-text {
+    font-weight: 700; /* Matching 'nav-text-bold' */
+    font-size: 1.1rem;
+    color: var(--secondary-color);
+    white-space: nowrap;
+}

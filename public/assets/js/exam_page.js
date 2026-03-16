@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const answers = new Array(qCard.length).fill(null);
 
+    // const competencies = 
+
     const questionData = Array.from({length: qCard.length}, (_, index) => ({
         index: index,
         questionText: qCard[index].querySelector('.question').innerText,
@@ -17,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
         startTime: null,
         endTime: null,
         duration: null,
-        category: qCard[index].querySelector(".text").innerText
+        category: qCard[index].querySelector(".cat_text").innerText,
+        competencies: JSON.parse(qCard[index].dataset.competencies)
     }));
 
     if (questionData == null) {
@@ -63,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        displayF.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
 
     function startTimer() {
@@ -232,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         prevBtn.disabled = index === 0;
-        nextBtn.disabled = index === qCard.length - 1;
+        // nextBtn.disabled = index === qCard.length - 1;
 
         updateNavButtons(index);
         updateNavButtonsStatus();
@@ -241,8 +243,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         onQuestionViewed(index);
         startTimer();
-        // console.log("QData: ", questionData[index]);
-        console.log("QData: ", questionData);
+        
+        if ((currentQuestionIndex + 1 ) === qCard.length) {
+            // console.log("Q.", currentQuestionIndex + 1, "CL", qCard.length);
+            nextBtn.innerHTML = "Submit  <i class=\"icon-arrow-right\"></i>";
+            
+        } else {
+            nextBtn.innerHTML = "Next  <i class=\"icon-arrow-right\"></i>";
+        }
     }
 
     prevBtn.addEventListener('click', function() {
@@ -251,14 +259,18 @@ document.addEventListener('DOMContentLoaded', function() {
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
         }
+
+        
     });
 
     nextBtn.addEventListener('click', function() {
-        if (currentQuestionIndex < qCard.length - 1) {
+        if (currentQuestionIndex === qCard.length - 1) {
+            stopTimer();
+            alertBgSimpleFlash.style.display = 'flex';x
+        } else {
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
-
         }
     });
     showQuestion(currentQuestionIndex);
@@ -274,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.classList.remove('active');
             }
 
-            console.log('Navigated to question index:', index);
+            // console.log('Navigated to question index:', index);
         });
     });
 
