@@ -322,8 +322,36 @@ body {
 .blue   { background-color: #3b82f6; }
 .green  { background-color: #4ade80; }
 
+
+.charts-container {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+.left-chart,
+.right-chart {
+    flex: 1;
+}
+
+.right-chart {
+    display: flex;
+    flex-direction: column;
+    
+}
+.right-chart .chart {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+}
 .chart-wrapper {
-  width: 180px;
+  width: 256px;
+}
+
+.chart-bar {
+    height: 300px;
+    display: flex;
+    justify-content: center;
 }
 
 

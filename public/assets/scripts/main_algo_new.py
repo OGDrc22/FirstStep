@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import json, sys
 from pathlib import Path
+import joblib
 
 
 
@@ -18,7 +19,10 @@ DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\main_algo_debug.txt"
 SCRIPT_DIR = Path(__file__).parent
 data_path = SCRIPT_DIR / "files" / "ai_training_dataset_10000_rows.csv"
 
-df = pd.read_csv(data_path)
+# df = pd.read_csv(data_path)
+
+model_path = SCRIPT_DIR / "model.pkl"
+model = joblib.load(model_path)
 
 FEATURE_COLUMNS = [
     "logic","syntax","algorithm","hardware","networking",
@@ -35,24 +39,28 @@ FEATURE_COLUMNS = [
     "IT_time_ratio","CS_time_ratio","CE_time_ratio","MMA_time_ratio"
 ]
 
-X = df[FEATURE_COLUMNS]
-y = df["Track"]
+# X = df[FEATURE_COLUMNS]
+# y = df["Track"]
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+# X_train, X_test, y_train, y_test = train_test_split(
+#     X, y, test_size=0.2, random_state=42
+# )
 
-model = RandomForestClassifier(
-    n_estimators=500,
-    max_depth=10,
-    min_samples_leaf=13,
-    class_weight="balanced",
-    random_state=42
-)
+# model = RandomForestClassifier(
+#     n_estimators=500,
+#     max_depth=10,
+#     min_samples_leaf=13,
+#     class_weight="balanced",
+#     random_state=42
+# )
 
-model.fit(X_train, y_train)
+# model.fit(X_train, y_train)
 
-accuracy = model.score(X_test, y_test)
+# joblib.dump(model, SCRIPT_DIR / "model.pkl")
+
+# print("✅ Model trained and saved!")
+
+# accuracy = model.score(X_test, y_test)
 
 
 # Label decoder
@@ -116,9 +124,9 @@ except Exception as e:
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
             f.write(f"🎯 New_Student: {e}\n")
 
-# ------------------------------
-# 4. PREDICT
-# ------------------------------
+# # ------------------------------
+# # 4. PREDICT
+# # ------------------------------
 
 try:
 
@@ -153,7 +161,8 @@ output = {
     "track_percentage": track_percentage,
     "predicted_track": primary_recommendation,
     "secondary_track": secondary_recommendation,
-    "model_accuracy": round(accuracy, 2)
+    # "model_accuracy": round(accuracy, 2)
+    "model_accuracy": None
 }
 
 print(json.dumps(output))

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
     const navBtn = Array.from(document.querySelectorAll('.nav-q-btn'));
+    const navContainer = document.querySelector('.question-navigator');
 
     const choices = document.querySelectorAll('.choices');
 
@@ -207,7 +208,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function scrollActiveNav(index) {
+        if (!navContainer || !navBtn[index]) return;
+        navBtn[index].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest'
+        });
+        console.log('Scrolling')
+    }
+
     function setCheck(cardIndex) {
+        scrollActiveNav(index);
         navBtn.forEach((btn, indx) => {
             if (indx === cardIndex) {
                 btn.classList.add('active')
@@ -239,6 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateNavButtons(index);
         updateNavButtonsStatus();
         update_choices(index)
+        scrollActiveNav(index);
 
 
         onQuestionViewed(index);

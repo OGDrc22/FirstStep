@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ExamResult;
 use App\Models\student_tb;
+use App\Services\RecommendationService;
 
 class RetrieveResultController extends Controller
 {
@@ -19,6 +20,8 @@ class RetrieveResultController extends Controller
 
         $action = $request->input('action');
 
+
+        
         
 
         if ($action === 'latest') {
@@ -46,15 +49,49 @@ class RetrieveResultController extends Controller
             //     return $q['correct_answer'];
             // }, $questions ?? []) : null;
             $username = $examResult ? $examResult->student->name : null;
+
+            $questionsData = $examResult ? $examResult->questionsData : null;
+
             $predictedTrack = $examResult ? $examResult->predicted_track : null;
+
+            $secondaryTrack = $examResult ? $examResult->secondary_track : null;
+        
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
+
+            $coreCompetencies = $examResult ? $examResult->core_competencies : null;
+
+            $detailedCompetencyLevels = $examResult ? $examResult->detailed_competencies : null;
+
             $acc_per_category = $examResult ? $examResult->accuracy_per_category : null;
-            $avg_time_per_category = $examResult ? $examResult->duration_per_category : null;
-            $questionsData = $examResult['questionsData'];
-            // dd($keyAns, $examResult);
-            // $accuracy = $examResult ? $examResult->accuracy : null;
+
+            $duration_per_category = $examResult ? $examResult->duration_per_category : null;
+
+            $note = $examResult ? $examResult->evaluation_note : null;
+
+            $model_accuracy = $examResult ? $examResult->model_accuracy : null;
+
+            
+
+            // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
+            $redirect = view('retrieve_result', compact(
+                'action',
+                'username',
+                'examResult',
+                'questions',
+                'questionsData',
+                'predictedTrack',
+                'secondaryTrack',
+                'trackPercentage',
+                'model_accuracy',
+                'acc_per_category',
+                'duration_per_category',
+                'coreCompetencies',
+                'detailedCompetencyLevels',
+                'note'
+            ));
+
             if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'avg_time_per_category', 'questionsData'));
+                return $redirect;
             } else {
                 return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
             }
@@ -76,113 +113,37 @@ class RetrieveResultController extends Controller
                     ->withErrors(['email' => 'No exam results found for ' . $request->email]);
             }
 
-            // dd($examResult);
-            
-            // $username = "TRY";
-
-            // Get username from the first attempt's related student
             $firstAttempt = $examResult->first();
             $username = null;
             if ($firstAttempt && $firstAttempt->student) {
                 $username = $firstAttempt->student->name;
             }
 
+            $service = new RecommendationService();
 
-            $totalsAcc = [];
-            $counts = [];
+            $result = $service->analyzeAllAttempts($examResult);
 
-            foreach ($examResult as $attempt) {
-                foreach ($attempt->accuracy_per_category as $track => $accuracy) {
-                    // dd($attempt->accuracy_per_category);
-                    // Sum accuracy per track
-                    $totalsAcc[$track] = ($totalsAcc[$track] ?? 0) + $accuracy;
-
-                    // Count how many times this track appears
-                    $counts[$track] = ($counts[$track] ?? 0) + 1;
-                }
-            }
-
-            // Average
-            $averageAcc = [];
-            foreach ($totalsAcc as $track => $total) {
-                $averageAcc[$track] = round($total / $counts[$track], 3) * 100;
-            }
-
-            asort($averageAcc);          
-
-            // dd($averageAcc);
-
-            $durationTotals = [
-                'Information Technology' => 0,
-                'Computer Engineering' => 0,
-                'Computer Science' => 0,
-                'Multimedia Arts' => 0,
-            ];
-
-            $attemptCount = 0;
-
-
-            $duration_per_category = [];
-
-
-            $trackTotals = [
-                'Information Technology' => 0,
-                'Computer Engineering' => 0,
-                'Computer Science' => 0,
-                'Multimedia Arts' => 0,
-            ];
-
+            $recommendedTrack = $result['recommended_track'];
+            $averageAcc = $result['averageAcc'];
+            $averageDuration = $result['averageDuration'];
+            $trackPercentage = $result['trackPercentage'];
+            
             // dd($examResult);
+
+            $dateAttmpt = [];
+
             foreach ($examResult as $attempt) {
-                if (!empty($attempt->duration_per_category)) {
-                    $attemptCount++;
-
-                    foreach ($attempt->duration_per_category as $track => $duration) {
-                        $durationTotals[$track] += $duration;
-                    }
-                }
+                $dateAttmpt[] = $attempt->created_at->format('Y-m-d H:i:s');
+                
             }
+            // $trackPercentageA = [];
 
-            $averageDuration = [];
-
-            if ($attemptCount > 0) {
-                foreach ($durationTotals as $track => $total) {
-                    $averageDuration[$track] = round($total / $attemptCount, 2);
-                }
-            }
-
-
-            $tracks = ['', '', '', ''];
-            $scorePerTrack = [];
-
-            foreach ([
-                'Information Technology', 'Computer Engineering', 'Computer Science', 'Multimedia Arts'] as $track) {
-                $accuracy = $averageAcc[$track];               // e.g. 92
-                $time     = $averageDuration[$track];          // e.g. 55
-
-                $timeScore = 1 / max($time, 1);                 // lower time = higher score
-
-                $scorePerTrack[$track] =
-                    (0.7 * $accuracy) +                         // accuracy weight
-                    (0.3 * $timeScore * 100);                   // scaled time
-            }
-
-
-            $recommendedTrack = collect($scorePerTrack)
-                ->sortDesc()
-                ->keys()
-                ->first();
-
-
-
-
-            // dd($examResult, $duration_per_category, $averageDuration);
-
-            if ($examResult) {
-                return view('retrieve_result', compact('action', 'examResult', 'username', 'recommendedTrack', 'averageAcc', 'duration_per_category', 'averageDuration'));
-            } else {
-                return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
-            }
+            // foreach ($examResult as $attempt => $data) {
+            //     $trackPercentageA[$attempt]['percentage'] = $attempt->track_percentage;
+            // }
+            // dd($trackPercentage);
+            
+            return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'averageAcc', 'averageDuration', 'examResult','trackPercentage', 'dateAttmpt'));
 
         } else {
             return redirect()->back()->withErrors(['action' => 'Invalid action specified.']);
@@ -192,18 +153,50 @@ class RetrieveResultController extends Controller
     public function getSpecificExam($id)
     {
         $examResult = ExamResult::with('student')->findOrFail($id);
+
+        $username = $examResult ? $examResult->student->name : null;
+        
         $questions = $examResult ? $examResult->questions : null;
+    
+        $questionsData = $examResult ? $examResult->questionsData : null;
+
         $predictedTrack = $examResult ? $examResult->predicted_track : null;
+
+        $secondaryTrack = $examResult ? $examResult->secondary_track : null;
+    
         $trackPercentage = $examResult ? $examResult->track_percentage : null;
+
+        $coreCompetencies = $examResult ? $examResult->core_competencies : null;
+
+        $detailedCompetencyLevels = $examResult ? $examResult->detailed_competencies : null;
+
         $acc_per_category = $examResult ? $examResult->accuracy_per_category : null;
-        $questionsData = $examResult['questionsData'];
+
+        $duration_per_category = $examResult ? $examResult->duration_per_category : null;
+
+        $note = $examResult ? $examResult->evaluation_note : null;
+
+        $model_accuracy = $examResult ? $examResult->model_accuracy : null;
 
         
-        $username = $examResult ? $examResult->student->name : null;
+        // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
+        $redirect = view('retrieve_specific_result', compact(
+            'username',
+            'examResult',
+            'questions',
+            'questionsData',
+            'predictedTrack',
+            'secondaryTrack',
+            'trackPercentage',
+            'model_accuracy',
+            'acc_per_category',
+            'duration_per_category',
+            'coreCompetencies',
+            'detailedCompetencyLevels',
+            'note'
+        ));
 
-        // dd($questionsData);
-
-        return view('retrieve_specific_result', compact('username', 'examResult', 'questions', 'predictedTrack', 'trackPercentage', 'acc_per_category', 'questionsData'));
+        return $redirect;
         
     }
 }

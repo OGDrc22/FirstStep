@@ -327,8 +327,7 @@ class ExamReasultController extends Controller
             ($normalizedConfidence["digital_creativity_confidence"]
             + $normalizedConfidence["ui_design_confidence"]) / 2;
 
-        
-        $coreCompetenciesAsLevel = [];
+
 
         foreach ($coreCompetencies as $name => $score) {
 
@@ -341,11 +340,12 @@ class ExamReasultController extends Controller
                 }
             }
 
-            if ($allNotAssessed) {
-                $coreCompetenciesAsLevel[$name] = "Not Assessed";
-            } else {
-                $coreCompetenciesAsLevel[$name] = $this->getCoreCompetencyLevels($score);
-            }
+            $level = $allNotAssessed ? "Not Assessed" : $this->getCoreCompetencyLevels($score);
+
+            $coreCompetencies[$name] = [
+                'score' => $score,
+                'level' => $level
+            ];
 
         }
 
@@ -356,12 +356,18 @@ class ExamReasultController extends Controller
             
             $comp = str_replace('_confidence', '', $name);
             if ($competencyScores[$comp]['total'] == 0) {
-                $detailedCompetencyLevels[$comp] = "Not Assessed";
+                $detailedCompetencyLevels[$comp] = [
+                    'score' => $score,
+                    'level' => "Not Assessed"
+                ];
             } else {
-                $detailedCompetencyLevels[$comp] = $this->getLevel($score);
+                $detailedCompetencyLevels[$comp] = [
+                    'score' => $score,
+                    'level' => $this->getLevel($score)
+                ];
             }
         }
-        // dd($coreCompetencies, $coreCompetenciesAsLevel, $detailedCompetencyLevels);
+        // dd($coreCompetencies, $detailedCompetencyLevels);
 
 
         // Prepare payload for Python script
@@ -414,34 +420,59 @@ class ExamReasultController extends Controller
 
         // dd($exam_qd, $keyAns);
         $predictedTrack = $resData['predicted_track'];
+        $predictedTrack = [
+            'track' => $predictedTrack[0],
+            'percentage' => $predictedTrack[1]
+        ];
         $secondaryTrack = $resData['secondary_track'];
+        $secondaryTrack = [
+            'track' => $secondaryTrack[0],
+            'percentage' => $secondaryTrack[1]
+        ];
         $trackPercentage = $resData['track_percentage'];
 
-        $accuracy = $resData['model_accuracy'];
+        foreach ($trackPercentage as $track => $track_p) {
+            $trackPercentage[$track] = [
+                'track' => $track,
+                'percentage' => $track_p
+            ];
+        }
 
-        $note = $this->generateCounselorNote($trackPercentage, $coreCompetencies);
+        $model_accuracy = $resData['model_accuracy'];
 
-        dd($predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $coreCompetenciesAsLevel, $note, $detailedCompetencyLevels, $resData);
+        $tPercentage = [];
+        foreach ($trackPercentage as $track => $data) {
+            $tPercentage[$track] = $data['percentage'];
+        }
+
+        $note = $this->generateCounselorNote($tPercentage, $coreCompetencies);
+
+        // dd($predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $note, $detailedCompetencyLevels, $resData);
         // dd($duration_per_category);
         // dd($accuracy);
 
         // dd($keyAns);
         // Save results
-        // DB::transaction(function () use ($student, $correct, $predictedTrack, $trackPercentage, $accuracy, $duration_per_category, $questions, $questionsData, $acc_per_category) {
-        //     $student->examResults()->create([
-        //         'score' => $correct,
-        //         'predicted_track' => $predictedTrack,
-        //         'track_percentage' => $trackPercentage,
-        //         'accuracy' => $accuracy,
-        //         'accuracy_per_category' => $acc_per_category,
-        //         'duration_per_category' => $duration_per_category,
-        //         'questionsData' => $questionsData,
-        //         'questions' => $questions,
-        //     ]);
-        // });
+        DB::transaction(function () use ($student, $correct, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $note, $accuracy, $duration_per_category, $questions, $questionsData, $acc_per_category) {
+            $student->examResults()->create([
+                'score' => $correct,
+                'predicted_track' => $predictedTrack,
+                'secondary_track' => $secondaryTrack, //
+                'track_percentage' => $trackPercentage,
+                'core_competencies' => $coreCompetencies, //
+                'detailed_competencies' => $detailedCompetencyLevels, //
+                'evaluation_note' => $note, //
+                'accuracy' => $accuracy,
+                'accuracy_per_category' => $acc_per_category,
+                'duration_per_category' => $duration_per_category,
+                'questionsData' => $questionsData,
+                'questions' => $questions,
+            ]);
+        });
 
         // dd($acc_per_category);
-        $accuracy = $resData['sys_accuracy'] * 100 . "%";
+        // $accuracy = $model_accuracy * 100 . "%";
+        $model_accuracy = 0;
 
 
         // FEEDBACK DATA
@@ -468,15 +499,16 @@ class ExamReasultController extends Controller
             'keyAns',
             'keyAnsText',
             'predictedTrack',
+            'secondaryTrack',
             'trackPercentage',
-            'accuracy',
+            'model_accuracy',
             'acc_per_category',
             'correct',
             'totalQuestions',
             'duration_per_category',
             'coreCompetencies',
-            'coreCompetenciesAsLevel',
-            'detailedCompetencyLevel'
+            'detailedCompetencyLevels',
+            'note'
         ));
 
         if ($feedback) {
