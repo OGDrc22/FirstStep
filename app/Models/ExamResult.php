@@ -15,7 +15,7 @@ class ExamResult extends Model
         'core_competencies',
         'detailed_competencies',
         'evaluation_note',
-        'accuracy',
+        'aptitude',
         'accuracy_per_category',
         'duration_per_category',
         'answers',

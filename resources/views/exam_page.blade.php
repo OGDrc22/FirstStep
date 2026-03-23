@@ -45,7 +45,7 @@
                         <input type="hidden" name="questionText" id="questionText">
                         <input type="hidden" name="category" id="try">
                         @foreach ($data['data']['questions'] as $q)
-                            <div class="question-card" data-index="{{ $loop->index }}" data-competencies='@json($q["competencies"])'>
+                            <div class="question-card" data-index="{{ $loop->index }}" data-competencies='@json($q["competencies"])' data-q-type='{{ $q["type"] }}' data-choices-equivalent='@json($q["choice_equivalent"] ?? $q["choices_equivalent"] ?? null)'>
                                 <h3 class="text_h cat_text">{{ $q['category'] }}</h3>
                                 <h3 class="question">{{ $loop->index + 1 }}. {{ $q['question'] }}</h3>
                                 

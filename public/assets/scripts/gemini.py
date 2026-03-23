@@ -143,7 +143,16 @@ def main():
     if not api_key:
         raise Exception("GOOGLE_API_KEY is missing")
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-2.5-flash')
+    generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 40,
+        "response_mime_type": "application/json", # <--- THIS IS THE KEY SETTING
+    }
+    model = genai.GenerativeModel(
+        model_name="gemini-2.5-flash",
+        generation_config=generation_config,
+    )
 
     update_job(
         'processing',
@@ -226,170 +235,78 @@ def main():
     )
     time.sleep(div3)
 
-    # prompt = f"""
-        # You are an exam content generator for a career aptitude assessment
-        # similar to the National Career Assessment Examination (NCAE).
-
-        # TARGET:
-        # Grade 10 students who have NOT yet chosen a specialization or college course.
-
-        # GOAL:
-        # Measure interest, reasoning ability, and basic familiarity with technology-related fields.
-
-        # Generate EXACTLY 20 multiple-choice questions based on the interests: {interest_text}.
-
-        # CATEGORIES:
-        # Distribute the questions across these categories:
-        # - Information Technology
-        # - Computer Science
-        # - Computer Engineering
-        # - Multimedia Arts
-
-        # QUESTION STYLE (VERY IMPORTANT):
-        # - Questions must be understandable by Grade 10 students
-        # - Avoid advanced programming or engineering terminology
-        # - Focus on:
-        # • basic computing knowledge
-        # • logical thinking
-        # • simple technology concepts
-        # • everyday technology scenarios
-        # • creativity and digital media concepts
-        # - Use situational or problem-based questions when possible
-
-        # EXAMPLES OF APPROPRIATE DIFFICULTY:
-        # - basic computer parts
-        # - simple logic problems
-        # - identifying digital tools
-        # - recognizing programming concepts (very basic)
-        # - multimedia creativity or design thinking
-
-        # QUESTION FORMAT:
-        # - 4 choices (A–D)
-        # - only ONE correct answer
-        # - clear and concise wording
-
-        # CATEGORY BALANCE:
-        # Try to distribute questions evenly among the four categories.
-
-        # STRICT OUTPUT RULES:
-        # - Output ONLY valid JSON
-        # - Do NOT include explanations
-        # - Do NOT include extra text
-        # - Follow the schema EXACTLY
-
-        # JSON SCHEMA:
-        # {{
-        # "questions": [
-        #     {{
-        #     "number": 1,
-        #     "category": "Information Technology",
-        #     "question": "Question text",
-        #     "choices": {{
-        #         "A": "choice",
-        #         "B": "choice",
-        #         "C": "choice",
-        #         "D": "choice"
-        #     }},
-        #     "answer": "A"
-        #     }}
-        # ]
-        # }}
-        # """
-
     prompt = f"""
-        You are an exam content generator for a career aptitude assessment
-        similar to the National Career Assessment Examination (NCAE).
+    Act as an Exam Content Generator for a Grade 10 Career Aptitude Assessment (similar to the NCAE).
+    The goal is to measure interest and basic reasoning for students who have not yet chosen a specialization.
 
-        TARGET PARTICIPANTS:
-        Grade 10 students who have NOT yet chosen a specialization or college course.
+    ### TARGET AUDIENCE
+    - 10th Grade students (minimal technical background).
+    - Avoid: Advanced programming, complex algorithms, or college-level engineering.
 
-        GOAL:
-        Measure interest, reasoning ability, and basic familiarity with
-        technology-related fields.
+    ### CONTENT SCOPE
+    - **Interests to incorporate:** {interest_text}
+    - **Categories:** Information Technology, Computer Science, Computer Engineering, Multimedia Arts.
+    - **Allowed Competencies (Pick exactly 2 per question):** logical_reasoning, syntax_analysis, algorithmic_thinking, hardware_systems, networking_systems, system_organization, digital_creativity, ui_design, problem_solving, attention_to_detail.
 
-        Generate EXACTLY 20 multiple-choice questions based on the interests: {interest_text}.
+    ### QUESTION QUANTITY & DISTRIBUTION
+    - Generate EXACTLY 20 questions.
+    - Distribute evenly (5 questions per category).
 
-        CATEGORIES:
-        Distribute questions across these categories:
-        - Information Technology
-        - Computer Science
-        - Computer Engineering
-        - Multimedia Arts
+    ### STRICT TYPE DEFINITIONS
+    1. **Objective**: Testing facts or reasoning. MUST have a correct "answer" (A, B, C, or D).
+    2. **Situational**: Testing application in a scenario. MUST have a correct "answer".
+    3. **Preference**: Testing interest. "answer" must be an empty string "". MUST include "choice_equivalent" mapping each option to one of the 4 Categories.
 
-        IMPORTANT QUESTION TYPES:
-        The exam should include a mix of the following question styles:
+    ### OUTPUT FORMAT RULES
+    - Output ONLY valid JSON.
+    - No conversational filler, no markdown code blocks (unless requested), no explanations.
+    - Follow this schema exactly:
 
-        - Situational or scenario-based questions (real-life technology situations)
-        - Logical reasoning questions
-        - Basic technology knowledge questions
-        - Problem-solving questions
-        - Interest or preference questions
-        - Creativity or multimedia-related questions
-        - Classification questions about technology concepts
-        - Process or step-based questions
-
-        Ensure questions remain appropriate for Grade 10 students with minimal technical background.
-
-        Avoid:
-        - advanced programming terms
-        - complex algorithms
-        - college-level engineering topics
-
-        Focus on:
-        - basic computing concepts
-        - logical thinking
-        - everyday technology use
-        - simple design or creativity tasks
-        - basic hardware familiarity
-
-        QUESTION RULES:
-        - Each question must have 4 choices (A–D)
-        - Only ONE correct answer
-        - Questions must be clear and concise
-
-        CATEGORY DISTRIBUTION:
-        Try to distribute questions evenly across the four categories.
-
-        Allowed competencies:
-        - logical_reasoning
-        - syntax_analysis
-        - algorithmic_thinking
-        - hardware_systems
-        - networking_systems
-        - system_organization
-        - digital_creativity
-        - ui_design
-        - problem_solving
-        - attention_to_detail
-
-
-        STRICT OUTPUT RULES:
-        - Select 2 to 3 competencies
-        - Choose competencies only from the Allowed competencies list
-        - Output ONLY valid JSON
-        - Do NOT include explanations
-        - Do NOT include extra text
-        - Follow the schema EXACTLY
-
-        JSON SCHEMA:
+    {{
+    "questions": [
         {{
-        "questions": [
-            {{
-            "number": 1,
-            "category": "Information Technology",
-            "competencies": ["competency1","competency2"],
-            "question": "Question text",
-            "choices": {{
-                "A": "choice",
-                "B": "choice",
-                "C": "choice",
-                "D": "choice"
-            }},
-            "answer": "A"
-            }}
-        ]
+        "number": 1,
+        "type": "Objective",
+        "category": "Computer Science",
+        "competencies": ["algorithmic_thinking", "problem_solving"],
+        "question": "Which of the following is a step-by-step instruction to solve a problem?",
+        "choices": {{
+            "A": "A variable",
+            "B": "An algorithm",
+            "C": "A hardware",
+            "D": "A screen"
+        }},
+        "answer": "B"
+        }},
+        {{
+        "number": 2,
+        "type": "Preference",
+        "category": "",
+        "competencies": ["digital_creativity", "ui_design"],
+        "question": "Which activity would you enjoy doing the most on a weekend?",
+        "choices": {{
+            "A": "Setting up a home Wi-Fi network",
+            "B": "Writing a simple code to automate a task",
+            "C": "Taking apart a broken radio to see how it works",
+            "D": "Designing a digital poster for a school event"
+        }},
+        "answer": "",
+        "choice_equivalent": {{
+            "A": "Information Technology",
+            "B": "Computer Science",
+            "C": "Computer Engineering",
+            "D": "Multimedia Arts"
         }}
-        """
+        }}
+    ]
+    }}
+
+    ### NEGATIVE CONSTRAINTS
+    - DO NOT use "Logical reasoning" or "Knowledge" as a 'type'.
+    - DO NOT include "choice_equivalent" in Objective or Situational questions.
+    - DO NOT mix "Preference" questions with a correct answer.
+    - DO NOT use technical jargon like 'asynchronous' or 'polymorphism'.
+    """
 
     response = model.generate_content(prompt)
 
@@ -414,21 +331,22 @@ def main():
     )
     time.sleep(div3)
 
-    update_job(
-        'processing',
-        message="Parsing questions...",
-        progress=100
-    )
+    
 
     raw_text = response.text.strip()
 
     # Remove ```json and ``` wrappers
-    if raw_text.startswith("```"):
-        raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+    # if raw_text.startswith("```"):
+    #     raw_text = raw_text.replace("```json", "").replace("```", "").strip()
 
     # parsed_questions = parse_questions(response.text)
     try:
         parsed_questions = json.loads(raw_text)
+        update_job(
+            'processing',
+            message="Parsing questions...",
+            progress=100
+        )
     except json.JSONDecodeError as e:
         raise Exception(f"Failed to parse AI output: {e}")
 

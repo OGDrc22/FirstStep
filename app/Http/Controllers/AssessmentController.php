@@ -224,15 +224,27 @@ class AssessmentController extends Controller
         $keys = [];
 
         foreach ($questions['questions'] as $qSet) {
+            // if (empty($qSet['answer'])) {
+            //     $qSet['answer'] = "E";
+            // }
             $keys[] = $qSet['answer'];
         }
 
+        // dd($keys);
+// 
         $keysText = [];
 
         foreach ($questions['questions'] as $i => $q) {
+            // if (empty($q['answer'])) {
+            //     $q['answer'] = "E";
+            //     $q['choices'] = [];
+            // }
             if (array_key_exists($q['answer'], $q['choices'])) {
                 $keysText[$i] = $q['choices'][$q['answer']];
             }
+            // else {
+            //     $keysText[$i] = "Preference";
+            // }
         }
 
         session(['answer_keys' => $keys]);

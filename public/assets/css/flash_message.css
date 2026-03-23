@@ -180,6 +180,78 @@
     display: inline-block;
 }
 
+.icon-pie {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    -webkit-mask-image: url('/public/assets/icons/chart.svg');
+    mask-image: url('icons/chart.svg');
+    background-color: var(--secondary-color);
+    display: inline-block;
+}
+
+.icon-chart {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    -webkit-mask-image: url('/public/assets/icons/chart-diagram.svg');
+    mask-image: url('icons/chart-diagram.svg');
+    background-color: var(--secondary-color);
+    display: inline-block;
+}
+
+.icon-user {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    -webkit-mask-image: url('/public/assets/icons/user.svg');
+    mask-image: url('icons/user.svg');
+    background-color: var(--secondary-color);
+    display: inline-block;
+}
+
+.icon-email {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    -webkit-mask-image: url('/public/assets/icons/sms.svg');
+    mask-image: url('icons/sms.svg');
+    background-color: var(--secondary-color);
+    display: inline-block;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;

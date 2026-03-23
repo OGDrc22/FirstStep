@@ -19,8 +19,12 @@ DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\main_algo_debug.txt"
 SCRIPT_DIR = Path(__file__).parent
 data_path = SCRIPT_DIR / "files" / "ai_training_dataset_10000_rows.csv"
 
+
+#TRAIN
 # df = pd.read_csv(data_path)
 
+
+#Actual
 model_path = SCRIPT_DIR / "model.pkl"
 model = joblib.load(model_path)
 
@@ -34,11 +38,15 @@ FEATURE_COLUMNS = [
     "logic_confidence","syntax_confidence","algorithm_confidence","hardware_confidence","networking_confidence",
     "system_org_confidence","creativity_confidence","ui_design_confidence","attention_detail_confidence","problem_solving_confidence",
 
+    "IT_interest","CS_interest","CE_interest","MMA_interest",
+
     "IT_accuracy","CS_accuracy","CE_accuracy","MMA_accuracy",
 
     "IT_time_ratio","CS_time_ratio","CE_time_ratio","MMA_time_ratio"
 ]
 
+
+# TRAIN
 # X = df[FEATURE_COLUMNS]
 # y = df["Track"]
 
@@ -60,18 +68,15 @@ FEATURE_COLUMNS = [
 
 # print("✅ Model trained and saved!")
 
+
+
+
 # accuracy = model.score(X_test, y_test)
 
 
-# Label decoder
-# le_track = LabelEncoder()
-# le_track.fit(df["Track"])
 
 
-# ------------------------------
-# 2. RECEIVE INPUT FROM LARAVEL
-# ------------------------------
-
+#Actual
 try:
     payload = json.load(sys.stdin)
 except Exception as e:
@@ -84,35 +89,9 @@ with open(DEBUG_FILE, "a", encoding="utf-8") as f:
         f.write(f"🔄 features: {len(features)}\n")
         f.write(f"🔄 FEATURE_COLLUMNS: {len(FEATURE_COLUMNS)}\n")
 
-# ------------------------------
-# 3. BUILD FEATURE VECTOR
-# ------------------------------
-
-# competency scores from Laravel
-# competency_scores = exam["competency_scores"]
-
-# logic = competency_scores.get("logical_reasoning", 0)
-# syntax = competency_scores.get("syntax_analysis", 0)
-# algorithm = competency_scores.get("algorithmic_thinking", 0)
-# hardware = competency_scores.get("hardware_systems", 0)
-# networking = competency_scores.get("networking_systems", 0)
-# system_org = competency_scores.get("system_organization", 0)
-# creativity = competency_scores.get("digital_creativity", 0)
-# ui_design = competency_scores.get("ui_design", 0)
-# attention_detail = competency_scores.get("attention_to_detail", 0)
-# problem_solving = competency_scores.get("problem_solving", 0)
 
 
-# # category accuracy
-# accuracy_per_cat = exam["accuracy_per_category"]
 
-# IT_accuracy = accuracy_per_cat.get("Information Technology", 0)
-# CS_accuracy = accuracy_per_cat.get("Computer Science", 0)
-# CE_accuracy = accuracy_per_cat.get("Computer Engineering", 0)
-# MMA_accuracy = accuracy_per_cat.get("Multimedia Arts", 0)
-
-
-# create dataframe for model
 try:
     new_student = pd.DataFrame(
         [features],
@@ -124,15 +103,12 @@ except Exception as e:
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
             f.write(f"🎯 New_Student: {e}\n")
 
-# # ------------------------------
-# # 4. PREDICT
-# # ------------------------------
 
 try:
 
-    probabilities = model.predict_proba(new_student)[0]
+    probabilities = model.predict_proba(new_student)[0].tolist()
 
-    track_labels = model.classes_
+    track_labels = model.classes_.tolist()
 
     track_percentage = {}
     for track, prob in zip(track_labels, probabilities):
@@ -141,8 +117,6 @@ except Exception as e:
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
             f.write(f"🎯 sorted_tracks: {e}\n")
 
-# best_index = np.argmax(probabilities)
-# predicted_track = track_labels[best_index]
 
 sorted_tracks = sorted(track_percentage.items(), key=lambda x: x[1], reverse=True)
 
@@ -159,6 +133,7 @@ secondary_recommendation = sorted_tracks[1]
 
 output = {
     "track_percentage": track_percentage,
+    "probabilities": probabilities,
     "predicted_track": primary_recommendation,
     "secondary_track": secondary_recommendation,
     # "model_accuracy": round(accuracy, 2)

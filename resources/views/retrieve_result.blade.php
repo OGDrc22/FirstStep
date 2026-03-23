@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/nav_bar.css') }}">
 </head>
 
+
+
 <body class="bg-overlay">
 
     <header class="header-pcu">
@@ -23,90 +25,134 @@
         </div>
     </header>
 
-    @if ($errors->has('email'))
-        <div class="alert alert-danger">{{ $errors->first('email') }}</div>
-    @endif
+    <div class="content">
+        @if ($errors->has('email'))
+            <div class="alert alert-danger">{{ $errors->first('email') }}</div>
+        @endif
 
 
-    @if (!isset($examResult))
-        <!--entering -->
-        <div class="page-Cencontainer">
-            <div class="login-card-wrapper">
-                <div class="login-card">
-                    <h2 class="form-title">Enter your credentials</h2>
+        @if (!isset($examResult))
+            <!--entering -->
+            <div class="page-Cencontainer">
+                <div class="login-card-wrapper">
+                    <div class="login-card">
+                        <h2 class="form-title">Enter your credentials</h2>
 
-                    <form method="POST" action="/get-result">
-                        @csrf
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Email@gmail.com" required>
-                        </div>
+                        <form method="POST" action="/get-result">
+                            @csrf
+                            <div class="form-group">
+                                <input type="email" id="email" name="email" placeholder="Email@gmail.com" required>
+                            </div>
 
-                        <div class="btn-group">
-                            <button type="submit" name="action" value="latest" class="btn-result">
-                                <i class="btn-icon icon-search-status" alt="Search Icon"></i>
-                                <span>Get Latest Result</span>
-                            </button>
+                            <div class="btn-group">
+                                <button type="submit" name="action" value="latest" class="btn-result">
+                                    <i class="btn-icon icon-search-status" alt="Search Icon"></i>
+                                    <span>Get Latest Result</span>
+                                </button>
 
-                            <button type="submit" name="action" value="all" class="btn-result">
-                                <i class="btn-icon icon-search-status" alt="Search Icon"></i>
-                                <span>See All Result</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="home-btn-container">
-                <a href="{{ route('welcome') }}" class="home-link"><i class="icon-home"></i> Back to Home</a>
-            </div>
-        </div>
-    @endif
-
-
-    <!-- score board> -->
-
-    @if (isset($examResult))
-        @if ($action === 'latest')
-            <div class="result-display-card">
-                <h3 class="card-user-title">Exam result for {{ $username }}</h3>
-
-                <div class="card-data-row">
-                    <span class="card-label">Score:</span>
-                    <span class="card-value">{{ $examResult->score }}</span>
-                </div>
-
-                <div class="card-data-row">
-                    <span class="card-label">Recommended Track:</span>
-                    <span class="card-value highlight" style="color: #2D79C1;">{{ $predictedTrack['track'] }}</span>
-                    <span class="card-value highlight" style="color: #2D79C1;">{{ $secondaryTrack['track'] }}</span>
-                </div>
-            </div>
-
-            <div class="charts-container">
-                <div class="left-chart">
-                    <h3>Core Competecies</h3>
-
-                    <div class="chart-bar">
-                        <canvas id="bar-chart"></canvas>
+                                <button type="submit" name="action" value="all" class="btn-result">
+                                    <i class="btn-icon icon-search-status" alt="Search Icon"></i>
+                                    <span>See All Result</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <div class="home-btn-container">
+                    <a href="{{ route('welcome') }}" class="home-link"><i class="icon-home"></i> Back to Home</a>
+                </div>
+            </div>
+        @endif
 
-                <div class="right-chart">
-                    <h3>Track Percentage:</h3>
 
-                    <div class="chart">
-                        <div class="chart-wrapper">
-                            <canvas id="doughnutChart">
-                            </canvas>
+        <!-- score board> -->
+
+        @if (isset($examResult))
+            @if ($action === 'latest')
+                <h3 class="result-title">Assessment Result</h3>
+
+                <!-- <div class="card-data-row">
+                    <span class="card-label">Score:</span>
+                    <span class="card-value">{{ $examResult->score }}</span>
+                </div> -->
+
+                
+                
+                <div class="dashboard-grid">
+                    <div class="user-card">
+                        <div class="user-detail">
+                            <i class="icon-user" alt="User Icon"></i>
+                            <span class="user-name">{{ $username }}</span>
                         </div>
-                        <div class="chart-info">
-                            <div class="info">
+                        <div class="user-detail">
+                            <i class="icon-email" alt="Email Icon"></i>
+                            <span class="user-email">{{ $useremail }}</span>
+                        </div>
+                    </div>
+                    <div class="result-display-card card">
+
+                        <div class="card-data-row">
+                            <span class="card-label">Primary Recommendation</span>
+                            <span class="card-value highlight">{{ $predictedTrack['track'] }}</span>
+                            <p>{{ $note }}</p>
+                        </div>
+
+                        <div class="card-data-row">
+                            <span class="card-label">Seondary Recommendation</span>
+                            <span class="card-value highlight">{{ $secondaryTrack['track'] }}</span>
+                        </div>
+                    </div>
+                    <div class="card aptitude-card">
+                        <h1>{{ $aptitude }}%</h1>
+                        <h3>APTITUDE SCORE</h3>
+                    </div>
+
+                    <div class="left-chart card">
+                        <div class="chart-label">
+                            <h3>Core Competencies</h3>
+                            <i class="icon-chart" alt="Chart Icon"></i>
+                        </div>
+
+                        <div class="chart-bar" style="position: relative;">
+                            <!-- <div style="display: flex; position: relative; height: 250px;"> -->
+
+                                <!-- LEFT: Labels -->
+                                <div id="custom-labels" style="position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    width: 100%;
+                                    pointer-events: none;
+                                    display: flex;
+                                    flex-direction: column;
+                                    height: 100%;
+                                    ">
+                                </div>
+
+                                <!-- RIGHT: Chart -->
+                                <div style="height: 100%; width: 100%;">
+                                    <canvas id="bar-chart"></canvas>
+                                </div>
+
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    
+                    <div class="right-chart card">
+                        <div class="chart-label">
+                            <h3>Track Breakdown</h3>
+                            <i class="icon-pie" alt="Pie Chart Icon"></i>
+                        </div>
+
+                        <div class="chart">
+                            <div class="chart-wrapper">
+                                <canvas id="doughnutChart">
+                                </canvas>
+                            </div>
+                            <div class="chart-info">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Track</th>
-                                            <th>Track Percentage</th>
-                                            <th>Accuracy</th>
-                                            <th>Duration</th>
+                                            <!-- <th>Track</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -114,49 +160,39 @@
                                             <td>
                                                 <div>
                                                     <div
-                                                        style="background-color: #640082; width: 32px; height: 16px; border-radius: 4px;">
-                                                    </div>CE
+                                                        style="background-color: #8b5cf6; width: 8px; height: 8px; border-radius: 50%;">
+                                                    </div>
+                                                    Computer Engineering
                                                 </div>
                                             </td>
-                                            <td>{{ $trackPercentage['Computer Engineering']['percentage'] }}%</td>
-                                            <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
-                                            <td>{{ $duration_per_category['Computer Engineering']}} s</td>
+
+                                            <td>
+                                                <div>
+                                                    <div
+                                                        style="background-color: #ffcd56; width: 8px; height: 8px; border-radius: 50%;">
+                                                    </div>
+                                                    Computer Science
+                                                </div>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <div>
                                                     <div
-                                                        style="background-color: #ffcd56; width: 32px; height: 16px; border-radius: 4px;">
-                                                    </div>CS
+                                                        style="background-color: #36a2eb; width: 8px; height: 8px; border-radius: 50%;">
+                                                    </div>
+                                                    Information Technolgy
                                                 </div>
                                             </td>
-                                            <td>{{ $trackPercentage['Computer Science']['percentage'] }}%</td>
-                                            <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
-                                            <td>{{ $duration_per_category['Computer Science']}} s</td>
-                                        </tr>
-                                        <tr>
+
                                             <td>
                                                 <div>
                                                     <div
-                                                        style="background-color: #36a2eb; width: 32px; height: 16px; border-radius: 4px;">
-                                                    </div>IT
+                                                        style="background-color: #7dff7d; width: 8px; height: 8px; border-radius: 50%;">
+                                                    </div>
+                                                    Miltimedia Arts
                                                 </div>
                                             </td>
-                                            <td>{{ $trackPercentage['Information Technology']['percentage'] }}%</td>
-                                            <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
-                                            <td>{{ $duration_per_category['Information Technology']}} s</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <div
-                                                        style="background-color: #7dff7d; width: 32px; height: 16px; border-radius: 4px;">
-                                                    </div>MMA
-                                                </div>
-                                            </td>
-                                            <td>{{ $trackPercentage['Multimedia Arts']['percentage'] }}%</td>
-                                            <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
-                                            <td>{{ $duration_per_category['Multimedia Arts']}} s</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -164,85 +200,90 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <h4>
-                {{ $note }}
-            </h4>
+                
 
-            <div class="questions-review">
-                @foreach ($questions as $index => $q)
-                    <div class="question-review-card">
-                        <h4 class="question-review">{{ $q }}</h4>
+                <div class="questions-review">
+                    @foreach ($questions as $index => $q)
+                        <div class="question-review-card">
+                            <h4 class="question-review">{{ $q }}</h4>
 
-                        @php
-                            $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                            $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                            $isCorrect = $studentAns === $correctAns;
-                        @endphp
-                        <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
-                            Your Answer:
-                            @if (isset($questionsData[$index]['answer']))
-                                {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
-                            @else
-                                No Answer
-                            @endif
-                        </p>
-                        <p class="bg-success-alpha correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}.
-                            {{ $questionsData[$index]['keyAns'][1] }}
-                        </p>
-                        <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
-                    </div>
-                @endforeach
+                            @php
+                                $studentAns = $questionsData[$index]['answer'][0] ?? null;
+                                $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
+                                $isCorrect = $studentAns === $correctAns;
 
-            </div>
-
-            <!-- see all -->
-
-        @elseif($action === 'all')
-            <h2>All Exam Attempt Results for {{ $username }}</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <!-- <th>ID</th> -->
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Track Percentage</th>
-                        <th>Predicted Track</th>
-                        <th>Secondary Track</th>
-                        <th>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($examResult as $exam)
-                        <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
-                            <!-- <td>{{ $exam->id }}</td> -->
-                            <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
-                            <td>{{ $exam->score }}</td>
-                            <td>
-                                @foreach ($exam->sorted_tracks as $percentage)
-                                    {{ $percentage['track'] }}: {{ $percentage['percentage'] }}% <br>
-                                @endforeach
-                            </td>
-                            <td>{{ $exam->predicted_track['track'] }}</td>
-                            <td>{{ $exam->secondary_track['track'] }}</td>
-
-                            <td>{{ $exam->evaluation_note }}</td>
-
-                        </tr>
+                                $fullStudentAns = $questionsData[$index]['answer'][0] . ". " . $questionsData[$index]['answer'][1];
+                                $fullCorrectAns = $questionsData[$index]['keyAns'][0] . ". " . $questionsData[$index]['keyAns'][1];
+                            @endphp
+                            <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
+                                Your Answer:
+                                @if (isset($questionsData[$index]['answer']))
+                                    {{ $fullStudentAns }}
+                                @else
+                                    No Answer
+                                @endif
+                            </p>
+                            <p class="bg-success-alpha correctAnswer">
+                                Correct Answer:
+                                @if (!empty($questionsData[$index]['keyAns'][0]))
+                                    {{ $fullCorrectAns }}
+                                @else
+                                    Preference type of question (No Correct Answer)
+                                @endif
+                            </p>
+                            <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
+                        </div>
                     @endforeach
-                </tbody>
-            </table>
 
-            <h3>Recommended track based on all exam attempt:</h3>
-            <h4>{{ $recommendedTrack }}</h4>
+                </div>
 
-            <div class="chart-bar">
-                <canvas id="stackedLineChart"></canvas>
-            </div>
+                <!-- see all -->
+
+            @elseif($action === 'all')
+                <h2>All Exam Attempt Results for {{ $username }}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <!-- <th>ID</th> -->
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Track Percentage</th>
+                            <th>Predicted Track</th>
+                            <th>Secondary Track</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($examResult as $exam)
+                            <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
+                                <!-- <td>{{ $exam->id }}</td> -->
+                                <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
+                                <td>{{ $exam->score }}</td>
+                                <td>
+                                    @foreach ($exam->sorted_tracks as $percentage)
+                                        {{ $percentage['track'] }}: {{ $percentage['percentage'] }}% <br>
+                                    @endforeach
+                                </td>
+                                <td>{{ $exam->predicted_track['track'] }}</td>
+                                <td>{{ $exam->secondary_track['track'] }}</td>
+
+                                <td>{{ $exam->evaluation_note }}</td>
+
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <h3>Recommended track based on all exam attempt:</h3>
+                <h4>{{ $recommendedTrack }}</h4>
+
+                <div class="chart-bar">
+                    <canvas id="stackedLineChart"></canvas>
+                </div>
+            @endif
         @endif
-    @endif
-
+    </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
@@ -257,7 +298,7 @@
             new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: ['CpE', 'CS', 'IT', 'MMA'],
+                    labels: ['CE', 'CS', 'IT', 'MMA'],
                     datasets: [{
                         data: [
                             {{ $trackPercentage['Computer Engineering']['percentage'] }},
@@ -266,14 +307,15 @@
                             {{ $trackPercentage['Multimedia Arts']['percentage'] }}
                         ],
                         backgroundColor: ['#8b5cf6', '#facc15', '#3b82f6', '#4ade80'],
-                        borderWidth: 0,
-                        hoverOffset: 10
+                        borderWidth: 0
                     }]
                 },
                 options: {
                     cutout: '70%', // Makes it a thin, professional ring
                     plugins: {
-                        legend: { display: false } // We use our table as the legend
+                        legend: { display: false },
+                        maintainAspectRatio: false,
+                        reponsive: true
                     }
                 }
             });
@@ -303,22 +345,17 @@
                     axis: 'y',
                     label: labels,
                     data: scores,
-                    barThickness: 30,    // Height of the bar in pixels
-                    maxBarThickness: 40, // Ensures it never gets too chunky
+                    barThickness: 16,    // Height of the bar in pixels
+                    maxBarThickness: 40, // Ensures it never gets too chunky'
+                    // categoryPercentage: 0.8,   // more vertical spacing
+                    // barPercentage: 0.9,        // keep bars solid
                     fill: false,
                     backgroundColor: [
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 200, 102, 0.5)',
-                        'rgba(120, 255, 102, 0.5)',
-                        'rgba(102, 232, 255, 0.5)',
+                        'rgb(102, 130, 255)'
                     ],
-                    borderColor: [
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 200, 102)',
-                        'rgb(120, 255, 102)',
-                        'rgb(102, 232, 255)',
-                    ],
-                    borderWidth: 1
+                    borderWidth: 0,
+                    borderRadius: 15,
+                    borderSkipped: false,
                 }]
             };
 
@@ -329,29 +366,28 @@
                 options: {
                     indexAxis: 'y',
                     maintainAspectRatio: false,
-                    layout: {
-                        padding: { left: 50, right: 200 }
-                    },
+                    // layout: {
+                    //     padding: { left: 50, right: 50 }
+                    // },
                     plugins: {
                         legend: {
                             display: false
                         },
-                        datalabels: {
-                            anchor: 'end', // Position relative to the end of the bar
-                            align: 'end',  // Position the label after the anchor point
-                            offset: 4,
-                            formatter: (value, context) => {
-                                const level = levels[context.dataIndex];
-                                const score = value.toFixed(1);
-                                return `${level} (${score}%)`;
-                            }
-                        },
+                        // datalabels: {
+                        //     anchor: 'end',
+                        //     align: 'end',
+                        //     offset: 8,
+                        //     color: '#666', // Matches the gray in your image
+                        //     formatter: (value) => `${value.toFixed(0)}%`,
+                        //     font: { weight: 'bold' }
+                        // },
+                        datalabels: { display: false },
                         // Tooltip
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
                                     // Main Bar Label
-                                    return `Total Score: ${context.parsed.x.toFixed(1)}%`;
+                                    return `Total Score: ${context.parsed.x.toFixed(2)}%`;
                                 },
                                 afterLabel: function(context) {
                                     const label = context.label;
@@ -371,7 +407,7 @@
                                     // 3. Loop through sub-keys and pull data from your 'detailedCompetencies' object
                                     subKeys.forEach(key => {
                                         if (detailedCompetencies[key]) {
-                                            const score = (detailedCompetencies[key].score * 100).toFixed(1);
+                                            const score = (detailedCompetencies[key].score * 100).toFixed(2);
                                             const name = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
                                             lines.push(`${name}: ${score}%`);
                                         }
@@ -384,19 +420,50 @@
                     },
                     scales: {
                         // 2. Hide the Labels on the left (Y-axis)
-                        y: {
-                            display: true,
+                         y: {
+                            ticks: {
+                                display: false
+                            },
                             grid: {
-                                display: false // Optional: hides the horizontal grid lines
+                                display: false,   // Hides horizontal grid lines
+                                drawBorder: false // Hides the Y-axis line
+                            },
+                            border: {
+                                display: false
                             }
                         },
                         x: {
-                            max: 100
+                            max: 100,
+                            display: false,
+                            grid: { 
+                                display: false,
+                                drawBorder: false
+                            },
                         }
                     }
                 }
             };
             new Chart(ctx_bar, config);
+
+            const labelsContainer = document.getElementById('custom-labels');
+
+            labelsContainer.innerHTML = labels.map((label, index) => {
+                const level = levels[index];
+                const percentage = scores[index].toFixed(2) + '%';
+
+                return `
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        flex: 1;
+                        color: #666;
+                        padding: 16px 0 0 10px;
+                    ">
+                        <span>${label} — ${level}</span>
+                        <span style="color:#666;">${percentage}</span>
+                    </div>
+                `;
+            }).join('');
 
         </script>
     @elseif (isset($examResult) && $action === 'all')

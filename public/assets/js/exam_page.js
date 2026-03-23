@@ -12,8 +12,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // const competencies = 
 
+    function parseDatasetJson(el, key, fallback = null) {
+        const raw = el?.dataset?.[key];
+        if (!raw) return fallback;
+        try {
+            return JSON.parse(raw);
+        } catch (err) {
+            return raw;
+        }
+    }
+
     const questionData = Array.from({length: qCard.length}, (_, index) => ({
         index: index,
+        type: qCard[index].dataset.qType,
         questionText: qCard[index].querySelector('.question').innerText,
         keyAnswer: null,
         answer: [],
@@ -21,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
         endTime: null,
         duration: null,
         category: qCard[index].querySelector(".cat_text").innerText,
-        competencies: JSON.parse(qCard[index].dataset.competencies)
+        competencies: parseDatasetJson(qCard[index], 'competencies', []),
+        choice_equivalent: parseDatasetJson(qCard[index], 'choicesEquivalent', null)
     }));
 
     if (questionData == null) {
@@ -37,9 +49,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // const displayF = document.getElementById('timerDF');
 
     function onQuestionViewed(index) {
-        console.log('Viewing index:', index);
-        console.log('questionData length:', questionData.length);
-        console.log('questionData[index]:', questionData[index]);
+        // console.log('Viewing index:', index);
+        // console.log('questionData length:', questionData.length);
+        // console.log('questionData[index]:', questionData[index]);
+        console.log(questionData);
 
         if (!questionData[index]) {
             console.error('❌ Invalid question index:', index);
@@ -139,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             answers[cardIndex] = radio.value;
 
             onAnswerSelected(cardIndex, radio.value, textAns.value)
-            // console.log(textAns.value)
+            
             // console.log('Stored answer for', cardIndex, answers[cardIndex]);
             setCheck(cardIndex, answers[cardIndex])
             // recordAnswerTime(cardIndex);
@@ -279,7 +292,8 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.addEventListener('click', function() {
         if (currentQuestionIndex === qCard.length - 1) {
             stopTimer();
-            alertBgSimpleFlash.style.display = 'flex';x
+            // console.log(questionData);
+            alertBgSimpleFlash.style.display = 'flex';
         } else {
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);

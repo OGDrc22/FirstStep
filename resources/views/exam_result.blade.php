@@ -11,137 +11,180 @@
 </head>
 
 
-<body>
+<body class="bg-overlay">
     @if (isset($success))
         <div class="alert heads-up-message hum-success">
             <p class="p p-success">Your feedback has been submitted successfully!</p>
         </div>
     @endif
 
-    @if (isset($resData))
-        <!-- <h3>Score: {{ $correct }} / {{ $totalQuestions }}</h3> -->
+    <div class="content">
+        @if (isset($resData))
+            <h3 class="result-title">Assessment Result</h3>
 
-        <h3>Recommended Track: {{ $predictedTrack['track'] }}</h3>
-        <h3>Secondary Recommendation: {{ $secondaryTrack['track'] }}</h3>
+            <div class="dashboard-grid">
+                        <div class="user-card">
+                            <div class="user-detail">
+                                <i class="icon-user" alt="User Icon"></i>
+                                <span class="user-name">{{ $username }}</span>
+                            </div>
+                            <div class="user-detail">
+                                <i class="icon-email" alt="Email Icon"></i>
+                                <span class="user-email">{{ $useremail }}</span>
+                            </div>
+                        </div>
+                        <div class="result-display-card card">
 
-        <div class="charts-container">
-            <div class="left-chart">
-                <h3>Core Competecies</h3>
+                            <div class="card-data-row">
+                                <span class="card-label">Primary Recommendation</span>
+                                <span class="card-value highlight">{{ $predictedTrack['track'] }}</span>
+                                <p>{{ $note }}</p>
+                            </div>
 
-                <div class="chart-bar">
-                    <canvas id="bar-chart"></canvas>
-                </div>
-            </div>
+                            <div class="card-data-row">
+                                <span class="card-label">Seondary Recommendation</span>
+                                <span class="card-value highlight">{{ $secondaryTrack['track'] }}</span>
+                            </div>
+                        </div>
+                        <div class="card aptitude-card">
+                            <h1>{{ $aptitude }}%</h1>
+                            <h3>APTITUDE SCORE</h3>
+                        </div>
 
-            <div class="right-chart">
-                    <h3>Track Percentage:</h3>
+                        <div class="left-chart card">
+                            <div class="chart-label">
+                                <h3>Core Competencies</h3>
+                                <i class="icon-chart" alt="Chart Icon"></i>
+                            </div>
 
-                <div class="chart">
-                    <div class="chart-wrapper">
-                        <canvas id="doughnutChart">
-                        </canvas>
-                    </div>
-                    <div class="chart-info">
-                        <div class="info">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Track</th>
-                                        <th>Track Percentage</th>
-                                        <th>Accuracy</th>
-                                        <th>Duration</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <div
-                                                    style="background-color: #640082; width: 32px; height: 16px; border-radius: 4px;">
-                                                </div>CE
-                                            </div>
-                                        </td>
-                                        <td>{{ $trackPercentage['Computer Engineering']['percentage'] }}%</td>
-                                        <td>{{ $acc_per_category['Computer Engineering'] * 100 }}%</td>
-                                        <td>{{ gmdate("H:i:s", $duration_per_category['Computer Engineering']) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <div
-                                                    style="background-color: #ffcd56; width: 32px; height: 16px; border-radius: 4px;">
-                                                </div>CS
-                                            </div>
-                                        </td>
-                                        <td>{{ $trackPercentage['Computer Science']['percentage'] }}%</td>
-                                        <td>{{ $acc_per_category['Computer Science'] * 100 }}%</td>
-                                        <td>{{  gmdate("H:i:s", $duration_per_category['Computer Science']) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <div
-                                                    style="background-color: #36a2eb; width: 32px; height: 16px; border-radius: 4px;">
-                                                </div>IT
-                                            </div>
-                                        </td>
-                                        <td>{{ $trackPercentage['Information Technology']['percentage'] }}%</td>
-                                        <td>{{ $acc_per_category['Information Technology'] * 100 }}%</td>
-                                        <td>{{  gmdate("H:i:s", $duration_per_category['Information Technology']) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div>
-                                                <div
-                                                    style="background-color: #7dff7d; width: 32px; height: 16px; border-radius: 4px;">
-                                                </div>MMA
-                                            </div>
-                                        </td>
-                                        <td>{{ $trackPercentage['Multimedia Arts']['percentage'] }}%</td>
-                                        <td>{{ $acc_per_category['Multimedia Arts'] * 100 }}%</td>
-                                        <td>{{  gmdate("H:i:s", $duration_per_category['Multimedia Arts']) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="chart-bar" style="position: relative;">
+                                <!-- <div style="display: flex; position: relative; height: 250px;"> -->
+
+                                    <!-- LEFT: Labels -->
+                                    <div id="custom-labels" style="position: absolute;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        pointer-events: none;
+                                        display: flex;
+                                        flex-direction: column;
+                                        height: 100%;
+                                        ">
+                                    </div>
+
+                                    <!-- RIGHT: Chart -->
+                                    <div style="height: 100%; width: 100%;">
+                                        <canvas id="bar-chart"></canvas>
+                                    </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        
+                        <div class="right-chart card">
+                            <div class="chart-label">
+                                <h3>Track Breakdown</h3>
+                                <i class="icon-pie" alt="Pie Chart Icon"></i>
+                            </div>
+
+                            <div class="chart">
+                                <div class="chart-wrapper">
+                                    <canvas id="doughnutChart">
+                                    </canvas>
+                                </div>
+                                <div class="chart-info">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Track</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <div
+                                                            style="background-color: #8b5cf6; width: 8px; height: 8px; border-radius: 50%;">
+                                                        </div>
+                                                        Computer Engineering
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div>
+                                                        <div
+                                                            style="background-color: #ffcd56; width: 8px; height: 8px; border-radius: 50%;">
+                                                        </div>
+                                                        Computer Science
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <div
+                                                            style="background-color: #36a2eb; width: 8px; height: 8px; border-radius: 50%;">
+                                                        </div>
+                                                        Information Technolgy
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div>
+                                                        <div
+                                                            style="background-color: #7dff7d; width: 8px; height: 8px; border-radius: 50%;">
+                                                        </div>
+                                                        Miltimedia Arts
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <h4>
-            {{ $note }}
-        </h4>
-        
-        <div class="questions-review">
             
-            <!-- Can be used as Answer Review -->
-            @foreach ($questions as $index => $q)
-                <div class="question-review-card">
-                    <h4 class="question-review">{{ $q }}</h4>
+            <div class="questions-review">
+                
+                <!-- Can be used as Answer Review -->
+                @foreach ($questions as $index => $q)
+                        <div class="question-review-card">
+                            <h4 class="question-review">{{ $q }}</h4>
 
-                    @php
-                        $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                        $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                        $isCorrect = $studentAns === $correctAns;
-                    @endphp
-                    <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
-                        Your Answer:
-                        @if (isset($questionsData[$index]['answer']))
-                            {{  $questionsData[$index]['answer'][0]  }}. {{ $questionsData[$index]['answer'][1] }}
-                        @else
-                            No Answer
-                        @endif
-                    </p>
-                    <p class="bg-success-alpha correctAnswer">Correct Answer: {{ $questionsData[$index]['keyAns'][0] }}.
-                        {{ $questionsData[$index]['keyAns'][1] }}</p>
-                    <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
-                </div>
-            @endforeach
+                            @php
+                                $studentAns = $questionsData[$index]['answer'][0] ?? null;
+                                $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
+                                $isCorrect = $studentAns === $correctAns;
 
-        </div>
-            <!-- <h3>System Accuracy: {{ $model_accuracy }}</h3> -->
-    @endif
+                                $fullStudentAns = $questionsData[$index]['answer'][0] . ". " . $questionsData[$index]['answer'][1];
+                                $fullCorrectAns = $questionsData[$index]['keyAns'][0] . ". " . $questionsData[$index]['keyAns'][1];
+                            @endphp
+                            <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
+                                Your Answer:
+                                @if (isset($questionsData[$index]['answer']))
+                                    {{ $fullStudentAns }}
+                                @else
+                                    No Answer
+                                @endif
+                            </p>
+                            <p class="bg-success-alpha correctAnswer">
+                                Correct Answer:
+                                @if (!empty($questionsData[$index]['keyAns'][0]))
+                                    {{ $fullCorrectAns }}
+                                @else
+                                    Preference type of question (No Correct Answer)
+                                @endif
+                            </p>
+                            <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
+                        </div>
+                    @endforeach
+
+            </div>
+                <!-- <h3>System Accuracy: {{ $model_accuracy }}</h3> -->
+        @endif
+    </div>
 
 
         <a href="{{ route('welcome') }}">Home</a>
@@ -223,22 +266,17 @@
                     axis: 'y',
                     label: labels,
                     data: scores,
-                    barThickness: 30,    // Height of the bar in pixels
-                    maxBarThickness: 40, // Ensures it never gets too chunky
+                    barThickness: 16,    // Height of the bar in pixels
+                    maxBarThickness: 40, // Ensures it never gets too chunky'
+                    // categoryPercentage: 0.8,   // more vertical spacing
+                    // barPercentage: 0.9,        // keep bars solid
                     fill: false,
                     backgroundColor: [
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 200, 102, 0.5)',
-                        'rgba(120, 255, 102, 0.5)',
-                        'rgba(102, 232, 255, 0.5)',
+                        'rgb(102, 130, 255)'
                     ],
-                    borderColor: [
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 200, 102)',
-                        'rgb(120, 255, 102)',
-                        'rgb(102, 232, 255)',
-                    ],
-                    borderWidth: 1
+                    borderWidth: 0,
+                    borderRadius: 15,
+                    borderSkipped: false,
                 }]
             };
 
@@ -249,29 +287,28 @@
                 options: {
                     indexAxis: 'y',
                     maintainAspectRatio: false,
-                    layout: {
-                        padding: { left: 50, right: 200 }
-                    },
+                    // layout: {
+                    //     padding: { left: 50, right: 50 }
+                    // },
                     plugins: {
                         legend: {
                             display: false
                         },
-                        datalabels: {
-                            anchor: 'end', // Position relative to the end of the bar
-                            align: 'end',  // Position the label after the anchor point
-                            offset: 4,
-                            formatter: (value, context) => {
-                                const level = levels[context.dataIndex];
-                                const score = value.toFixed(1);
-                                return `${level} (${score}%)`;
-                            }
-                        },
+                        // datalabels: {
+                        //     anchor: 'end',
+                        //     align: 'end',
+                        //     offset: 8,
+                        //     color: '#666', // Matches the gray in your image
+                        //     formatter: (value) => `${value.toFixed(0)}%`,
+                        //     font: { weight: 'bold' }
+                        // },
+                        datalabels: { display: false },
                         // Tooltip
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
                                     // Main Bar Label
-                                    return `Total Score: ${context.parsed.x.toFixed(1)}%`;
+                                    return `Total Score: ${context.parsed.x.toFixed(2)}%`;
                                 },
                                 afterLabel: function(context) {
                                     const label = context.label;
@@ -291,7 +328,7 @@
                                     // 3. Loop through sub-keys and pull data from your 'detailedCompetencies' object
                                     subKeys.forEach(key => {
                                         if (detailedCompetencies[key]) {
-                                            const score = (detailedCompetencies[key].score * 100).toFixed(1);
+                                            const score = (detailedCompetencies[key].score * 100).toFixed(2);
                                             const name = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
                                             lines.push(`${name}: ${score}%`);
                                         }
@@ -304,19 +341,50 @@
                     },
                     scales: {
                         // 2. Hide the Labels on the left (Y-axis)
-                        y: {
-                            display: true,
+                         y: {
+                            ticks: {
+                                display: false
+                            },
                             grid: {
-                                display: false // Optional: hides the horizontal grid lines
+                                display: false,   // Hides horizontal grid lines
+                                drawBorder: false // Hides the Y-axis line
+                            },
+                            border: {
+                                display: false
                             }
                         },
                         x: {
-                            max: 100
+                            max: 100,
+                            display: false,
+                            grid: { 
+                                display: false,
+                                drawBorder: false
+                            },
                         }
                     }
                 }
             };
             new Chart(ctx_bar, config);
+
+            const labelsContainer = document.getElementById('custom-labels');
+
+            labelsContainer.innerHTML = labels.map((label, index) => {
+                const level = levels[index];
+                const percentage = scores[index].toFixed(2) + '%';
+
+                return `
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        flex: 1;
+                        color: #666;
+                        padding: 0 0 0 10px;
+                    ">
+                        <span>${label} — ${level}</span>
+                        <span style="color:#666;">${percentage}</span>
+                    </div>
+                `;
+            }).join('');
 
         </script>
 

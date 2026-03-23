@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ExamResult;
 use App\Models\student_tb;
-use App\Services\RecommendationService;
+use App\Services\RetrieveResultService;
 
 class RetrieveResultController extends Controller
 {
@@ -50,11 +50,15 @@ class RetrieveResultController extends Controller
             // }, $questions ?? []) : null;
             $username = $examResult ? $examResult->student->name : null;
 
+            $useremail = $examResult ? $examResult->student->email : null;
+
             $questionsData = $examResult ? $examResult->questionsData : null;
 
             $predictedTrack = $examResult ? $examResult->predicted_track : null;
 
             $secondaryTrack = $examResult ? $examResult->secondary_track : null;
+
+            $aptitude = $examResult ? number_format($examResult->aptitude, 2) : null;
         
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
@@ -70,17 +74,20 @@ class RetrieveResultController extends Controller
 
             $model_accuracy = $examResult ? $examResult->model_accuracy : null;
 
+            $general_aptitude = 
             
 
             // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
             $redirect = view('retrieve_result', compact(
                 'action',
                 'username',
+                'useremail',
                 'examResult',
                 'questions',
                 'questionsData',
                 'predictedTrack',
                 'secondaryTrack',
+                'aptitude',
                 'trackPercentage',
                 'model_accuracy',
                 'acc_per_category',
@@ -119,9 +126,10 @@ class RetrieveResultController extends Controller
                 $username = $firstAttempt->student->name;
             }
 
-            $service = new RecommendationService();
+            $service = new RetrieveResultService();
 
             $result = $service->analyzeAllAttempts($examResult);
+            // dd($result);
 
             $recommendedTrack = $result['recommended_track'];
             $averageAcc = $result['averageAcc'];
@@ -155,6 +163,8 @@ class RetrieveResultController extends Controller
         $examResult = ExamResult::with('student')->findOrFail($id);
 
         $username = $examResult ? $examResult->student->name : null;
+
+        $useremail = $examResult ? $examResult->student->email : null;
         
         $questions = $examResult ? $examResult->questions : null;
     
@@ -163,6 +173,8 @@ class RetrieveResultController extends Controller
         $predictedTrack = $examResult ? $examResult->predicted_track : null;
 
         $secondaryTrack = $examResult ? $examResult->secondary_track : null;
+
+        $aptitude = $examResult ? number_format($examResult->aptitude, 0) : null;
     
         $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
@@ -182,11 +194,13 @@ class RetrieveResultController extends Controller
         // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
         $redirect = view('retrieve_specific_result', compact(
             'username',
+            'useremail',
             'examResult',
             'questions',
             'questionsData',
             'predictedTrack',
             'secondaryTrack',
+            'aptitude',
             'trackPercentage',
             'model_accuracy',
             'acc_per_category',
