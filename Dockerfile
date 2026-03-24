@@ -31,4 +31,4 @@ RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Start the 'Receptionist' (Nginx) and the 'Manager' (PHP)
-CMD service nginx start && php-fpm
+CMD php artisan migrate --force && service nginx start && php-fpm
