@@ -11,6 +11,9 @@ RUN docker-php-ext-install pdo_mysql mbstring
 # Get Composer (Laravel's manager)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Overwrite the default Nginx configuration
+COPY ./docker/nginx.conf /etc/nginx/sites-available/default
+
 WORKDIR /var/www
 # Copy the certificates folder into the container
 COPY ./certs /var/www/certs
