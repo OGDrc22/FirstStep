@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import pymysql
 import time
 
-DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\gemini_debug.txt"
+DEBUG_FILE = "/var/www/storage/logs/python_debug.log"
 db = None
 cursor = None
 job_id = None
@@ -25,10 +25,11 @@ def ensure_db_connection():
         pass
 
     db = pymysql.connect(
-        host="127.0.0.1",
-        user="root",
-        password="",
-        database="firststep",
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USER'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_DATABASE'),
+        ssl={'ca': os.getenv('MYSQL_ATTR_SSL_CA')},
         charset="utf8mb4",
         cursorclass=pymysql.cursors.DictCursor
     )

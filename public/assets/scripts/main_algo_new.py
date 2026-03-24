@@ -9,14 +9,14 @@ import joblib
 
 
 
-DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\main_algo_debug.txt"
+DEBUG_FILE = "/var/www/storage/logs/python_debug.log"
 
 
 # ------------------------------
 # 1. LOAD DATA & TRAIN MODEL
 # ------------------------------
 
-SCRIPT_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).resolve().parent
 data_path = SCRIPT_DIR / "files" / "ai_training_dataset_10000_rows.csv"
 
 
