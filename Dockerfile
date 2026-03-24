@@ -18,7 +18,7 @@ COPY . /var/www
 
 # Install Laravel libraries
 RUN composer install --no-dev --optimize-autoloader
-RUN chmod -R 755 /var/www/assets/scripts
+# RUN chmod -R 755 /var/www/assets/scripts
 
 # Install your Python libraries (the ones you listed)
 # We use --break-system-packages because this is a standalone container
