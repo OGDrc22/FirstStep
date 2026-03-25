@@ -26,6 +26,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Install your Python libraries (the ones you listed)
 # We use --break-system-packages because this is a standalone container
 RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages
+RUN pip install google-generativeai mysql-connector-python pandas
 
 # Set permissions so Laravel can write logs
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
