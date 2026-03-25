@@ -177,19 +177,19 @@ class AssessmentController extends Controller
             // 3. Use a standard Linux command string
             // We remove 'start "" /B' and use '2>&1' so we can see errors in the logs
             $command = sprintf(
-                '%s -u "%s" %d 2>&1',
+                '%s -u "%s" %d > /dev/null/ 2>&1',
                 $pythonPath,
                 $scriptPath,
                 $job->id
             );
 
-            $output = shell_exec($command);
+            exec($command);
 
             // Log the output so you can see it in the Render "Logs" tab
-            \Log::info("Gemini Python Output: " . $output);
+            // \Log::info("Gemini Python Output: " . $output);
 
             // RUN IN BACKGROUND 
-            pclose(popen($command, "r"));
+            // pclose(popen($command, "r"));
             // $command = "\"$pythonPath\" \"$scriptPath\" {$job->id}";
             // exec($command);
 

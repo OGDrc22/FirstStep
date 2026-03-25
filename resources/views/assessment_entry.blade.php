@@ -173,7 +173,7 @@
                     </div>
                     <div class="buttons">
                         <button type="button" class="btn prev-btn"><i class="icon-arrow-left"></i> Previous</button>
-                        <button type="submit" class="btn next-btn">Submit <i class="icon-arrow-right"></i></button>
+                        <button type="submit" class="btn next-btn" id="submit-btn">Submit <i class="icon-arrow-right"></i></button>
                     </div>
                 </div>
 
