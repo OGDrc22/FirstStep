@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import pymysql
 import time
 
-DEBUG_FILE = "/var/www/storage/logs/python_debug.log"
+# DEBUG_FILE = "/var/www/storage/logs/python_debug.log"
 db = None
 cursor = None
 job_id = None
@@ -71,8 +71,8 @@ def update_job(status, *, output=None, error=None, message=None, progress=None):
     values.append(job_id)
 
     sql = f"UPDATE exam_jobs SET {', '.join(fields)} WHERE id = %s"
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"🔄 values: {values}\n")
+    # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+    #     f.write(f"🔄 values: {values}\n")
     cursor.execute(sql, values)
     db.commit()
 
@@ -131,8 +131,8 @@ def main():
 
     job_id = int(sys.argv[1])
     
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"🎯 Received job ID: {sys.argv[1]}\n")
+    # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+    #     f.write(f"🎯 Received job ID: {sys.argv[1]}\n")
 
     update_job(
         'started',
@@ -189,15 +189,15 @@ def main():
         payload_ = json.loads(payload_)
 
     # Debug once (remove later)
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"📦 Payload parsed: {json.dumps(payload_, indent=2)}\n")
+    # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+    #     f.write(f"📦 Payload parsed: {json.dumps(payload_, indent=2)}\n")
 
     # Normalize interest 
     if isinstance(payload_, dict):
         interests = payload_.get("interest")
 
-        with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(interests, indent=2))
+        # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+        #     f.write(json.dumps(interests, indent=2))
 
     elif isinstance(payload_, list):
         # Case 1: list of interests directly
@@ -313,11 +313,11 @@ def main():
     response = model.generate_content(prompt)
     print("Sending request to Gemini...", flush=True)
 
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write("\n🤖 RAW AI RESPONSE:\n")
-        f.write(str(response) + "\n")
-        f.write("🤖 response.text:\n")
-        f.write(str(response.text) + "\n")
+    # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+    #     f.write("\n🤖 RAW AI RESPONSE:\n")
+    #     f.write(str(response) + "\n")
+    #     f.write("🤖 response.text:\n")
+    #     f.write(str(response.text) + "\n")
 
 
     update_job(
@@ -354,8 +354,8 @@ def main():
         raise Exception(f"Failed to parse AI output: {e}")
 
 
-    with open(DEBUG_FILE, "a", encoding="UTF-8") as f:
-        f.write(json.dumps(parsed_questions, indent=2))
+    # with open(DEBUG_FILE, "a", encoding="UTF-8") as f:
+    #     f.write(json.dumps(parsed_questions, indent=2))
         
 
     update_job(
@@ -371,11 +371,12 @@ if __name__ == "__main__":
             raise ValueError("Missing job ID argument")
         main()
     except Exception as e:
-        print("Error in Main()", flush=True)
-        with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"❌ Error in main: {e}\n")
-            f.write(traceback.format_exc() + "\n")
-        sys.exit(1)
+        print(f"PYTHON CRASH: {str(e)}", flush=True) # THIS WILL SHOW IN RENDER LOGS
+        print(traceback.format_exc(), flush=True)
+        # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
+        #     f.write(f"❌ Error in main: {e}\n")
+        #     f.write(traceback.format_exc() + "\n")
+        # sys.exit(1)
 
         try:
             update_job('failed', error=str(e))
