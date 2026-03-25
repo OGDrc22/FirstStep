@@ -127,8 +127,6 @@ def main():
 
     ensure_db_connection()
 
-    print("Python is working on Render!")
-
     job_id = int(sys.argv[1])
     
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
