@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
                 getInputs();
-                autoSubmit(submit_btnbtn);
+                autoSubmit(submit_btn);
                 startCountDown();
                 document.getElementById('seconds').innerText = timer;
             }
