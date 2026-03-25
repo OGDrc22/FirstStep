@@ -177,7 +177,9 @@ class AssessmentController extends Controller
             // 3. Use a standard Linux command string
             // We remove 'start "" /B' and use '2>&1' so we can see errors in the logs
             // Redirecting to /proc/1/fd/1 sends the output to the main Docker log stream
-            $command = sprintf('python3 -u "%s" %d > /proc/1/fd/1 2>&1 &', $scriptPath, $job->id);
+            // We use '>&2' to send all output to the Error Stream, which Render captures.
+            $command = sprintf('python3 -u "%s" %d >&2 &', $scriptPath, $job->id);
+
             exec($command);
 
             // Log the output so you can see it in the Render "Logs" tab
