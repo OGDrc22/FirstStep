@@ -135,7 +135,7 @@ def main():
     #     f.write(f"🎯 Received job ID: {sys.argv[1]}\n")
 
     update_job(
-        'started',
+        'processing',
         message="Preparing Environment...",
         progress=0
     )
