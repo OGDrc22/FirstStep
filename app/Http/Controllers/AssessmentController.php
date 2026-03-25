@@ -168,15 +168,25 @@ class AssessmentController extends Controller
             ]);
 
 
-            // WINDOWS-SAFE background execution
-            $pythonPath = 'C:\Users\admin\AppData\Local\Programs\Python\Python312\python.exe';
+            // 1. In Docker, 'python3' is already in the system path. No need for the C: drive!
+            $pythonPath = 'python3'; 
+
+            // 2. Make sure the script path matches where it is in your repo
             $scriptPath = base_path('public/assets/scripts/gemini.py');
+
+            // 3. Use a standard Linux command string
+            // We remove 'start "" /B' and use '2>&1' so we can see errors in the logs
             $command = sprintf(
-                'start "" /B "%s" -u "%s" %d',
+                '%s -u "%s" %d 2>&1',
                 $pythonPath,
                 $scriptPath,
-                $job->id,
+                $job->id
             );
+
+            $output = shell_exec($command);
+
+            // Log the output so you can see it in the Render "Logs" tab
+            \Log::info("Gemini Python Output: " . $output);
 
             // RUN IN BACKGROUND 
             pclose(popen($command, "r"));
