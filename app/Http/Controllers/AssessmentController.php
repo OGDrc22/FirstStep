@@ -177,7 +177,7 @@ class AssessmentController extends Controller
             // 3. Use a standard Linux command string
             // We remove 'start "" /B' and use '2>&1' so we can see errors in the logs
             $command = sprintf(
-                '%s -u "%s" %d > /dev/null/ 2>&1',
+                '%s -u "%s" %d > /dev/null 2>&1',
                 $pythonPath,
                 $scriptPath,
                 $job->id
