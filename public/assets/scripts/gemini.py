@@ -15,6 +15,7 @@ div3 = 0.3333
 
 # ------------------ DB CONNECT ------------------
 def ensure_db_connection():
+    print("Connecting to TiDB...", flush=True)
     global db, cursor
 
     try:
@@ -123,6 +124,7 @@ def parse_questions(text):
 
 
 def main():
+    print("Main Python Called", flush=True)
     global job_id
 
     ensure_db_connection()
@@ -139,7 +141,6 @@ def main():
     )
     time.sleep(sleep_t)
 
-    load_dotenv()
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise Exception("GOOGLE_API_KEY is missing")
@@ -310,6 +311,7 @@ def main():
     """
 
     response = model.generate_content(prompt)
+    print("Sending request to Gemini...", flush=True)
 
     with open(DEBUG_FILE, "a", encoding="utf-8") as f:
         f.write("\n🤖 RAW AI RESPONSE:\n")
@@ -369,6 +371,7 @@ if __name__ == "__main__":
             raise ValueError("Missing job ID argument")
         main()
     except Exception as e:
+        print("Error in Main()", flush=True)
         with open(DEBUG_FILE, "a", encoding="utf-8") as f:
             f.write(f"❌ Error in main: {e}\n")
             f.write(traceback.format_exc() + "\n")
