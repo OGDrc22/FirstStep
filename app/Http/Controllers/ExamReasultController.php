@@ -243,12 +243,14 @@ class ExamReasultController extends Controller
         ]);
 
         // dd($payload);
+        try {
+            $resData = $service->runMainAlgorithm($payload);
 
-        $resData = $service->runMainAlgorithm($payload);
+            $predictedTrack = $resData['predicted_track'];
 
-
-        // dd($exam_qd, $keyAns);
-        $predictedTrack = $resData['predicted_track'];
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
         $predictedTrack = [
             'track' => $predictedTrack[0],
             'percentage' => $predictedTrack[1]

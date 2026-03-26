@@ -217,7 +217,7 @@ class ExamResultService {
     public function runMainAlgorithm($payload) {
         $scriptPath = base_path('public/assets/scripts/main_algo_new.py');
         $command = "python3 $scriptPath";
-        // dd($command);
+
         $process = proc_open($command, [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
@@ -225,7 +225,7 @@ class ExamResultService {
         ], $pipes);
 
         if (!is_resource($process)) {
-            return back()->withErrors('Failed to run exam evaluation script.');
+            throw new \Exception('Failed to run exam evaluation script.');
         }
 
         fwrite($pipes[0], $payload);
@@ -242,11 +242,18 @@ class ExamResultService {
         if ($error) {
             \Log::error('Python error', ['error' => $error]);
         }
-        // output
+
         $resData = json_decode($result, true);
+
         if (!$resData || !isset($resData['predicted_track'])) {
-            return back()->withErrors('Exam evaluation failed. Please try again.');
+            \Log::error('Invalid Python response', [
+                'result' => $result,
+                'error' => $error
+            ]);
+
+            throw new \Exception('Exam evaluation failed.');
         }
+
         return $resData;
     }
 
