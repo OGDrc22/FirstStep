@@ -16,7 +16,6 @@ class ExamReasultController extends Controller
         $keyAnsText = session('answer_keys_text');
         $exam_qd = json_decode($request->input('questionData'), true);
 
-        // dd($exam_qd, $keyAns);
         $student = Auth::guard('web')->user();
 
         $service = new ExamResultService();
@@ -28,6 +27,8 @@ class ExamReasultController extends Controller
         $username = $student->name;
 
         $useremail = $student->email;
+        
+        dd($student, $exam_qd, $keyAns, $studentAnswer);
 
         $questions = [];
         

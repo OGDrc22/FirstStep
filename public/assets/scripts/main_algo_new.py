@@ -19,6 +19,7 @@ import joblib
 SCRIPT_DIR = Path(__file__).resolve().parent
 data_path = SCRIPT_DIR / "files" / "ai_training_dataset_10000_rows.csv"
 
+print(f"FR algo: Good", flush=True)
 
 #TRAIN
 # df = pd.read_csv(data_path)
@@ -80,8 +81,7 @@ FEATURE_COLUMNS = [
 try:
     payload = json.load(sys.stdin)
 except Exception as e:
-    print(json.dumps({"error": str(e)}))
-    sys.exit(1)
+    print(f"PYTHON CRASH main algo: {str(e)}", flush=True)
 
 features = payload["features"]
 
@@ -97,6 +97,8 @@ try:
         [features],
         columns=FEATURE_COLUMNS
     )
+    
+    print(f"PYTHON RF algo: good", flush=True)
     # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
         #  f.write(f"new_student count: {len(new_student)}\n")
 except Exception as e:   
@@ -115,10 +117,12 @@ try:
     track_percentage = {}
     for track, prob in zip(track_labels, probabilities):
         track_percentage[track] = round(prob * 100, 2)
+        
+        print(f"PYTHON RF algo: good", flush=True)
 except Exception as e:
     # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
             # f.write(f"🎯 sorted_tracks: {e}\n")
-    print(f"PYTHON CRASH main algo: {str(e)}", flush=True)
+    print(f"PYTHON CRASH RF algo: {str(e)}", flush=True)
 
 
 sorted_tracks = sorted(track_percentage.items(), key=lambda x: x[1], reverse=True)
