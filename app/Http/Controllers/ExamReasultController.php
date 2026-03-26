@@ -28,7 +28,7 @@ class ExamReasultController extends Controller
 
         $useremail = $student->email;
         
-        dd($student, $exam_qd, $keyAns, $studentAnswer);
+        // dd($student, $exam_qd, $keyAns, $studentAnswer);
 
         $questions = [];
         

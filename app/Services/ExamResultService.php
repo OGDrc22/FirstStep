@@ -217,7 +217,7 @@ class ExamResultService {
     public function runMainAlgorithm($payload) {
         $scriptPath = base_path('assets/scripts/main_algo_new.py');
         $command = "python3 $scriptPath";
-        dd($command);
+        // dd($command);
         $process = proc_open($command, [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
