@@ -215,7 +215,7 @@ class ExamResultService {
     }
 
     public function runMainAlgorithm($payload) {
-        $scriptPath = base_path('assets/scripts/main_algo_new.py');
+        $scriptPath = base_path('public/assets/scripts/main_algo_new.py');
         $command = "python3 $scriptPath";
         // dd($command);
         $process = proc_open($command, [
