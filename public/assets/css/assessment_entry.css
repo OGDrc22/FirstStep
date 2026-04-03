@@ -284,13 +284,11 @@ body {
 }
 
 .interest-card:hover {
-    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
     background-color: var(--color-surface-gray-200-hover);
 }
 
 .interest-card.selected {
-    transform: translateY(-3px);
     box-shadow: var(--shadow-md);
     border: 2px solid var(--color-black); 
     background-color: var(--color-white); 
@@ -477,7 +475,6 @@ body {
     color: var(--color-text-muted);
 }
 .likert-choices:hover {
-    transform: translateY(-3px);
 }
 .likert-choices label:hover {
     background-color: var(--color-surface-gray-200-hover);
@@ -680,7 +677,6 @@ body {
     border-radius: 8px;
 }
 .mini-question label:hover {
-    transform: translate(-3px);
     background-color: var(--color-surface-gray-200-hover);
 }
 
@@ -786,8 +782,7 @@ body {
 
 /* Hover State - Changes color and lifts slightly */
 .home-link:hover {
-    color: var(--color-primary); /* Uses the light gray from your :root */
-    transform: translateY(-2px);
+    color: var(--color-primary);
 }
 
 /* The Magic Underline Animation */

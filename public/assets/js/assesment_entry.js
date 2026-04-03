@@ -228,9 +228,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     function updateHeader() {
         const step = document.querySelector('.form-step.active');
         const header = document.querySelector('.header h3');
-        header.textContent = `${step.getAttribute('data-title')}`;
+        if (header) {
+            header.textContent = `${step.getAttribute('data-title')}`;
+        }
+        
         const subHeader = document.querySelector('.header p');
-        subHeader.textContent = step.getAttribute('data-subtitle');
+        if (subHeader) {
+            subHeader.textContent = step.getAttribute('data-subtitle');
+        }
     }
 
     
