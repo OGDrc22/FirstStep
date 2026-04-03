@@ -118,7 +118,7 @@
     top: 0;
     z-index: 999;
     width: 100%;
-    background: var(--glass-bg) !important;
+    background: var(--glass-bg);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     display: flex;

@@ -7,6 +7,11 @@
     padding: 0;
 }
 
+
+body {
+    font-family: var(--inter-font);
+}
+
 .bg-overlay {
     background: url('../images/background.png') no-repeat center center fixed;
     background-size: cover;
