@@ -16,7 +16,6 @@ class ExamReasultController extends Controller
         $keyAnsText = session('answer_keys_text');
         $exam_qd = json_decode($request->input('questionData'), true);
 
-        // dd($exam_qd, $keyAns);
         $student = Auth::guard('web')->user();
 
         $service = new ExamResultService();
@@ -28,6 +27,8 @@ class ExamReasultController extends Controller
         $username = $student->name;
 
         $useremail = $student->email;
+        
+        // dd($student, $exam_qd, $keyAns, $studentAnswer);
 
         $questions = [];
         
@@ -242,12 +243,14 @@ class ExamReasultController extends Controller
         ]);
 
         // dd($payload);
+        try {
+            $resData = $service->runMainAlgorithm($payload);
 
-        $resData = $service->runMainAlgorithm($payload);
+            $predictedTrack = $resData['predicted_track'];
 
-
-        // dd($exam_qd, $keyAns);
-        $predictedTrack = $resData['predicted_track'];
+        } catch (\Exception $e) {
+            return back()->withErrors($e->getMessage());
+        }
         $predictedTrack = [
             'track' => $predictedTrack[0],
             'percentage' => $predictedTrack[1]
@@ -281,21 +284,21 @@ class ExamReasultController extends Controller
         // dd($keyAns);
         // Save results
         $correct = 0;
-        // $service->saveToDB(
-        //     $student,
-        //     $correct,
-        //     $predictedTrack,
-        //     $secondaryTrack,
-        //     $trackPercentage,
-        //     $coreCompetencies,
-        //     $detailedCompetencyLevels,
-        //     $note,
-        //     $aptitude,
-        //     $duration_per_category,
-        //     $questions,
-        //     $questionsData,
-        //     $acc_per_category
-        // );
+        $service->saveToDB(
+            $student,
+            $correct,
+            $predictedTrack,
+            $secondaryTrack,
+            $trackPercentage,
+            $coreCompetencies,
+            $detailedCompetencyLevels,
+            $note,
+            $aptitude,
+            $duration_per_category,
+            $questions,
+            $questionsData,
+            $acc_per_category
+        );
 
         // dd($acc_per_category);
         // $accuracy = $model_accuracy * 100 . "%";

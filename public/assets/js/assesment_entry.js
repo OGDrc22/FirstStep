@@ -129,7 +129,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const formSteps = this.documentElement.querySelectorAll('.form-step')
 
     const interest_next_btn = document.getElementById('interest-next-btn');
-    const skill_next_btn = document.getElementById('skill-next-btn')
+    const skill_next_btn = document.getElementById('skill-next-btn');
+    const submit_btn = document.getElementById('submit-btn');
     const basic_info = document.getElementById('basic-info-next-btn');
 
     
@@ -179,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
                 getInputs();
-                autoSubmit();
+                autoSubmit(submit_btn);
                 startCountDown();
                 document.getElementById('seconds').innerText = timer;
             }
@@ -506,24 +507,27 @@ document.addEventListener('DOMContentLoaded', async function () {
     const statusText = loadingScreen.querySelector('p');
     const form = document.getElementById('assessment-form')
 
+    let isSubmitting = false;
 
-    async function handleFormSubmit() {
-        showLoadingScreen();
+    async function handleFormSubmit(buttonID) {
+        if (isSubmitting) return;
 
-        collectBasicInfo();
-        collectSkillRatings();
-
-        collectMiniTestAnswers();
-
-        // inject JSON into hidden input
-        document.getElementById('minitest-input').value =
-            JSON.stringify(assessmentState.miniTest);
-
-
-
-        const formData = new FormData(form);
-        getInputs();
         try {
+            isSubmitting = true;
+            buttonID.disable = true;
+            showLoadingScreen();
+
+            collectBasicInfo();
+            collectSkillRatings();
+
+            collectMiniTestAnswers();
+
+            // inject JSON into hidden input
+            document.getElementById('minitest-input').value =
+                JSON.stringify(assessmentState.miniTest);
+
+            const formData = new FormData(form);
+            getInputs();
             const res = await fetch('/generate-exam', {
                 method: 'POST',
                 credentials: 'same-origin', // ⭐ THIS FIXES AUTH
@@ -541,6 +545,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             console.log('Generate exam response:', data);
 
+            
 
             startPolling(data.job_id);
 
@@ -549,17 +554,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert('Error', err);
         }
     }
-    
+
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        handleFormSubmit();        
+        handleFormSubmit(submit_btn);        
     });
 
-    function autoSubmit() {
+    function autoSubmit(submit_btn) {
         if (timer > 0) {
             setTimeout(() => {
                 console.log("Times up!")
-                handleFormSubmit()
+                handleFormSubmit(submit_btn)
             }, timer * 1000);
         }
     }
