@@ -1,27 +1,6 @@
-:root {
-    --primary-color: #19429C;
-    --accent-blue: #3498db;
-    --secondbry-color: #000A21;
-    --bg-color: #F5F5F5;
-    --font-family: 'Poppins', sans-serif;
-    --bg-color-alt: hsl(0, 0%, 92%);
-    --bg-color-dark: #171718;
+@import "./variables.css";
+@import "./icons.css";
 
-    --grid-size: 30px;
-    --base-grid-color: rgba(255, 255, 255, 0.08);
-    --grid-strength: 1px;
-    --glow-color: rgba(52, 152, 219, 0.6);
-
-    --light-gray: #bbbbbb;
-
-    --glass-bg: rgba(255, 255, 255, 0.85); 
-    --glass-border: rgba(220, 220, 220, 0.5);
-    --glass-blur: 10px;
-    
-    --card-bg-1: #E2E5E9;
-    --text-color-alpha: hsla(0, 0%, 96%, 0.6);
-    --text-color-alpha-dark: hsla(0, 0%, 4%, 0.6);
-}
 
 * {
     box-sizing: border-box;
@@ -47,36 +26,136 @@ body {
 }
 
 
-/*content for getting results*/
-.page-Cencontainer {
+
+.login-page {
+    height: max-content;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 0.3fr auto auto auto;
+    grid-column-gap: 32px;
+    grid-row-gap: 32px;
+    margin: 1% 10%;
+
+    border-radius: 16px;
+    background-color: var(--card-bg-assessment);
+    box-shadow: var(--shadow-sm);
+
+    grid-template-areas:
+        "box-1 box-1"
+        "box-2 box-3"
+        "box-2 box-3"
+        "box-2 box-3";
+}
+
+.login-page .top-content {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centers the login card */
+    justify-content: center;
     align-items: center;
-    height: 80vh;
-    padding: 40px 20px;
-    gap: 32px;
+    gap: 16px;
+}
+.login-page .top-content p {
+    font-family: var(--manrope-font);
+    font-size: 3rem;
+    font-weight: bolder;
+    letter-spacing: -1px;
+    color: var(--color-text-main);
 }
 
-
-/* The light gray outer "shell" from your first picture */
-.login-card-wrapper {
-    background: rgba(235, 235, 235, 0.85);
-    backdrop-filter: blur(15px);
-    padding: 15px; /* Subtle border-like padding */
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     width: 100%;
-    max-width: 800px; /* Adjust based on your Figma preference */
+}
+.input-container label {
+    font-family: var(--inter-font);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.input-container input {
+    width: 100%;
+    padding: 16px 20px;
+    border: var(--border-subtle); 
+    outline: none;
+    border-radius: 4px;
+    background-color: var(--color-surface-gray-300);
+    font-size: 1rem;
+    color: var(--color-text-muted-alpha);
+    transition: border-color 0.3s;
 }
 
-.login-card {
-    background: transparent;
-    padding: 20px 40px;
+.input-container input:focus {
+    color: var(--color-text-main);
+    border-color: var(--color-black);
 }
+
+
+.login-page .left {
+    background-color: var(--card-bg-3);
+}
+
+.login-page .right {
+    background-color: var(--card-bg-4);
+}
+.login-page .action-container {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    gap: 16px;
+    padding: 64px;
+    border-radius: 32px;
+    box-shadow: var(--shadow-sm);
+}
+
+.login-page .action-container p:nth-child(1) {
+    font-family: var(--inter-font);
+    font-size: 1.5rem;
+    font-weight: bolder;
+    color: var(--color-text-main);
+}
+.login-page .action-container p:nth-child(2) {
+    font-family: var(--inter-font);
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+}
+.login-page .action-container .p3-btn-action {
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-family: var(--inter-font);
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.login-page .action-container:nth-child(2) .p3-btn-action {
+    background-color: var(--color-black);
+    color: var(--color-text-main-white);
+}
+
+.login-page .action-container:nth-child(2) .p3-btn-action:hover {
+    background-color: var(--color-black-hover);
+    color: var(--color-text-main-white);
+}
+.login-page .action-container:nth-child(3) .p3-btn-action {
+    color: var(--color-text-main);
+    border: var(--border-subtle);
+}
+
+.login-page .action-container:nth-child(3) .p3-btn-action:hover {
+    background-color: var(--color-surface-gray-200-hover);
+    color: var(--color-text-muted);
+}
+
 
 .form-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--inter-font);
     font-size: 1.1rem;
     font-weight: 700;
     color: #333;
@@ -92,19 +171,6 @@ body {
     margin-bottom: 30px;
 }
 
-#email {
-    width: 80%;
-    padding: 12px 20px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #fff;
-    font-family: 'Poppins', sans-serif;
-    outline: none;
-}
-
-#email::placeholder {
-    color: #bbb;
-}
 
 /* Button Group */
 .btn-group {
@@ -136,9 +202,9 @@ body {
 }
 
 .btn-icon {
-    width: 32px;
-    height: 32px;
-    background-color: var(--bg-color) !important;
+    width: 24px;
+    height: 24px;
+    background-color: var(--color-white) !important;
 }
 
 .home-btn-container {
@@ -231,7 +297,7 @@ body {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     font-size: 3rem;
-    color: #1a1a1a;
+    color: var(--color-text-main);
     margin-bottom: 5px;
 }
 
@@ -254,7 +320,7 @@ body {
 .user-card {
     grid-area: 1 / 1 / 2 / 5;
     border-radius: 8px;
-    background-color: hsl(0, 0%, 98%);
+    background-color: var(--card-bg-1);
     padding: 32px;
     display: flex;
     flex-direction: column;
@@ -265,21 +331,21 @@ body {
     gap: 8px;
 }
 .user-detail i {
-    background-color: var(--bg-color-dark);
+    background-color: var(--icon-color-muted-alpha);
 }
 .user-name {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     font-size: 1.2rem;
-    color: #1a1a1a;
+    color: var(--color-text-main);
     margin-bottom: 5px;
 }
 
 
-.dashboard-grid .card {
+.card {
     border-radius: 8px;
     padding: 32px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-md);
 }
 .result-display-card {
     grid-area: 2 / 1 / 3 / 4;
@@ -300,7 +366,7 @@ body {
 
 .card-label {
     font-size: 0.6rem;
-    color: #666;
+    color: var(--color-text-muted);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -311,17 +377,18 @@ body {
 }
 
 .card-value {
+    font-family: var(--inter-font);
     font-size: 0.9rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text-main);
 }
 
 .card-data-row:nth-last-of-type(2) .card-label {
-    background-color: hsla(219, 100%, 50%, 0.322);
+    background-color: var(--accent-chip-bg);
 }
 
 .card-data-row:nth-last-of-type(1) .card-label {
-    background-color: hsla(200, 43%, 85%, 0.5);
+    background-color: var(--accent-chip-bg-muted);
 }
 
 .card-data-row:nth-last-of-type(2) .card-value {
@@ -335,7 +402,7 @@ body {
 
 .aptitude-card {
     grid-area: 2 / 4 / 3 / 5;
-    background-color: hsl(221, 100%, 15%);
+    background-color: var(--color-surface-blue-900);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -345,19 +412,19 @@ body {
 .aptitude-card h1 {
     font-size: 3.5rem;
     font-family: 'Manrope', sans-serif;
-    color: var(--bg-color);
+    color: var(--color-text-main-white);
 }
 
 .aptitude-card h3 {
     font-size: 1rem;
     font-family: 'Manrope', sans-serif;
-    color: var(--text-color-alpha);
+    color: var(--color-text-main-white-alpha);
 }
 
 .left-chart { grid-area: 3 / 1 / 4 / 3;  }
 .right-chart { grid-area: 3 / 3 / 4 / 5;  }
 .left-chart, .right-chart {
-    background-color: var(--card-bg-1);
+    background-color: var(--card-bg-2);
 }
 
 
@@ -366,13 +433,33 @@ body {
     justify-content: space-between;
 }
 .chart-label i {
-    background-color: var(--text-color-alpha-dark);
+    background-color: var(--icon-color-muted-alpha);
 }
 
 .chart-bar {
     height: 300px;
     display: flex;
     justify-content: center;
+}
+
+.chart-bar #custom-labels {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+.chart-bar .canvas-wrapper {
+    height: 100%;
+    width: 100%;
+    z-index:2;
+}
+.canvas-wrapper canvas {
+    width: 100%;
+    height: 100%;
 }
 
 .right-chart {
@@ -421,7 +508,7 @@ body {
     margin-bottom: 12px ;
 }
 .stats-table-wrapper {
-    flex: 1; /* Takes up more space for the text */
+    flex: 1;
 }
 
  /* font size */
@@ -433,7 +520,7 @@ body {
 
 .custom-stats-table th {
     text-align: left;
-    color: #666;
+    color: var(--color-text-muted);
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
@@ -465,45 +552,13 @@ body {
 
 
 
-/* exam result student w/score */
-.results-card-container { 
-    margin-top: 40px;
-    padding: 40px;
-    width: auto;
-}
-
-.results-sub-card { 
-    padding: 40px;
-    border-radius: 20px;
-    width: auto;
-    max-width: 1000px;
-    margin-left: 20px;
-}
-
-.question-review-title {
-    font-family: 'Poppins', sans-serif;
-    margin-bottom: 20px;
-}
-
-.question-item {
-    margin-bottom: 25px;
-    text-align: left;
-}
-
-/* modification for ans text */
-.question-text {
-    font-weight: normal;
-    margin-bottom: 15px;
-    font-size: 1.2rem; 
-}
-
 /* color of wrong and right answer */
 .answer-line {
     padding: 8px 15px;
     margin-bottom: 2px;
     display:inline-block; 
     width: auto;
-     font-size: 0.9rem; 
+    font-size: 0.9rem;
 }
 
 .answer-box {
@@ -517,3 +572,10 @@ body {
     font-size: 0.9rem;
     color: #777;
 }
+
+
+.questions-review {
+    background-color: var(--card-bg-1);
+    margin-top: 32px;
+}
+

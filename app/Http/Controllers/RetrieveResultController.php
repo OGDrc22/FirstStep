@@ -58,7 +58,7 @@ class RetrieveResultController extends Controller
 
             $secondaryTrack = $examResult ? $examResult->secondary_track : null;
 
-            $aptitude = $examResult ? number_format($examResult->aptitude, 2) : null;
+            $aptitude = $examResult ? number_format($examResult->aptitude, 0) : null;
         
             $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
@@ -73,8 +73,6 @@ class RetrieveResultController extends Controller
             $note = $examResult ? $examResult->evaluation_note : null;
 
             $model_accuracy = $examResult ? $examResult->model_accuracy : null;
-
-            $general_aptitude = 
             
 
             // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
@@ -190,6 +188,8 @@ class RetrieveResultController extends Controller
 
         $model_accuracy = $examResult ? $examResult->model_accuracy : null;
 
+        $examID = $id;
+
         
         // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
         $redirect = view('retrieve_specific_result', compact(
@@ -207,7 +207,8 @@ class RetrieveResultController extends Controller
             'duration_per_category',
             'coreCompetencies',
             'detailedCompetencyLevels',
-            'note'
+            'note',
+            'examID'
         ));
 
         return $redirect;

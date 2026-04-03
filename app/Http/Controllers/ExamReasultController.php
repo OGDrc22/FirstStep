@@ -40,7 +40,7 @@ class ExamReasultController extends Controller
 
         // dd($rawAbility_Interest, $exam_qd);
 
-        $aptitude = $service->getAptitude($exam_qd, $rawAbility_Interest);
+        $aptitude = number_format($service->getAptitude($exam_qd, $rawAbility_Interest), 0);
         // dd($aptitude);
 
         $competencyOrder = [

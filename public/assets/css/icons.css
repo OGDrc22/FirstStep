@@ -1,0 +1,182 @@
+@import "./variables.css";
+
+.icon {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    background-color: var(--secondary-color);
+    display: inline-block;
+}
+
+.icon-home {
+    -webkit-mask-image: url('/public/assets/icons/home.svg');
+    mask-image: url('icons/home.svg');
+}
+
+.icon-danger {
+    -webkit-mask-image: url('/public/assets/icons/danger.svg');
+    mask-image: url('icons/danger.svg');
+}
+
+.icon-book {
+    -webkit-mask-image: url('/public/assets/icons/book-open.svg');
+    mask-image: url('icons/book-open.svg');
+}
+
+.icon-document-copy {
+    -webkit-mask-image: url('/public/assets/icons/document-copy.svg');
+    mask-image: url('icons/document-copy.svg');
+}
+
+.icon-document-text {
+    -webkit-mask-image: url('/public/assets/icons/document-text-2.svg');
+    mask-image: url('icons/document-text-2.svg');
+}
+
+.icon-medal-star {
+    -webkit-mask-image: url('/public/assets/icons/medal-star.svg');
+    mask-image: url('icons/medal-star.svg');
+}
+
+.icon-search-status {
+    -webkit-mask-image: url('/public/assets/icons/search-status-1.svg');
+    mask-image: url('icons/search-status-1.svg');
+}
+
+.icon-info {
+    -webkit-mask-image: url('/public/assets/icons/info-circle.svg');
+    mask-image: url('icons/info-circle.svg');
+}
+
+
+.icon-close {
+    -webkit-mask-image: url('/public/assets/icons/close-circle.svg');
+    mask-image: url('icons/close-circle.svg');
+}
+
+
+.icon-check-mark {
+    -webkit-mask-image: url('/public/assets/icons/tick-circle.svg');
+    mask-image: url('icons/tick-circle.svg');
+}
+
+.icon-arrow-right {
+    -webkit-mask-image: url('/public/assets/icons/arrow-right.svg');
+    mask-image: url('icons/arrow-right.svg');
+}
+.icon-arrow-left {
+    -webkit-mask-image: url('/public/assets/icons/arrow-left.svg');
+    mask-image: url('icons/arrow-left.svg');
+}
+
+.icon-send {
+    -webkit-mask-image: url('/public/assets/icons/send-2.svg');
+    mask-image: url('icons/send-2.svg');
+}
+
+.icon-pie {
+    -webkit-mask-image: url('/public/assets/icons/chart.svg');
+    mask-image: url('icons/chart.svg');
+}
+
+.icon-chart {
+    -webkit-mask-image: url('/public/assets/icons/chart-diagram.svg');
+    mask-image: url('icons/chart-diagram.svg');
+}
+
+.icon-user {
+    -webkit-mask-image: url('/public/assets/icons/user.svg');
+    mask-image: url('icons/user.svg');
+}
+
+.icon-email {
+    -webkit-mask-image: url('/public/assets/icons/sms.svg');
+    mask-image: url('icons/sms.svg');
+}
+
+.icon-lock {
+    -webkit-mask-image: url('/public/assets/icons/padlock.svg');
+    mask-image: url('icons/padlock.svg');
+}
+
+
+
+.icon-coding {
+    -webkit-mask-image: url('/public/assets/icons/code-1.svg');
+    mask-image: url('icons/code-1.svg');
+}
+
+.icon-software {
+    -webkit-mask-image: url('/public/assets/icons/box.svg');
+    mask-image: url('icons/box.svg')
+}
+
+.icon-game-dev {
+    -webkit-mask-image: url('/public/assets/icons/game.svg');
+    mask-image: url('icons/game.svg');
+}
+
+.icon-mobile-app {
+    -webkit-mask-image: url('/public/assets/icons/mobile.svg');
+    mask-image: url('icons/mobile.svg');
+}
+
+.icon-security {
+    -webkit-mask-image: url('/public/assets/icons/shield-tick.svg');
+    mask-image: url('icons/shield-tick.svg');
+}
+
+.icon-networking {
+    -webkit-mask-image: url('/public/assets/icons/share.svg');
+    mask-image: url('icons/share.svg');
+}
+
+.icon-bot {
+    -webkit-mask-image: url('/public/assets/icons/bots.svg');
+    mask-image: url('icons/bots.svg');
+}
+
+
+.icon-ux-ui {
+    -webkit-mask-image: url('/public/assets/icons/ui8.svg');
+    mask-image: url('icons/ui8.svg');
+}
+
+.icon-vidography {
+    -webkit-mask-image: url('/public/assets/icons/video.svg');
+    mask-image: url('icons/video.svg');
+}
+
+
+.icon-video-editing {
+    -webkit-mask-image: url('/public/assets/icons/monitor-recorder.svg');
+    mask-image: url('icons/monitor-recorder.svg');
+}
+
+
+.icon-graphic-design {
+    -webkit-mask-image: url('/public/assets/icons/pen-close.svg');
+    mask-image: url('icons/pen-close.svg');
+}
+
+.icon-think {
+    -webkit-mask-image: url('/public/assets/icons/think.svg');
+    mask-image: url('icons/think.svg');
+}
+
+
+
+
+
+.icon-grid {
+    -webkit-mask-image: url('/public/assets/icons/grids-4.svg');
+    mask-image: url('icons/grids-4.svg');    
+}

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const navBtn = Array.from(document.querySelectorAll('.nav-q-btn'));
     const navContainer = document.querySelector('.question-navigator');
 
+    const progressContainer = document.querySelector('.progressbar');
+
     const choices = document.querySelectorAll('.choices');
 
     const answers = new Array(qCard.length).fill(null);
@@ -47,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let timerInterval;
     const timerDisplay = document.getElementById('timerD');
     // const displayF = document.getElementById('timerDF');
+
+    qCard.forEach(() => {
+        const prgressStep = document.createElement('div');
+        prgressStep.className = "progress-step";
+        progressContainer.appendChild(prgressStep);
+    });
 
     function onQuestionViewed(index) {
         // console.log('Viewing index:', index);
@@ -232,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setCheck(cardIndex) {
-        scrollActiveNav(index);
+        scrollActiveNav(cardIndex);
         navBtn.forEach((btn, indx) => {
             if (indx === cardIndex) {
                 btn.classList.add('active')
@@ -272,10 +280,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if ((currentQuestionIndex + 1 ) === qCard.length) {
             // console.log("Q.", currentQuestionIndex + 1, "CL", qCard.length);
-            nextBtn.innerHTML = "Submit  <i class=\"icon-arrow-right\"></i>";
+            nextBtn.innerHTML = "Submit  <i class=\"icon icon-arrow-right\"></i>";
             
         } else {
-            nextBtn.innerHTML = "Next  <i class=\"icon-arrow-right\"></i>";
+            nextBtn.innerHTML = "Next  <i class=\"icon icon-arrow-right\"></i>";
         }
     }
 
@@ -298,6 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
+            updateProgress();
         }
     });
     showQuestion(currentQuestionIndex);
@@ -328,6 +337,19 @@ document.addEventListener('DOMContentLoaded', function() {
     //     console.log('Clicked submit');
     //     console.log(questionData)
     // });
+
+    // console.log(qCard.length);
+    const progressStep = document.querySelectorAll('.progress-step');
+    function updateProgress() {
+        const answeredIndex = getAnsweredIndexes();
+        progressStep.forEach((li, i) => {
+            if (answeredIndex.includes(i)) {
+                li.classList.add('q-done');
+            } else {
+                li.classList.remove('q-done');
+            }
+        });
+    }
 
     const alertBgSimpleFlash = document.querySelector('.alert-bg.simple-flash');
     const alert_SFM = alertBgSimpleFlash.querySelector('.alert');
@@ -377,7 +399,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const qCat = questionData.map(q => q.category);
         document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
-        console.log(questionData)
+        console.log(questionData);
+        document.getElementById("examForm").submit();
+        
+        showLoadingScreen();
     });
 
     feedbackSubmit.addEventListener('click', function(e) {
@@ -394,19 +419,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const qCat = questionData.map(q => q.category);
         document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
-        console.log(questionData)
-        console.log("Feedback: ", feedbackInput.value)        
+        console.log(questionData);
+        console.log("Feedback: ", feedbackInput.value);
         document.getElementById("examForm").submit();
+
+        showLoadingScreen();
     });
 
 
 
     function showLoadingScreen() {
+        console.log("Show Loading")
         const loadingScreen = document.getElementById('loading-screen');
-        loadingScreen.style.display = 'block';
+        loadingScreen.style.display = 'grid';
+        const loadingText = loadingScreen.querySelector('p');
     }
-    window.onload = function() {
-        showLoadingScreen();
-    }
-    
 });
