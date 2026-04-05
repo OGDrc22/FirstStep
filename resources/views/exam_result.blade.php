@@ -162,12 +162,21 @@
                             <h4 class="question-review">{{ $q }}</h4>
 
                             @php
-                                $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                                $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                                $isCorrect = $studentAns === $correctAns;
+                                $studentAnswerArray = $questionsData[$index]['answer'] ?? [];
+                                $correctAnswerArray = $questionsData[$index]['keyAns'] ?? [];
 
-                                $fullStudentAns = $questionsData[$index]['answer'][0] . ". " . $questionsData[$index]['answer'][1];
-                                $fullCorrectAns = $questionsData[$index]['keyAns'][0] . ". " . $questionsData[$index]['keyAns'][1];
+                                $studentAns = $studentAnswerArray[0] ?? null;
+                                $correctAns = $correctAnswerArray[0] ?? null;
+
+                                $isCorrect = $studentAns !== null && $correctAns !== null && $studentAns === $correctAns;
+
+                                $fullStudentAns = isset($studentAnswerArray[0], $studentAnswerArray[1])
+                                    ? $studentAnswerArray[0] . ". " . $studentAnswerArray[1]
+                                    : 'No Answer';
+
+                                $fullCorrectAns = isset($correctAnswerArray[0], $correctAnswerArray[1])
+                                    ? $correctAnswerArray[0] . ". " . $correctAnswerArray[1]
+                                    : 'No Correct Answer';
                             @endphp
                             <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
                                 Your Answer:
