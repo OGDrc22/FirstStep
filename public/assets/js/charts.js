@@ -24,7 +24,7 @@ function initCharts(trackPercentage, detailedCompetencies, coreCompetencies) {
                         trackPercentage['Multimedia Arts'].percentage
                     ],
                     backgroundColor: [
-                        '#640082',
+                        '#8b5cf6',
                         '#ffcd56',
                         '#36a2eb',
                         '#7dff7d'
