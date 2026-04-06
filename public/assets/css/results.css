@@ -22,7 +22,7 @@ body {
 }
 
 .content {
-    margin: 1% 10%;
+    margin: 1% 5%;
 }
 
 
@@ -132,6 +132,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    border: none;
 }
 
 .login-page .action-container:nth-child(2) .p3-btn-action {
@@ -400,6 +401,67 @@ body {
 }
 
 
+/* FOR ALL RESULTS */
+.card-all-result .result-info-container .result-display-card {
+    flex: 2;
+}
+.card-all-result .result-info-container .left-chart {
+    flex: 1;
+}
+.card-all-result .results-table {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.card-all-result .results-table h3 {
+    font-family: var(--inter-font);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-text-main);
+    padding-bottom: 16px;
+
+    border-bottom: var(--border-subtle-dark);
+}
+
+.card-all-result .results-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.card-all-result .results-table table tbody {
+    background-color: var(--color-white);
+}
+.card-all-result .results-table table thead tr th {
+    text-align: left;
+}
+.card-all-result .results-table table tbody tr td {
+    padding: 32px 0;
+}
+.card-all-result .results-table table tbody tr:hover {
+    background-color: var(--color-surface-gray-200-hover);
+}
+.card-all-result .results-table table tbody tr td:nth-child(2) p {
+    width: max-content;
+    padding: 4px 12px;
+    border-radius: 9999px;
+}
+.card-all-result .results-table table tbody tr td:nth-child(2) .track_it {
+    background-color: hsla(204, 100%, 75%, 0.7);
+    color: hsl(204, 100%, 36%);
+}
+.card-all-result .results-table table tbody tr td:nth-child(2) .track_cs {
+    background-color: hsla(42, 100%, 71%, 0.7);
+    color: hsl(42, 100%, 44%);
+}
+.card-all-result .results-table table tbody tr td:nth-child(2) .track_ce {
+    background-color: hsla(286, 100%, 25%, 0.7);
+    color: hsl(286, 100%, 43%);
+}
+.card-all-result .results-table table tbody tr td:nth-child(2) .track_mma {
+    background-color: hsla(120, 100%, 75%, 0.7);
+    color: hsl(120, 70%, 39%);
+}
+
+
 .aptitude-card {
     grid-area: 2 / 4 / 3 / 5;
     background-color: var(--color-surface-blue-900);
@@ -491,6 +553,40 @@ body {
 
 
 
+.card-all-result {
+    background-color: var(--card-bg-assessment);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.header h3 {
+    font-family: var(--inter-font);
+    font-size: 2.2rem;
+    color: var(--color-black);
+    margin: 0;
+}
+.header p {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+.card-all-result .result-info-container {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+}
+
+
+
 
 
 /* track percentage container */
@@ -510,39 +606,6 @@ body {
 .stats-table-wrapper {
     flex: 1;
 }
-
- /* font size */
-.custom-stats-table {
-    width: 90%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-
-.custom-stats-table th {
-    text-align: left;
-    color: var(--color-text-muted);
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.custom-stats-table td {
-    padding: 12px 0;
-    color: #333;
-    font-weight: 500;
-}
-
-/* Legend Dots */
-.dot {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%; 
-    display: inline-block;
-    margin-right: 8px;
-}
-.violet { background-color: #8b5cf6; }
-.yellow { background-color: #facc15; }
-.blue   { background-color: #3b82f6; }
-.green  { background-color: #4ade80; }
 
 
 

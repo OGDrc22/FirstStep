@@ -140,11 +140,11 @@ body {
 }
 
 .prev-btn:hover {
-    background-color: var(--accent-chip-bg-muted); /* Darker blue on hover */
-    color: var(--color-text-muted-alpha); /* Light gray text on hover */
+    background-color: var(--accent-chip-bg-muted);
+    color: var(--color-text-muted-alpha);
 }
 .prev-btn:hover i {
-    background-color: var(--color-text-muted-alpha); /* Light gray icon on hover */
+    background-color: var(--color-text-muted-alpha);
 }
 
 
@@ -473,8 +473,6 @@ body {
 }
 .likert-choices label:hover::after {
     color: var(--color-text-muted);
-}
-.likert-choices:hover {
 }
 .likert-choices label:hover {
     background-color: var(--color-surface-gray-200-hover);

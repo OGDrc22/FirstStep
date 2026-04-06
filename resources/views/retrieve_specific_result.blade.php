@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="right-chart card">
                 <div class="chart-label">
                     <h3>Track Breakdown</h3>
@@ -140,42 +140,51 @@
             </div>
         </div>
 
-        
+
         <div class="questions-review card">
             <h3>Question Review</h3>
-            
+
             <!-- Can be used as Answer Review -->
             @foreach ($questions as $index => $q)
-                    <div class="question-review-card">
-                        <h4 class="question-review">{{ $q }}</h4>
+                <div class="question-review-card">
+                    <h4 class="question-review">{{ $q }}</h4>
 
-                        @php
-                            $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                            $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                            $isCorrect = $studentAns === $correctAns;
+                    @php
+                        $studentAnswerArray = $questionsData[$index]['answer'] ?? [];
+                        $correctAnswerArray = $questionsData[$index]['keyAns'] ?? [];
 
-                            $fullStudentAns = $questionsData[$index]['answer'][0] . ". " . $questionsData[$index]['answer'][1];
-                            $fullCorrectAns = $questionsData[$index]['keyAns'][0] . ". " . $questionsData[$index]['keyAns'][1];
-                        @endphp
-                        <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
-                            Your Answer:
-                            @if (isset($questionsData[$index]['answer']))
-                                {{ $fullStudentAns }}
-                            @else
-                                No Answer
-                            @endif
-                        </p>
-                        <p class="bg-success-alpha correctAnswer">
-                            Correct Answer:
-                            @if (!empty($questionsData[$index]['keyAns'][0]))
-                                {{ $fullCorrectAns }}
-                            @else
-                                Preference type of question (No Correct Answer)
-                            @endif
-                        </p>
-                        <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
-                    </div>
-                @endforeach
+                        $studentAns = $studentAnswerArray[0] ?? null;
+                        $correctAns = $correctAnswerArray[0] ?? null;
+
+                        $isCorrect = $studentAns !== null && $correctAns !== null && $studentAns === $correctAns;
+
+                        $fullStudentAns = isset($studentAnswerArray[0], $studentAnswerArray[1])
+                            ? $studentAnswerArray[0] . ". " . $studentAnswerArray[1]
+                            : 'No Answer';
+
+                        $fullCorrectAns = isset($correctAnswerArray[0], $correctAnswerArray[1])
+                            ? $correctAnswerArray[0] . ". " . $correctAnswerArray[1]
+                            : 'No Correct Answer';
+                    @endphp
+                    <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
+                        Your Answer:
+                        @if (isset($questionsData[$index]['answer']))
+                            {{ $fullStudentAns }}
+                        @else
+                            No Answer
+                        @endif
+                    </p>
+                    <p class="bg-success-alpha correctAnswer">
+                        Correct Answer:
+                        @if (!empty($questionsData[$index]['keyAns'][0]))
+                            {{ $fullCorrectAns }}
+                        @else
+                            Preference type of question (No Correct Answer)
+                        @endif
+                    </p>
+                    <p>Duration: {{ $questionsData[$index]['duration'] }}</p>
+                </div>
+            @endforeach
 
         </div>
     </div>
@@ -183,7 +192,8 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 
     <script>
         const trackPercentage = @json($trackPercentage);

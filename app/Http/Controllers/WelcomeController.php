@@ -9,14 +9,22 @@ use Illuminate\Support\Facades\DB;
 class WelcomeController extends Controller
 {
     public function index() {
-        $topTracks = ExamResult::selectRaw("JSON_EXTRACT(predicted_track, '$.track') as track_name")
-            ->groupBy('track_name')
-            ->orderByRaw('COUNT(*) DESC')
-            ->limit(2)
-            ->pluck('track_name');
+        $total = ExamResult::count();
 
-        // Clean up the quotes from JSON_EXTRACT (e.g., "Information Technology" -> Information Technology)
-        $topTracks = $topTracks->map(fn($item) => trim($item, '"'));
+        $tracks = ExamResult::selectRaw("JSON_UNQUOTE(JSON_EXTRACT(predicted_track, '$.track')) as track_name, COUNT(*) as total_count")
+            ->groupBy('track_name')
+            ->orderByDesc('total_count')
+            ->take(2)
+            ->get();
+        
+        $topTracks = $tracks->map(function ($item) use ($total) {
+            return [
+                'track' => $item->track_name,
+                'count' => $item->total_count,
+                'percentage' => round(($item->total_count / $total) * 100, 2)
+            ];
+        });
+        
         return view('welcome', compact('topTracks'));
     }
 }

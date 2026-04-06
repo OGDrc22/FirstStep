@@ -25,3 +25,4 @@ Thumbs.db
 *.7z
 *.zip
 *.rar
+/public/assets/js/gemini.py

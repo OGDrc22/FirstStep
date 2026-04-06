@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="chip">
-                    <p class="label">Sample Core Competency Output (Based on Model Prediction)</p>
+                    <p class="label">Sample Output (Model-Based Prediction)</p>
                 </div>
 
             </div>
@@ -114,7 +114,7 @@
                 <div class="r1">
                     <p>Top Tracks</p>
                     @foreach ($topTracks as $track)
-                        <p>{{ $track }}</p>
+                        <p>{{ $track['track'] }} - {{ $track['percentage'] }}</p>
                     @endforeach
                 </div>
                 <div class="r2">
@@ -129,7 +129,7 @@
             <div class="bottom-content" style="grid-area: box-3;">
                 <div class="left" style="grid-area: box-1;">
                     <p>Career Aptitude Matrix</p>
-                    <p>Our proprietary algorithm analyzes over student responses and performance matrics to create a "Signature Insight" for every student.</p>
+                    <p>This system analyzes student responses and performance metrics using a Random Forest classification model to generate career track recommendations.</p>
                 </div>
                 <div class="right"  style="grid-area: box-2;">
                     <div class="img-container">
@@ -160,6 +160,12 @@
                     <span>See Results</span>
                 </a>
             </div>
+            
+            <div class="info-cards" style="grid-area: box-4;">
+                <i class="icon icon-think"></i>
+                <h3>How it works</h3>
+                <p>1. Complete the Assessment <br> 2. System Analyzes Responses <br> 3. Receive Career Track Recommendations</p>
+            </div>
         </div>
     </div>
     
@@ -183,19 +189,19 @@
         const coreCompetencies = {
             "Logical-Mathematical Reasoning": {
                 score: 0.82,
-                level: "Advanced"
+                level: "Level: Advanced"
             },
             "Syntax & Structure Analysis": {
                 score: 0.65,
-                level: "Intermediate"
+                level: "Level: Intermediate"
             },
             "Systems Hardware & Networking": {
                 score: 0.58,
-                level: "Intermediate"
+                level: "Level: Intermediate"
             },
             "Digital Aesthetics & UI Design": {
                 score: 0.40,
-                level: "Beginner"
+                level: "Level: Beginner"
             }
         };
 

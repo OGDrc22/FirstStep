@@ -76,7 +76,7 @@
     /* True Black - Inner icons, high contrast elements */
     --color-black: hsl(0, 0%, 0%);
 
-    --color-black-hover: hsl(0, 0%, 20%);
+    --color-black-hover: hsl(0, 0%, 30%);
 
     --color-white: hsl(0, 0%, 100%);
 

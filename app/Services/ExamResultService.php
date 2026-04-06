@@ -315,10 +315,10 @@ class ExamResultService {
         // dd($competencies);
         
         if ($competencies[$weakness] < 40) {
-            $note .= " However, consider taking elective workshops in **" . $weakness . "** to round out your technical profile.";
+            $note .= " However, consider taking elective workshops in " . $weakness . " to round out your technical profile.";
         }
         if ($topTrack == 'Multimedia Arts' && $competencies['Syntax & Structure Analysis'] > 60) {
-            $note .= " Your unique combination of logic and design makes you a prime candidate for **Front-end Engineering** or **Technical Art** in gaming.";
+            $note .= " Your unique combination of logic and design makes you a prime candidate for Front-end Engineering or Technical Art in gaming.";
         }
 
         return $note;

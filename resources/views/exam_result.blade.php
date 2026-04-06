@@ -204,23 +204,23 @@
     </div>
 
 
-        <a href="{{ route('welcome') }}">Home</a>
+    <a href="{{ route('welcome') }}">Home</a>
 
-        <script src="{{ asset('assets/js/flash_message.js') }}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script src="{{ asset('assets/js/flash_message.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 
-        <script>
-            const trackPercentage = @json($trackPercentage);
-            const detailedCompetencies = @json($detailedCompetencyLevels);
-            const coreCompetencies = @json($coreCompetencies);
+    <script>
+        const trackPercentage = @json($trackPercentage);
+        const detailedCompetencies = @json($detailedCompetencyLevels);
+        const coreCompetencies = @json($coreCompetencies);
 
-            document.addEventListener('DOMContentLoaded', function () {
-                initCharts(trackPercentage, detailedCompetencies, coreCompetencies);
-            });
-        </script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initCharts(trackPercentage, detailedCompetencies, coreCompetencies);
+        });
+    </script>
 
-        <script src="{{ asset('assets/js/charts.js') }}"></script>
+    <script src="{{ asset('assets/js/charts.js') }}"></script>
 
 </body>
 

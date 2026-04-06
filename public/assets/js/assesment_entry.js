@@ -62,12 +62,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     otherInterestList.addEventListener('click', function (event) {
-        if (event.target.tagName === 'LI') {
+        if (event.target.classList.contains('other-interest-item')) {
             const valueToRemove = event.target.textContent;
             otherInterest = otherInterest.filter(item => item !== valueToRemove);
             otherInterestList.removeChild(event.target);
 
             timer -= min
+            console.log("Removing: ", valueToRemove);
+            
             console.log('Other Interests: ', otherInterest, timer);
         }
     });
@@ -101,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             console.log('enter')
         }
-    })
+    });
 
 
     const assessmentState = {

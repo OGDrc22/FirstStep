@@ -130,11 +130,12 @@ class RetrieveResultController extends Controller
             // dd($result);
 
             $recommendedTrack = $result['recommended_track'];
+            $secondaryTrack = $result['second_recommendation'];
             $averageAcc = $result['averageAcc'];
             $averageDuration = $result['averageDuration'];
-            $trackPercentage = $result['trackPercentage'];
-            
-            // dd($examResult);
+            $trackPercentage = $result['rawTrackPercentage'];
+            $computedTrackPercentage = $result['computedTrackPercentage'];
+            $note = $result['note'];
 
             $dateAttmpt = [];
 
@@ -142,14 +143,20 @@ class RetrieveResultController extends Controller
                 $dateAttmpt[] = $attempt->created_at->format('Y-m-d H:i:s');
                 
             }
+            $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
+                $query->where('email', $request->email);
+            })
+            ->latest('id')
+            ->take(4)
+            ->get();
             // $trackPercentageA = [];
 
             // foreach ($examResult as $attempt => $data) {
             //     $trackPercentageA[$attempt]['percentage'] = $attempt->track_percentage;
             // }
-            // dd($trackPercentage);
+            // dd($averageAcc);
             
-            return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'averageAcc', 'averageDuration', 'examResult','trackPercentage', 'dateAttmpt'));
+            return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'note', 'secondaryTrack', 'averageAcc', 'averageDuration', 'examResult', 'computedTrackPercentage', 'trackPercentage', 'dateAttmpt'));
 
         } else {
             return redirect()->back()->withErrors(['action' => 'Invalid action specified.']);

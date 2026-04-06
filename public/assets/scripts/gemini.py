@@ -15,7 +15,7 @@ div3 = 0.3333
 
 # ------------------ DB CONNECT ------------------
 def ensure_db_connection():
-    print("Connecting to TiDB...", flush=True)
+    # print("Connecting to TiDB...", flush=True)
     global db, cursor
 
     try:
@@ -124,7 +124,7 @@ def parse_questions(text):
 
 
 def main():
-    print("Main Python Called", flush=True)
+    # print("Main Python Called", flush=True)
     global job_id
 
     ensure_db_connection()
@@ -311,7 +311,7 @@ def main():
     """
 
     response = model.generate_content(prompt)
-    print("Sending request to Gemini...", flush=True)
+    # print("Sending request to Gemini...", flush=True)
 
     # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
     #     f.write("\n🤖 RAW AI RESPONSE:\n")
@@ -371,8 +371,8 @@ if __name__ == "__main__":
             raise ValueError("Missing job ID argument")
         main()
     except Exception as e:
-        print(f"PYTHON CRASH: {str(e)}", flush=True) # THIS WILL SHOW IN RENDER LOGS
-        print(traceback.format_exc(), flush=True)
+        # print(f"PYTHON CRASH: {str(e)}", flush=True) # THIS WILL SHOW IN RENDER LOGS
+        # print(traceback.format_exc(), flush=True)
         # with open(DEBUG_FILE, "a", encoding="utf-8") as f:
         #     f.write(f"❌ Error in main: {e}\n")
         #     f.write(traceback.format_exc() + "\n")

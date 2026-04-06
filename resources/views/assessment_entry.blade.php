@@ -72,7 +72,7 @@
                         <div class="input-stacked-container">
                             <div class="email-input input-container">
                                 <label for="name">Username</label>
-                                <input type="text" id="name" name="name" placeholder="Name" class="pcu-field" required>
+                                <input type="text" id="name" name="name" placeholder="Userame" class="pcu-field" required>
                             </div>
 
                             <div class="email-input input-container">
