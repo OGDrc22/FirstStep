@@ -7,10 +7,10 @@
     <title>PCU First Step</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
 
-    <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/results.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/css/welcome.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{asset('assets/css/results.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{asset('assets/css/welcome.css')}}?v={{ time() }}">
 </head>
 
 <body class="bg-overlay">
