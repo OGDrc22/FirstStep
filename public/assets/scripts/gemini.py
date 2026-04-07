@@ -116,7 +116,6 @@ def parse_questions(text):
         if question_text and choices:
             parsed.append([question_text.strip(), choices, key])
 
-    # print(json.dumps(parse_questions(response.text), indent=2))
 
     return parsed
 
