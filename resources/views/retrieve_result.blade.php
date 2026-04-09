@@ -29,10 +29,11 @@
 
     <div class="content">
         @if ($errors->has('email'))
-            <div class="alert heads-up-message hum-error">
-                <i class="icon-close"></i>
-                {{ $errors->first('email') }}
-            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Toast.create(document.body, "err", @json($errors->first('email')));
+                });
+            </script>
         @endif
 
 
@@ -43,7 +44,7 @@
                     @csrf
                     <div class="login-page">
                         <div class="top-content" style="grid-area: box-1;">
-                            <p>Start Your Assessment</p>
+                            <p>Review Your Assessment</p>
                             <div class="email-input input-container">
                                 <label for="name">Username</label>
                                 <input type="email" id="email" name="email" placeholder="Email@gmail.com" required>
@@ -54,7 +55,7 @@
                             <p>View your most recent assessment result, including your recommended career track and performance
                                 summary.</p>
                             <button class="p3-btn-action" type="submit" name="action" value="latest">
-                                <span>See Laatest</span>
+                                <span>See Latest</span>
                             </button>
                         </div>
                         <div class="right action-container" style="grid-area: box-3;">
@@ -353,6 +354,7 @@
     </div>
 
 
+    <script src="{{ asset('assets/js/flash_message.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>

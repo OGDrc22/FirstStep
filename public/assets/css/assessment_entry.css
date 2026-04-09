@@ -82,7 +82,7 @@ body {
     border-radius: 4px;
     background-color: var(--color-surface-gray-300);
     font-size: 1rem;
-    color: var(--color-text-muted-alpha);
+    color: var(--color-text-main);
     transition: border-color 0.3s;
 }
 

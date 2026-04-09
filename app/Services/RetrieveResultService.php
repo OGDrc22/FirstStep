@@ -20,10 +20,12 @@ class RetrieveResultService
     private function handleSingle($attempt)
     {
         $predicted = $attempt->predicted_track;
+        $secondRecommendation = $attempt->secondary_track;
 
         return [
             'mode' => 'single',
             'recommended_track' => $predicted['track'],
+            'secondRecommendation' => $secondRecommendation,
             'averageAcc' => $attempt->accuracy_per_category,
             'averageDuration' => $attempt->duration_per_category,
             'trackPercentage' => $attempt->track_percentage

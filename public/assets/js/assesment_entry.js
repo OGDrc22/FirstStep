@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const prevBtns = document.querySelectorAll('.prev-btn');
     const nextBtns = document.querySelectorAll('.next-btn');
-    const progress = document.getElementById('progress')
     const progressSteps = document.querySelectorAll('.progress-step')
     const formSteps = this.documentElement.querySelectorAll('.form-step')
 
@@ -144,7 +143,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             e.preventDefault();
             if (nameInput.value.trim() !== "" && emailInput.value.trim() !== "") {
                 basic_info.click();
-                console.log("next btn clicked! 1")
             }
         }
     });
@@ -154,7 +152,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             e.preventDefault();
             if (nameInput.value.trim() !== "" && emailInput.value.trim() !== "") {
                 basic_info.click();
-                console.log("next btn clicked! 2")
             }
         }
     });
@@ -163,8 +160,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     const { generateMiniTestQuestions } = await import('./assessment_helper.js');
     let formStepsNum = 0;
 
+
     nextBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+            if (btn === basic_info) {
+                const isValid = validateBasicInfo();
+
+                if (!isValid) return;
+            }
             if (btn === interest_next_btn) {
                 if (!isInterestEmpty()) return;
                 allInterest = getAllInterest();
@@ -190,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             updateFormSteps();
             updateProgressStep();
         })
-    })
+    });
 
     prevBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -199,6 +202,34 @@ document.addEventListener('DOMContentLoaded', async function () {
             updateProgressStep();
         })
     })
+
+    function validateBasicInfo() {
+        if (nameInput.value.trim() === "") {
+            Toast.create(document.body, "err", "Please enter a Username");
+            return false;
+        }
+
+        if (emailInput.value.trim() === "") {
+            Toast.create(document.body, "err", "Please enter an Email");
+            return false;
+        }
+
+        if (!validateEmail(emailInput.value)) {
+            Toast.create(document.body, "err", "Please enter a valid email");
+            return false;
+        }
+
+        return true;
+    }
+    function validateEmail(email) {
+        const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        console.log(pattern.test(email));
+        
+        return pattern.test(email);
+    }
+
+
+
 
 
     function updateFormSteps() {
@@ -302,7 +333,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     function validatePreMiniTest() {
         console.log(countSkillRating(), + " " + countSkillRatingChecked());
         if (countSkillRatingChecked() !== countSkillRating()) {
-            showToast('Please rate your skills.');
+            Toast.create(document.body, 'err', 'Please rate your skills.');
             return false;
         }
 
@@ -329,11 +360,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         // console.log('Final Interests on Submit: ', interestInput.value);
     }
 
+    
     function isInterestEmpty() {
         console.log(getAllInterest().length);
         if (!getAllInterest().length) {
             // alert('Please select at least one interest.');
-            showToast('Please select at least one interest.');
+            
+            Toast.create(document.body, 'err', 'Please select at least one interest.');
             return false;
         }
         return true;
@@ -614,43 +647,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                 });
         }, 2000);
-    }
-
-    let toastQueue = [];
-    let toastActive = false;
-    let hideTimer = null;
-
-    function showToast(errMessage) {
-        const box = document.querySelector('.heads-up-message');
-        const msg = box?.querySelector('p'); // not '.p' unless your class is literally "p"
-        if (!box || !msg) return;
-
-        toastQueue.push(errMessage);
-        if (!toastActive) processToastQueue(box, msg);
-    }
-
-    function processToastQueue(box, msg) {
-        if (!toastQueue.length) {
-            toastActive = false;
-            return;
-        }
-
-        toastActive = true;
-        msg.textContent = toastQueue.shift();
-
-        box.style.display = 'flex';
-        requestAnimationFrame(() => {
-            box.style.opacity = '1';
-        });
-
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(() => {
-            box.style.opacity = '0';
-            setTimeout(() => {
-                box.style.display = 'none';
-                processToastQueue(box, msg); // show next toast
-            }, 800); // match CSS transition
-        }, 5000);
     }
 
 });
