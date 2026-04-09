@@ -263,7 +263,6 @@ class RetrieveResultService
             'Multimedia Arts' => "your creativity and ability to blend technology with visual storytelling, ideal for careers in UI/UX design, game development, and digital media.",
         ];
 
-        dd($scores, $topScore, $topTrack);
         $note = "Based on your overall performance, with a top score of " . number_format($topScore, 2) . "%, ";
         $note .= "the " . $topTrack . " pathway is highly recommended. ";
         $note .= "This is primarily due to " . $recommendations[$topTrack];
