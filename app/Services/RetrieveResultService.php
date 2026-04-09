@@ -25,7 +25,7 @@ class RetrieveResultService
         return [
             'mode' => 'single',
             'recommended_track' => $predicted['track'],
-            'secondRecommendation' => $secondRecommendation,
+            'second_recommendation' => $secondRecommendation,
             'averageAcc' => $attempt->accuracy_per_category,
             'averageDuration' => $attempt->duration_per_category,
             'trackPercentage' => $attempt->track_percentage
