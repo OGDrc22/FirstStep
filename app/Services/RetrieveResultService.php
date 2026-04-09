@@ -42,7 +42,7 @@ class RetrieveResultService
             'second_recommendation' => $secondRecommendation,
             'averageAcc' => $attempt->accuracy_per_category,
             'averageDuration' => $attempt->duration_per_category,
-            'trackPercentage' => $rawScores,
+            'rawTrackPercentage' => $rawTrackPercentage,
             'computedTrackPercentage' => $finalScores,
             'note' => $note
         ];
