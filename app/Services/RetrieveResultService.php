@@ -33,7 +33,7 @@ class RetrieveResultService
             $rawScores[] = $p['percentage'];
         }
 
-        dd($rawTrackPercentage, $rawScores, $finalScores);
+        // dd($rawTrackPercentage, $rawScores, $finalScores);
         $note = $this->generateCounselorNote($rawScores);
 
         return [
@@ -82,7 +82,7 @@ class RetrieveResultService
             $rawScores[$name] = $p['percentage'];
         }
         
-        dd($rawTrackPercentage, $rawScores, $finalScores);
+        // dd($rawTrackPercentage, $rawScores, $finalScores);
         $note = $this->generateCounselorNote($rawScores);
 
         return [
