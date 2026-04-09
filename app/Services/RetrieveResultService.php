@@ -29,8 +29,8 @@ class RetrieveResultService
         
         $rawTrackPercentage = $attempt->track_percentage;
         $rawScores = [];
-        foreach ($rawTrackPercentage as $p) {
-            $rawScores[] = $p['percentage'];
+        foreach ($rawTrackPercentage as $name => $p) {
+            $rawScores[$name] = $p['percentage'];
         }
 
         // dd($rawTrackPercentage, $rawScores, $finalScores);
