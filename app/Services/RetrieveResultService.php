@@ -22,13 +22,23 @@ class RetrieveResultService
         $predicted = $attempt->predicted_track;
         $secondRecommendation = $attempt->secondary_track;
 
+        $averageAcc = $this->calculateAverageAccuracySingle($attempt);
+        $averageDuration = $this->calculateAverageDurationSingle($attempt);
+
+        $finalScores = $this->computeScores($averageAcc, $averageDuration);
+        
+        $rawScores = $attempt->track_percentage;
+        $note = $this->generateCounselorNote($rawScores);
+
         return [
             'mode' => 'single',
             'recommended_track' => $predicted['track'],
             'second_recommendation' => $secondRecommendation,
             'averageAcc' => $attempt->accuracy_per_category,
             'averageDuration' => $attempt->duration_per_category,
-            'trackPercentage' => $attempt->track_percentage
+            'trackPercentage' => $rawScores,
+            'computedTrackPercentage' => $finalScores,
+            'note' => $note
         ];
     }
 
@@ -74,7 +84,6 @@ class RetrieveResultService
             'second_recommendation' => $secondRecommendation,
             'averageAcc' => $averageAcc,
             'averageDuration' => $averageDuration,
-            'scorePerTrack' => $finalScores,
             'rawTrackPercentage' => $rawTrackPercentage,
             'computedTrackPercentage' => $finalScores,
             'note' => $note
@@ -134,6 +143,48 @@ class RetrieveResultService
                 foreach ($attempt->duration_per_category as $track => $duration) {
                     $totals[$track] = ($totals[$track] ?? 0) + $duration;
                 }
+            }
+        }
+
+        $average = [];
+
+        if ($count > 0) {
+            foreach ($totals as $track => $total) {
+                $average[$track] = round($total / $count, 2);
+            }
+        }
+
+        return $average;
+    }
+
+    private function calculateAverageAccuracySingle($attempt)
+    {
+        $totals = [];
+        $counts = [];
+
+        foreach ($attempt->accuracy_per_category as $track => $accuracy) {
+            $totals[$track] = ($totals[$track] ?? 0) + $accuracy;
+            $counts[$track] = ($counts[$track] ?? 0) + 1;
+        }
+
+        $average = [];
+        foreach ($totals as $track => $total) {
+            $average[$track] = round(($total / $counts[$track]) * 100, 2);
+        }
+
+        return $average;
+    }
+
+    private function calculateAverageDurationSingle($attempt)
+    {
+        $totals = [];
+        $count = 0;
+
+        if (!empty($attempt->duration_per_category)) {
+            $count++;
+
+            foreach ($attempt->duration_per_category as $track => $duration) {
+                $totals[$track] = ($totals[$track] ?? 0) + $duration;
             }
         }
 
