@@ -27,7 +27,13 @@ class RetrieveResultService
 
         $finalScores = $this->computeScores($averageAcc, $averageDuration);
         
-        $rawScores = $attempt->track_percentage;
+        $rawTrackPercentage = $attempt->track_percentage;
+        $rawScores = [];
+        foreach ($rawTrackPercentage as $p) {
+            $rawScores[] = $p['percentage'];
+        }
+
+        dd($rawTrackPercentage, $rawScores, $finalScores);
         $note = $this->generateCounselorNote($rawScores);
 
         return [
@@ -76,6 +82,7 @@ class RetrieveResultService
             $rawScores[$name] = $p['percentage'];
         }
         
+        dd($rawTrackPercentage, $rawScores, $finalScores);
         $note = $this->generateCounselorNote($rawScores);
 
         return [
