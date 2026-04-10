@@ -16,9 +16,11 @@
 <body class="bg-overlay">
 
     @if (session('error'))
-        <div class="heads-up-message">
-            {{ session('error') }}
-        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Toast.create(document.body, "err", @json(session('error')));
+            });
+        </script>
     @endif
     <!-- <div class="alert-bg">
         <div class="alert alert-danger">
@@ -78,8 +80,8 @@
                 </div>
             </div>
 
-                <div class="right-bar-chart">
-                
+            <div class="right-bar-chart">
+
                 <div class="left-chart card">
                     <div class="chart-label">
                         <h3>Core Competencies</h3>
@@ -106,9 +108,10 @@
         </div>
 
         <div class="page-2 page">
-            <div class="left-content"  style="grid-area: box-1;">
+            <div class="left-content" style="grid-area: box-1;">
                 <p>Track Discovery</p>
-                <p>Move beyond standard lists. Explore career clusters mapped to your psychological profile and technical aptitude.</p>
+                <p>Move beyond standard lists. Explore career clusters mapped to your psychological profile and
+                    technical aptitude.</p>
             </div>
             <div class="right-content" style="grid-area: box-2;">
                 <div class="r1">
@@ -129,12 +132,15 @@
             <div class="bottom-content" style="grid-area: box-3;">
                 <div class="left" style="grid-area: box-1;">
                     <p>Career Aptitude Matrix</p>
-                    <p>This system analyzes student responses and performance metrics using a Random Forest classification model to generate career track recommendations.</p>
+                    <p>This system analyzes student responses and performance metrics using a Random Forest
+                        classification model to generate career track recommendations.</p>
                 </div>
-                <div class="right"  style="grid-area: box-2;">
+                <div class="right" style="grid-area: box-2;">
                     <div class="img-container">
-                        <img class="matrix-img" src="{{ asset('assets/images/data_matrix.png') }}" alt="Career Aptitude Matrix" srcset="">
-                        <img class="overlay" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="Career Aptitude Matrix" srcset="">
+                        <img class="matrix-img" src="{{ asset('assets/images/data_matrix.png') }}"
+                            alt="Career Aptitude Matrix" srcset="">
+                        <img class="overlay" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}"
+                            alt="Career Aptitude Matrix" srcset="">
                     </div>
                 </div>
             </div>
@@ -154,27 +160,29 @@
             </div>
             <div class="right action-container" style="grid-area: box-3;">
                 <p>Result Synthesis</p>
-                <p>Review your assessment results and gain insights into your career preferences and strengths.</p> 
+                <p>Review your assessment results and gain insights into your career preferences and strengths.</p>
                 <a href="{{ url("/retrieve-result") }}" class="p3-btn-action">
                     <!-- <i class="btn-icon icon-search-status" alt="Search Icon"></i> -->
                     <span>See Results</span>
                 </a>
             </div>
-            
+
             <div class="info-cards" style="grid-area: box-4;">
                 <i class="icon icon-think"></i>
                 <h3>How it works</h3>
-                <p>1. Complete the Assessment <br> 2. System Analyzes Responses <br> 3. Receive Career Track Recommendations</p>
+                <p>1. Complete the Assessment <br> 2. System Analyzes Responses <br> 3. Receive Career Track
+                    Recommendations</p>
             </div>
         </div>
     </div>
-    
+
     <div class="footer">
         <p>© 2026 Philippine Christian University - College of Informatics. All rights reserved.</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
     <script src="{{ asset('assets/js/flash_message.js') }}"></script>
 
 
@@ -226,7 +234,7 @@
             initCharts(trackPercentage, detailedCompetencies, coreCompetencies);
         });
     </script>
-    
+
     <script src="{{ asset('assets/js/charts.js') }}"></script>
 </body>
 

@@ -290,8 +290,9 @@ body {
 
 .interest-card.selected {
     box-shadow: var(--shadow-md);
-    border: 2px solid var(--color-black); 
-    background-color: var(--color-white); 
+    outline-offset: 4px;
+    outline: 2px solid var(--color-black); 
+    background-color: var(--color-surface-light-blue-300); 
 }
 
 .interest-card .icon-container {

@@ -53,7 +53,6 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-radius: 12px;
-    border: var(--border-subtle);
     position: relative;
     overflow: hidden;
 }
@@ -172,12 +171,7 @@
     }
 }
 
-.hum-success {
-    border: 4px solid var(--success-border-color);
-    /* background-color: var(--success-bg-color); */
-    color: var(--success-text-color);
-    animation: slideDownOvershoot 6s ease-in-out;
-}
+
 
 @keyframes slideDownOvershoot {
     0% {
@@ -228,17 +222,33 @@
 }
 
 
+.hum-success {
+    border: 4px solid var(--success-border-color);
+    /* background-color: var(--success-bg-color); */
+    color: var(--success-text-color);
+    animation: slideDownOvershoot 6s ease-in-out;
+}
 
-.simple-flash-message {
+
+
+.modal {
+    width: 720px;
+    aspect-ratio: 5 / 3;
+    z-index: 1000;
+    background: var(--color-surface-gray-200);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    padding: 16px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    gap: 32px;
+    align-items: center;
+    gap: 16px;
 }
-
-.simple-flash-message span {
+.modal i {
     width: 120px;
     height: 120px;
     object-fit: contain;
@@ -246,7 +256,7 @@
     background-color: var(--color-primary);
 }
 
-.simple-flash-message h2 {
+.modal h2 {
     font-family: var(--manrope-font);
     font-size: 1.5em;
     font-weight: 600;
@@ -254,15 +264,6 @@
 }
 
 
-.alert-form {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-}
 
 .feedback-input {
     font-family: var(--inter-font);
@@ -305,7 +306,7 @@
     transition: background-color 0.3s ease;
 }
 
-.btn span {
+.btn i {
     width: 24px;
     height: 24px;
     object-fit: contain;
@@ -313,28 +314,28 @@
 }
 
 .btn-primary {
-    grid-column: 3 / span 1;
+    grid-column: 3 / i 1;
     background-color: var(--color-black);
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: var(--color-surface-gray-200-hover);
+    background-color: var(--color-black-hover);
     opacity: 0.8;
 }
 
 .btn-secondary {
     grid-column: span 1;
-    background-color: var(--color-surface-gray-200-hover);
+    background-color: var(--color-black-hover);
     color: white;
 }
 
 .btn-secondary:hover {
-    background-color: var(--color-surface-gray-200-hover);
+    background-color: var(--color-black-hover);
     opacity: 0.8;
 }
 
-.btn-secondary span {
+.btn-secondary i {
     background-color: white;
     transform: rotate(180deg) scaleY(-1);
 }

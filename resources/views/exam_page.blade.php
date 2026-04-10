@@ -111,29 +111,25 @@
             <button class="btn btn-submit" id="btn-submit" type="submit">Finish and Submit Exam</button>
         </div>
 
-        <div class="alert-bg simple-flash hidden">
-            <div class="alert">
-                <div class="simple-flash-message">
-                    <span class="icon icon-danger"></span>
-                    <h2>Are you sure you want to submit the exam?</h2>
-                    <div class="alert-button-container">
-                        <button class="btn btn-secondary"><span class="icon-arrow-right"></span> Cancel</button>
-                        <button class="btn btn-primary">Submit <span class="icon-send"></span></button>
-                    </div>
+        <div class="alert-bg modal-warning hidden">
+            <div class="modal">
+                <i class="icon icon-danger"></i>
+                <h2>Are you sure you want to submit the exam?</h2>
+                <div class="alert-button-container">
+                    <button class="btn btn-secondary"><i class="icon-arrow-right"></i> Cancel</button>
+                    <button class="btn btn-primary">Submit <i class="icon-send"></i></button>
                 </div>
             </div>
         </div>
 
         <div class="alert-bg feedback-form hidden">
-            <div class="alert">
-                <div class="alert-form">
-                    <p>Feedback Form</p>
-                    <textarea type="text" class="feedback-input" name="feedback" placeholder="Enter your feedback here..."></textarea>
-                    <div class="alert-button-container">
-                        <button class="btn btn-secondary"><span class="icon-arrow-right"></span> Cancel</button>
-                        <button class="btn btn-middle">Skip <span class="icon-arrow-right"></span></button>
-                        <button class="btn btn-primary">Submit <span class="icon-send"></span></button>
-                    </div>
+            <div class="modal">
+                <p>Feedback Form</p>
+                <textarea type="text" class="feedback-input" name="feedback" placeholder="Enter your feedback here..."></textarea>
+                <div class="alert-button-container">
+                    <button class="btn btn-secondary"><i class="icon-arrow-right"></i> Cancel</button>
+                    <button class="btn btn-middle">Skip <i class="icon-arrow-right"></i></button>
+                    <button class="btn btn-primary">Submit <i class="icon-send"></i></button>
                 </div>
             </div>
         </div>

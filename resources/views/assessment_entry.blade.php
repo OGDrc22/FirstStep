@@ -45,8 +45,8 @@
 
                 <div class="assessment-top">
                     <div class="header">
-                        <h3></h3>
-                        <p></p>
+                        <h3>Foundation of Growth</h3>
+                        <p>Begin your career intelligence journey. Your basic details allow us to contextualize your assessment results within global industry standards.</p>
                     </div>
 
                     <div class="progressbar">

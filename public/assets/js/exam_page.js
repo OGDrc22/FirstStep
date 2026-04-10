@@ -351,9 +351,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const alertBgSimpleFlash = document.querySelector('.alert-bg.simple-flash');
-    const alert_SFM = alertBgSimpleFlash.querySelector('.alert');
-    const alertMessage_SFM = alert_SFM.querySelector('.simple-flash-message');
+    const alertBgSimpleFlash = document.querySelector('.alert-bg.modal-warning');
+    const alertMessage_SFM = alertBgSimpleFlash.querySelector('.modal');
     const btnContainer_SFM = alertMessage_SFM.querySelector('.alert-button-container');
     const btnPrimary_SFM = btnContainer_SFM.querySelector('.btn-primary');
     const btnSecondary_SFM = btnContainer_SFM.querySelector('.btn-secondary');
@@ -379,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const alertBgFeedback = document.querySelector('.alert-bg.feedback-form');
-    const feedbackForm = alertBgFeedback.querySelector('.alert');
+    const feedbackForm = alertBgFeedback.querySelector('.modal');
     const feedbackInput = feedbackForm.querySelector('.feedback-input');
     const feedBackSkip = feedbackForm.querySelector('.btn-middle');
     const feedbackCancel = feedbackForm.querySelector('.btn-secondary');
