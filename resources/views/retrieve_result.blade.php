@@ -253,7 +253,7 @@
             @elseif($action === 'all')
                 <div class="card-all-result">
                     <div class="header">
-                        <h3>All Exam Attempt Results for {{ $username }}</h3>
+                        <h3>Assessment History and Results for {{ $username }}</h3>
                         <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
                     </div>
 
@@ -301,6 +301,47 @@
                         </div>
                     </div>
 
+                    <div class="info-card card">
+                        <div class="header">
+                            <div class="icon-container" style="grid-area: icon;">
+                                <i class="icon icon-think"></i>
+                            </div>
+                            <div class="texts">
+                                <h3 style="grid-area: title;">How Your Results is Calculated</h3>
+                                <h2 style="grid-area: sub-title;">All results are based on a combination of performance metrics and machine learning predictions.</h2>
+                            </div>
+                        </div>
+                        <div class="cards-container">
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-document-copy"></i>
+                                </div>
+                                <h2>Aptitude Tests</h2>
+                                <h1>Standardized assessments measuring problem-solving, logic, and technical ability.</h2>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-chart"></i>
+                                </div>
+                                <h2>Core Competencies</h2>
+                                <h1>Evaluation of your hard skills across logic, syntax, and system design.</h1>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-heart"></i>
+                                </div>
+                                <h2>Career Interest</h2>
+                                <h1>Profiling your professional preferences and work-style inclinations.</h1>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-bot"></i>
+                                </div>
+                                <h2>Weighted Model</h2>
+                                <h1>• 60% User Performance <br> (Accuracy, completion, behavior) <br> <br> • 40% Machine Learning Prediction <br> (Pattern-based recommendation).</h1>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="results-table">
                         <h3>Previous Assessments Attempts</h3>
@@ -312,7 +353,7 @@
                                     <!-- <th>Track Percentage</th> -->
                                     <th>Date</th>
                                     <th>Predicted Track</th>
-                                    <th>Secondary Track</th>
+                                    <th>Secondary Recommendation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -376,18 +417,33 @@
         <script>
 
 
-            const tracks = @json($computedTrackPercentage);
+            const cTracks = @json($computedTrackPercentage);
 
-            const filteredTracksObj = Object.entries(tracks).filter(([_, value]) => value > 0);
-            console.log(
-                filteredTracksObj
-            );
+            const filteredTracksObj = Object.entries(cTracks).filter(([_, value]) => value > 0);
             
             const labels = filteredTracksObj.map(([key, item]) => key);
             const percentage = filteredTracksObj.map(([key, item]) => item.toFixed(2));
 
-            // const filteredAcc = Object.entries(averageAcc).filter(([key, item]) => item.0);
-            
+            const trackPercentage = @json($trackPercentage);
+            const filteredTracksPer = Object.entries(trackPercentage).filter(([_, value]) => value);
+            console.log(
+                filteredTracksPer
+            );
+            const newTrack = filteredTracksPer.map(([key, value]) => value);
+            console.log(
+                newTrack
+            );
+            const rawP = newTrack.map(item => item.percentage);
+            console.log(
+                rawP
+            );
+
+            const averageAcc = @json($averageAcc);
+            const filteredAcc = Object.entries(averageAcc).filter(([key, item]) => key);
+            const average = filteredAcc.map(([key, item]) => item.toFixed(2));
+            console.log(
+                average
+            );
 
 
             const ctx = document.getElementById('stackedLineChart').getContext('2d');
@@ -428,15 +484,37 @@
                             display: false
                         },
                         datalabels: { display: false },
-                        // Tooltip
                         tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    // Main Bar Label
-                                    return `Total Score: ${context.parsed.x.toFixed(2)}%`;
-                                }
-                            }
+                            enabled: false
                         }
+                        // tooltip: {
+                        //     callbacks: {
+                        //         label: function(context) {
+                        //             // Main Bar Label
+                        //             return `Total Score: ${context.parsed.x.toFixed(2)}%`;
+                        //         },
+                        //         afterLabel: function(context) {
+                        //             // const averageLabel = context.label;
+                        //             let lines = [];
+                        //             // if(tracks[key]) {
+                        //             //     const nameL = "Average Accuracy";
+                        //             //     const avrg = average[key];
+                        //             //     lines.push(`$(name): $(avrg)`);
+                        //             // }
+
+                        //             const index = context.dataIndex;
+                        //             const rawTP = rawP[index];
+                        //             const avrg = average[index];
+                                    
+                        //             if (avrg !== undefined) {
+                        //                 lines.push(`Raw Percentage: ${rawTP}%`);
+                        //                 lines.push(`Average Accuracy: ${avrg}%`);
+                        //                 return lines;
+                        //             }
+
+                        //         }
+                        //     }
+                        // }
                     },
                     scales: {
                         // 2. Hide the Labels on the left (Y-axis)

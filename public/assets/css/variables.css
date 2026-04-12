@@ -114,7 +114,12 @@
     --shadow-sm-hard:  0 4px 4px rgba(0,0,0,0.1);
     --shadow-sm-hard-hover: 0 8px 8px rgba(0,0,0,0.15);
 
+    /* Border Colors */
+    --border-color-1: hsla(220, 10%, 11%, 0.1);
+    --border-color-2: hsla(220, 10%, 11%, 0.2);
+    --border-color-3: hsla(220, 10%, 11%, 0.4);
     /* Subtle border */
-    --border-subtle: 2px solid hsla(220, 10%, 11%, 0.1);
-    --border-subtle-dark: 2px solid hsla(220, 10%, 11%, 0.2);
+    --border-subtle: 2px solid var(--border-color-1);
+    --border-subtle-dark: 2px solid var(--border-color-2);
+    --border-subtle-dark-1: 2px solid var(--border-color-3);
 }

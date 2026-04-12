@@ -107,6 +107,11 @@
     mask-image: url('icons/padlock.svg');
 }
 
+.icon-heart {
+    -webkit-mask-image: url('/public/assets/icons/heart.svg');
+    mask-image: url('icons/heart.svg');
+}
+
 
 
 .icon-coding {

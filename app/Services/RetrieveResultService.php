@@ -23,17 +23,24 @@ class RetrieveResultService
         $secondRecommendation = $attempt->secondary_track;
 
         $averageAcc = $this->calculateAverageAccuracySingle($attempt);
+        $averageAccuracy = [];
+        foreach ($averageAcc as $name => $a) {
+            if ($name != "Preference" && !empty($name)) {
+                $averageAccuracy[$name] = $a;
+            }
+        }
+
         $averageDuration = $this->calculateAverageDurationSingle($attempt);
 
-        $finalScores = $this->computeScores($averageAcc, $averageDuration);
+        $finalScores = $this->computeScores($averageAccuracy, $averageDuration);
         
         $rawTrackPercentage = $attempt->track_percentage;
         $rawScores = [];
         foreach ($rawTrackPercentage as $name => $p) {
             $rawScores[$name] = $p['percentage'];
         }
+        
 
-        // dd($rawTrackPercentage, $rawScores, $finalScores);
         $note = $this->generateCounselorNote($rawScores);
 
         return [
@@ -42,8 +49,8 @@ class RetrieveResultService
             'second_recommendation' => $secondRecommendation['track'],
             'averageAcc' => $attempt->accuracy_per_category,
             'averageDuration' => $attempt->duration_per_category,
-            'rawTrackPercentage' => $rawTrackPercentage,
-            'computedTrackPercentage' => $finalScores,
+            'rawTrackPercentage' => $rawScores,
+            'computedTrackPercentage' => $rawScores,
             'note' => $note
         ];
     }
@@ -51,19 +58,30 @@ class RetrieveResultService
     private function handleMultiple($examResults)
     {
         $averageAcc = $this->calculateAverageAccuracy($examResults);
+        $averageAccuracy = [];
+        foreach ($averageAcc as $name => $a) {
+            if ($name != "Preference" && !empty($name)) {
+                $averageAccuracy[$name] = $a;
+            }
+        }
         $averageDuration = $this->calculateAverageDuration($examResults);
         $mlScores = $this->aggregateMLPredictions($examResults);
 
-        $scorePerTrack = $this->computeScores($averageAcc, $averageDuration);
+        $scorePerTrack = $this->computeScores($averageAccuracy, $averageDuration);
 
         // ✅ Combine ML + computed scores
         $finalScores = [];
 
+        $mlScores1 = [];
+
         foreach ($scorePerTrack as $track => $score) {
+            $mlScores1[$track] = $mlScores[$track] ?? 0;
             $ml = $mlScores[$track] ?? 0;
 
             $finalScores[$track] = (0.6 * $score) + (0.4 * $ml);
         }
+
+        // dd($mlScores1, $scorePerTrack, $finalScores);
 
         $recommendedTrack = collect($finalScores)
             ->sortDesc()
@@ -77,19 +95,19 @@ class RetrieveResultService
 
 
         $rawTrackPercentage = $this->computeRawTrackPercentage($examResults);
-        $rawScores = [];
-        foreach ($rawTrackPercentage as $name => $p) {
-            $rawScores[$name] = $p['percentage'];
-        }
-        
+        // $rawScores = [];
+        // foreach ($rawTrackPercentage as $name => $p) {
+        //     $rawScores[$name] = $p['percentage'];
+        // }
+
         // dd($rawTrackPercentage, $rawScores, $finalScores);
-        $note = $this->generateCounselorNote($rawScores);
+        $note = $this->generateCounselorNote($finalScores);
 
         return [
             'mode' => 'multiple',
             'recommended_track' => $recommendedTrack,
             'second_recommendation' => $secondRecommendation,
-            'averageAcc' => $averageAcc,
+            'averageAcc' => $averageAccuracy,
             'averageDuration' => $averageDuration,
             'rawTrackPercentage' => $rawTrackPercentage,
             'computedTrackPercentage' => $finalScores,
@@ -255,6 +273,8 @@ class RetrieveResultService
         arsort($scores); // Sorts high to low
         $topTrack = array_key_first($scores);
         $topScore = reset($scores);
+
+        // dd($scores, $topScore, $topTrack);
 
         $recommendations = [
             'Computer Science' => "your strong aptitude for abstract reasoning and problem-solving, which are essential for software development and data-driven fields.",
