@@ -63,6 +63,7 @@
 }
 
 
+.icon-success,
 .icon-check-mark {
     -webkit-mask-image: url('/public/assets/icons/tick-circle.svg');
     mask-image: url('icons/tick-circle.svg');

@@ -80,7 +80,7 @@ body {
 .qNum {
     background-color: var(--color-black);
     border-radius: 8px;
-    font-size: 0.6rem;
+    font-size: 0.8rem;
     font-family: var(--manrope-font);
     color: var(--color-text-main-white);
     text-transform: uppercase;

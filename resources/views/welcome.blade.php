@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" href="{{asset('assets/css/nav_bar.css')}}?v={{ time() }}">
     <link rel="stylesheet" href="{{asset('assets/css/results.css')}}?v={{ time() }}">
-    <link rel="stylesheet" href="{{asset('assets/css/icons.css')}}?v={{ time() }}">
     <link rel="stylesheet" href="{{asset('assets/css/flash_message.css')}}?v={{ time() }}">
     <link rel="stylesheet" href="{{asset('assets/css/welcome.css')}}?v={{ time() }}">
 </head>
@@ -177,9 +176,62 @@
         </div>
     </div>
 
+    <!-- <form id="feedback-form">
+        <input type="text" id="name" name="name" placeholder="Your Name" required value="boying">
+        <input type="email" id="email" name="email" placeholder="Your Email" required value="boying@pusa.cat">
+        <input type="title" id="title" name="title" placeholder="Title" required value="Sample Mail">
+        <textarea type="text" id="message" class="feedback-input" name="message"
+            placeholder="Enter your feedback here..."></textarea>
+        <div class="alert-button-container">
+            <button class="btn btn-secondary"><i class="icon-arrow-right"></i> Cancel</button>
+            <button class="btn btn-middle">Skip <i class="icon-arrow-right"></i></button>
+            <button class="btn btn-primary" type="button" onclick="submitFeedback()">Submit <i
+                    class="icon-send"></i></button>
+        </div>
+    </form> -->
+
     <div class="footer">
         <p>© 2026 Philippine Christian University - College of Informatics. All rights reserved.</p>
     </div>
+
+
+
+    <!-- 1️⃣ Load EmailJS FIRST -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     Toast.create(document.body, "err", "Error");
+        // });
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     Toast.create(document.body, "success", "Success");
+        // });
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     Toast.create(document.body, "info", "Information");
+        // });
+
+
+        // (function () {
+        //     emailjs.init("7MFGNft50s_E0vbxh");
+        // })();
+
+        // function submitFeedback() {
+        //     // Pass the form ID or the element itself as the 3rd argument
+        //     emailjs.sendForm(
+        //         "service_a7ecfr6",
+        //         "template_jtx307u",
+        //         "#feedback-form" // This is the CSS selector for your form
+        //     ).then(function () {
+        //         Toast.create(document.body, "success", "Message sent successfully!");
+        //         document.getElementById("feedback-form").reset();
+        //         console.log("Success!");
+
+        //     }, function (error) {
+        //         Toast.create(document.body, "err", "Failed to send message.");
+        //         console.log(error);
+        //     });
+        // }
+    </script> -->
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
     <script

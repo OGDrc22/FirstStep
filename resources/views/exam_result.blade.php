@@ -30,7 +30,7 @@
     @if (isset($success))
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                Toast.create(document.body, "err", "Your feedback has been submitted successfuly!");
+                Toast.create(document.body, "success", "Your feedback has been submitted successfuly!");
             });
         </script>
     @endif

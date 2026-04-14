@@ -13,7 +13,7 @@
 
     --success-text-color: #33FF88;
 
-    --info-alert-text-color: #33AAFF;
+    --info-text-color: #33AAFF;
 
     --alert-bg: hsla(0, 0%, 0%, 0.8);
     
@@ -83,7 +83,13 @@
     align-items: center;
     overflow: hidden;
     color: var(--color-text-main-white-muted);
+}
+.toast-container:has(.message-container .icon-close) {
     animation: slideDownShake 6s ease-in-out;
+}
+.toast-container:has(.message-container .icon-info),
+.toast-container:has(.message-container .icon-success) {
+    animation: slideDownOvershoot 6s ease-in-out;
 }
 .toast-container.removing {
     opacity: 0;
@@ -122,8 +128,17 @@
 .toast-container:has(.message-container .icon-close) span {
     background-color: var(--error-text-color);
 }
+.toast-container .message-container .icon-success,
+.toast-container:has(.message-container .icon-success) span::after,
+.toast-container:has(.message-container .icon-success) span {
+    background-color: var(--success-text-color);
+}
+.toast-container .message-container .icon-info,
+.toast-container:has(.message-container .icon-info) span::after,
+.toast-container:has(.message-container .icon-info) span {
+    background-color: var(--info-text-color);
+}
 @keyframes slideDownShake {
-
     /* 0%: Start above the screen and invisible */
     0% {
         opacity: 0;
@@ -170,42 +185,41 @@
         transform: translateX(0%) translateY(-40px);
     }
 }
-
-
-
 @keyframes slideDownOvershoot {
+    /* 0%: Start above the screen and invisible */
     0% {
         opacity: 0;
-        transform: translateX(-50%) translateY(-40px);
+        max-height: 0; /* Start collapsed */
+        margin-bottom: 0;
+        transform: translateX(0%) translateY(-40px);
     }
-
-    7% {
+    8% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        max-height: 200px; /* Expand to show content */
+        margin-bottom: 12px; /* Your desired gap */
+        transform: translateX(0%) translateY(0);
     }
 
-    /* The "Overshoot" sequence */
-    8%,
-    9% {
-        transform: translateX(-50%) translateY(4px);
+    8% {
+        transform: translateX(0%) translateY(32px);
     }
 
     20% {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    30% {
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(0%) translateY(0);
     }
 
     90% {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        max-height: 200px;
+        margin-bottom: 16px;
+        transform: translateX(0%) translateY(0);
     }
-
     100% {
         opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
+        max-height: 0;      /* Shrink the height to 0 */
+        margin-bottom: 0;   /* Remove margin to avoid empty gaps */
+        padding: 0;         /* Clear padding to ensure 0 height */
+        transform: translateX(0%) translateY(-40px);
     }
 
 }
@@ -218,15 +232,7 @@
 #timerProgress .progress-t {
     height: 100%;
     width: 100%;
-    background-color: var(--info-alert-text-color);
-}
-
-
-.hum-success {
-    border: 4px solid var(--success-border-color);
-    /* background-color: var(--success-bg-color); */
-    color: var(--success-text-color);
-    animation: slideDownOvershoot 6s ease-in-out;
+    background-color: var(--info-text-color);
 }
 
 
@@ -240,7 +246,7 @@
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
-    padding: 16px;
+    padding: 32px;
 
     display: flex;
     flex-direction: column;
@@ -264,7 +270,13 @@
 }
 
 
-
+.feedback-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
 .feedback-input {
     font-family: var(--inter-font);
     width: 100%;
@@ -288,7 +300,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
-    margin-top: 24px;
     width: 100%;
     gap: 32px;
 }

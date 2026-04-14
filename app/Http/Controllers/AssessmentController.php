@@ -222,6 +222,9 @@ class AssessmentController extends Controller
 
         $student = Auth::guard('web')->user();
 
+        $username = $student->name;
+        $useremail = $student->email;
+
         if ($job->student_id !== $student->id) {
             abort(403, 'Unauthorized access to this exam.');
         }
@@ -277,7 +280,9 @@ class AssessmentController extends Controller
             'data' => [
                 'data' => $questions
             ],
-            'job' => $job
+            'job' => $job,
+            'username' => $username,
+            'useremail' => $useremail
         ]);
     }
 
