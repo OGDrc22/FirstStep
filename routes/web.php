@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\WelcomeSampleController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\ExamReasultController;
 use App\Http\Controllers\StartExamController;
 use App\Http\Controllers\AssessmentController;
@@ -9,9 +9,7 @@ use App\Models\ExamJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\PreventDirectAccess;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 
 

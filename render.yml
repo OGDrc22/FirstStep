@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: laravel-python-app
+    runtime: docker
+    plan: free # You can change this to 'starter' if you need more RAM for Python
+    region: singapore # Choose the region closest to the Philippines
+    envVars:
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false # You will paste your TiDB host in the Render Dashboard
+      - key: DB_PORT
+        value: "4000"
+      - key: DB_DATABASE
+        value: test
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: MYSQL_ATTR_SSL_CA
+        value: /var/www/certs/isrgrootx1.pem
+      # Add your Gemini API key here
+      - key: GOOGLE_API_KEY
+        sync: false

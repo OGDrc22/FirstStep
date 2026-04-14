@@ -5,81 +5,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retrieve Result</title>
-    <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/flash_message.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/nav_bar.css') }}">
+    <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/flash_message.css') }}?v={{ filemtime('assets/css/flash_message.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/nav_bar.css') }}?v={{ filemtime('assets/css/nav_bar.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/results.css') }}?v={{ filemtime('assets/css/results.css') }}">
 </head>
+
+<style>
+    @import url("{{ asset('assets/css/icons.css') }}?v={{ filemtime(public_path('assets/css/icons.css')) }}");
+</style>
 
 
 
 <body class="bg-overlay">
 
-    <header class="header-pcu">
-        <div class="header-left">
+    <nav class="top-nav-pcu">
+        <a class="top-nav-left" href="{{ route('welcome') }}">
             <img class="pcu-logo" src="{{ asset('assets/images/main_logo.png') }}" alt="PCU Logo">
             <span class="pcu-text-small">Philippine Christian University</span>
-        </div>
-        <div class="header-right">
+        </a>
+        <a class="top-nav-right" href="{{ route('welcome') }}">
             <span class="coi-text">COI First Step</span>
             <img class="pcu-coi-logo" src="{{ asset('assets/images/College_of_Informatics_72_R.png') }}" alt="COI Logo">
-        </div>
-    </header>
+        </a>
+    </nav>
 
     <div class="content">
         @if ($errors->has('email'))
-            <div class="alert alert-danger">{{ $errors->first('email') }}</div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Toast.create(document.body, "err", @json($errors->first('email')));
+                });
+            </script>
         @endif
 
 
         @if (!isset($examResult))
             <!--entering -->
-            <div class="page-Cencontainer">
-                <div class="login-card-wrapper">
-                    <div class="login-card">
-                        <h2 class="form-title">Enter your credentials</h2>
-
-                        <form method="POST" action="/get-result">
-                            @csrf
-                            <div class="form-group">
+            <div class="login-form-container">
+                <form method="POST" action="/get-result">
+                    @csrf
+                    <div class="login-page">
+                        <div class="top-content" style="grid-area: box-1;">
+                            <p>Review Your Assessment</p>
+                            <div class="email-input input-container">
+                                <label for="name">Username</label>
                                 <input type="email" id="email" name="email" placeholder="Email@gmail.com" required>
                             </div>
-
-                            <div class="btn-group">
-                                <button type="submit" name="action" value="latest" class="btn-result">
-                                    <i class="btn-icon icon-search-status" alt="Search Icon"></i>
-                                    <span>Get Latest Result</span>
-                                </button>
-
-                                <button type="submit" name="action" value="all" class="btn-result">
-                                    <i class="btn-icon icon-search-status" alt="Search Icon"></i>
-                                    <span>See All Result</span>
-                                </button>
-                            </div>
-                        </form>
+                        </div>
+                        <div class="left action-container" style="grid-area: box-2;">
+                            <p>See Latest</p>
+                            <p>View your most recent assessment result, including your recommended career track and performance
+                                summary.</p>
+                            <button class="p3-btn-action" type="submit" name="action" value="latest">
+                                <span>See Latest</span>
+                            </button>
+                        </div>
+                        <div class="right action-container" style="grid-area: box-3;">
+                            <p>See All</p>
+                            <p>Browse all your past assessment results to compare your performance and track recommendations
+                                over time.</p>
+                            <button class="p3-btn-action" type="submit" name="action" value="all">
+                                <span>See Results</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="home-btn-container">
-                    <a href="{{ route('welcome') }}" class="home-link"><i class="icon-home"></i> Back to Home</a>
-                </div>
+                </form>
             </div>
+
         @endif
 
-
-        <!-- score board> -->
 
         @if (isset($examResult))
             @if ($action === 'latest')
                 <h3 class="result-title">Assessment Result</h3>
 
                 <!-- <div class="card-data-row">
-                    <span class="card-label">Score:</span>
-                    <span class="card-value">{{ $examResult->score }}</span>
-                </div> -->
+                            <span class="card-label">Score:</span>
+                            <span class="card-value">{{ $examResult->score }}</span>
+                        </div> -->
 
-                
-                
+
+
                 <div class="dashboard-grid">
-                    <div class="user-card">
+                    <div class="user-card card">
                         <div class="user-detail">
                             <i class="icon-user" alt="User Icon"></i>
                             <span class="user-name">{{ $username }}</span>
@@ -102,7 +112,7 @@
                             <span class="card-value highlight">{{ $secondaryTrack['track'] }}</span>
                         </div>
                     </div>
-                    <div class="card aptitude-card">
+                    <div class="aptitude-card card">
                         <h1>{{ $aptitude }}%</h1>
                         <h3>APTITUDE SCORE</h3>
                     </div>
@@ -116,27 +126,19 @@
                         <div class="chart-bar" style="position: relative;">
                             <!-- <div style="display: flex; position: relative; height: 250px;"> -->
 
-                                <!-- LEFT: Labels -->
-                                <div id="custom-labels" style="position: absolute;
-                                    top: 0;
-                                    left: 0;
-                                    width: 100%;
-                                    pointer-events: none;
-                                    display: flex;
-                                    flex-direction: column;
-                                    height: 100%;
-                                    ">
-                                </div>
+                            <!-- LEFT: Labels -->
+                            <div id="custom-labels">
+                            </div>
 
-                                <!-- RIGHT: Chart -->
-                                <div style="height: 100%; width: 100%;">
-                                    <canvas id="bar-chart"></canvas>
-                                </div>
+                            <!-- RIGHT: Chart -->
+                            <div class="canvas-wrapper">
+                                <canvas id="bar-chart"></canvas>
+                            </div>
 
                             <!-- </div> -->
                         </div>
                     </div>
-                    
+
                     <div class="right-chart card">
                         <div class="chart-label">
                             <h3>Track Breakdown</h3>
@@ -201,20 +203,32 @@
                     </div>
                 </div>
 
-                
 
-                <div class="questions-review">
+
+                <div class="questions-review card">
+                    <h3>Question Review</h3>
+
+                    <!-- Can be used as Answer Review -->
                     @foreach ($questions as $index => $q)
                         <div class="question-review-card">
                             <h4 class="question-review">{{ $q }}</h4>
 
                             @php
-                                $studentAns = $questionsData[$index]['answer'][0] ?? null;
-                                $correctAns = $questionsData[$index]['keyAns'][0] ?? null;
-                                $isCorrect = $studentAns === $correctAns;
+                                $studentAnswerArray = $questionsData[$index]['answer'] ?? [];
+                                $correctAnswerArray = $questionsData[$index]['keyAns'] ?? [];
 
-                                $fullStudentAns = $questionsData[$index]['answer'][0] . ". " . $questionsData[$index]['answer'][1];
-                                $fullCorrectAns = $questionsData[$index]['keyAns'][0] . ". " . $questionsData[$index]['keyAns'][1];
+                                $studentAns = $studentAnswerArray[0] ?? null;
+                                $correctAns = $correctAnswerArray[0] ?? null;
+
+                                $isCorrect = $studentAns !== null && $correctAns !== null && $studentAns === $correctAns;
+
+                                $fullStudentAns = isset($studentAnswerArray[0], $studentAnswerArray[1])
+                                    ? $studentAnswerArray[0] . ". " . $studentAnswerArray[1]
+                                    : 'No Answer';
+
+                                $fullCorrectAns = isset($correctAnswerArray[0], $correctAnswerArray[1])
+                                    ? $correctAnswerArray[0] . ". " . $correctAnswerArray[1]
+                                    : 'No Correct Answer';
                             @endphp
                             <p class="{{ $isCorrect ? 'bg-correct-alpha' : 'bg-danger-alpha' }} stdntAnswer">
                                 Your Answer:
@@ -241,110 +255,210 @@
                 <!-- see all -->
 
             @elseif($action === 'all')
-                <h2>All Exam Attempt Results for {{ $username }}</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <!-- <th>ID</th> -->
-                            <th>Date</th>
-                            <th>Score</th>
-                            <th>Track Percentage</th>
-                            <th>Predicted Track</th>
-                            <th>Secondary Track</th>
-                            <th>Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($examResult as $exam)
-                            <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
-                                <!-- <td>{{ $exam->id }}</td> -->
-                                <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
-                                <td>{{ $exam->score }}</td>
-                                <td>
-                                    @foreach ($exam->sorted_tracks as $percentage)
-                                        {{ $percentage['track'] }}: {{ $percentage['percentage'] }}% <br>
-                                    @endforeach
-                                </td>
-                                <td>{{ $exam->predicted_track['track'] }}</td>
-                                <td>{{ $exam->secondary_track['track'] }}</td>
+                <div class="card-all-result">
+                    <div class="header">
+                        <h3>Assessment History and Results for {{ $username }}</h3>
+                        <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
+                    </div>
 
-                                <td>{{ $exam->evaluation_note }}</td>
+                    <div class="result-info-container">
 
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        <div class="result-display-card card">
+                            <div class="card-data-row">
+                                <span class="card-label">Primary Recommendation</span>
+                                <span class="card-value highlight">{{ $recommendedTrack }}</span>
+                                <p> {{ $note }}</p>
+                            </div>
 
-                <h3>Recommended track based on all exam attempt:</h3>
-                <h4>{{ $recommendedTrack }}</h4>
+                            <div class="card-data-row">
+                                <span class="card-label">Seondary Recommendation</span>
+                                <span class="card-value highlight">{{ $secondaryTrack }}</span>
+                            </div>
+                        </div>
+                        <!-- <div class="info-tracks">
+                            <h3>Recommended track based on all exam attempt:</h3>
+                            <h4>{{ $recommendedTrack }}</h4>
+                        </div> -->
 
-                <div class="chart-bar">
-                    <canvas id="stackedLineChart"></canvas>
+                        <!-- <div class="chart-bar">
+                            <canvas id="stackedLineChart"></canvas>
+                        </div> -->
+                        <div class="left-chart card">
+                            <div class="chart-label">
+                                <h3>Track Breakdown</h3>
+                                <i class="icon icon-chart" alt="Chart Icon"></i>
+                            </div>
+                            <div class="chart-bar" style="position: relative;">
+                                <!-- <div style="display: flex; position: relative; height: 250px;"> -->
+
+                                <!-- LEFT: Labels -->
+                                <div id="custom-labels">
+                                </div>
+
+                                <!-- RIGHT: Chart -->
+                                <div class="canvas-wrapper">
+                                    <canvas id="stackedLineChart"></canvas>
+                                </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card card">
+                        <div class="header">
+                            <div class="icon-container" style="grid-area: icon;">
+                                <i class="icon icon-think"></i>
+                            </div>
+                            <div class="texts">
+                                <h3 style="grid-area: title;">How Your Results is Calculated</h3>
+                                <h2 style="grid-area: sub-title;">All results are based on a combination of performance metrics and machine learning predictions.</h2>
+                            </div>
+                        </div>
+                        <div class="cards-container">
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-document-copy"></i>
+                                </div>
+                                <h2>Aptitude Tests</h2>
+                                <h1>Standardized assessments measuring problem-solving, logic, and technical ability.</h2>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-chart"></i>
+                                </div>
+                                <h2>Core Competencies</h2>
+                                <h1>Evaluation of your hard skills across logic, syntax, and system design.</h1>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-heart"></i>
+                                </div>
+                                <h2>Career Interest</h2>
+                                <h1>Profiling your professional preferences and work-style inclinations.</h1>
+                            </div>
+                            <div class="sub-card">
+                                <div class="icon-container">
+                                    <i class="icon icon-bot"></i>
+                                </div>
+                                <h2>Weighted Model</h2>
+                                <h1>• 60% User Performance <br> (Accuracy, completion, behavior) <br> <br> • 40% Machine Learning Prediction <br> (Pattern-based recommendation).</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-table">
+                        <h3>Previous Assessments Attempts</h3>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <!-- <th>ID</th> -->
+                                    <!-- <th>Track Percentage</th> -->
+                                    <th>Date</th>
+                                    <th>Predicted Track</th>
+                                    <th>Secondary Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($examResult as $exam)
+                                    <tr onclick="window.location='{{ route('show-exam-result', $exam->id) }}'" style="cursor: pointer">
+                                        <!-- <td>{{ $exam->id }}</td> -->
+                                        <!-- <td>
+                                                        @foreach ($exam->sorted_tracks as $percentage)
+                                                            {{ $percentage['track'] }}: {{ $percentage['percentage'] }}% <br>
+                                                        @endforeach
+                                                    </td> -->
+                                        <td>{{ $exam->created_at->format('M d, Y: h:i') }}</td>
+
+                                        @if ($exam->predicted_track['track'] == "Information Technology")
+                                            <td><p class="track_it">{{ $exam->predicted_track['track'] }}</p></td>
+                                        @elseif ($exam->predicted_track['track'] == "Computer Science")
+                                            <td><p class="track_cs">{{ $exam->predicted_track['track'] }}</p></td>
+                                        @elseif ($exam->predicted_track['track'] == "Computer Engineering")
+                                            <td><p class="track_ce">{{ $exam->predicted_track['track'] }}</p></td>
+                                        @elseif ($exam->predicted_track['track'] == "Multimedia Arts")
+                                            <td><p class="track_mma">{{ $exam->predicted_track['track'] }}</p></td>
+                                        @endif
+
+                                        <td>{{ $exam->secondary_track['track'] }}</td>
+
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @endif
         @endif
     </div>
 
+    <div class="footer">
+        <p>© 2026 Philippine Christian University - College of Informatics. All rights reserved.</p>
+    </div>
 
+
+    <script src="{{ asset('assets/js/flash_message.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 
 
     @if (isset($examResult) && $action === 'latest')
         <script>
-
-            // Inside your <script> at the bottom
-            const ctx2 = document.getElementById('doughnutChart').getContext('2d');
-            new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['CE', 'CS', 'IT', 'MMA'],
-                    datasets: [{
-                        data: [
-                            {{ $trackPercentage['Computer Engineering']['percentage'] }},
-                            {{ $trackPercentage['Computer Science']['percentage'] }},
-                            {{ $trackPercentage['Information Technology']['percentage'] }},
-                            {{ $trackPercentage['Multimedia Arts']['percentage'] }}
-                        ],
-                        backgroundColor: ['#8b5cf6', '#facc15', '#3b82f6', '#4ade80'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    cutout: '70%', // Makes it a thin, professional ring
-                    plugins: {
-                        legend: { display: false },
-                        maintainAspectRatio: false,
-                        reponsive: true
-                    }
-                }
-            });
-
-
-            // Convert the PHP array to a JS object
+            const trackPercentage = @json($trackPercentage);
             const detailedCompetencies = @json($detailedCompetencyLevels);
-            const filteredComp = Object.entries(detailedCompetencies)
-                .filter(([key, item]) => item.score > 0);
             const coreCompetencies = @json($coreCompetencies);
-            const filteredEntries = Object.entries(coreCompetencies)
-                .filter(([key, item]) => item.score > 0);
 
-            // 2. Map the filtered data
-            const labels = filteredEntries.map(([key, item]) => key);
-            const scores = filteredEntries.map(([key, item]) => item.score * 100);
-            const levels = filteredEntries.map(([key, item]) => item.level);
+            document.addEventListener('DOMContentLoaded', function () {
+                initCharts(trackPercentage, detailedCompetencies, coreCompetencies);
+            });
+        </script>
 
-            const compName = filteredComp.map(([key, item]) => key);
-            const compScores = filteredComp.map(([key, item]) => item.score * 100);
+        <script src="{{ asset('assets/js/charts.js') }}"></script>
+    @elseif (isset($examResult) && $action === 'all')
+        <script>
 
-            const ctx_bar = document.getElementById('bar-chart').getContext('2d');
 
+            const cTracks = @json($computedTrackPercentage);
+
+            const filteredTracksObj = Object.entries(cTracks).filter(([_, value]) => value > 0);
+            
+            const labels = filteredTracksObj.map(([key, item]) => key);
+            const percentage = filteredTracksObj.map(([key, item]) => item.toFixed(2));
+
+            const trackPercentage = @json($trackPercentage);
+            const filteredTracksPer = Object.entries(trackPercentage).filter(([_, value]) => value);
+            console.log(
+                filteredTracksPer
+            );
+            const newTrack = filteredTracksPer.map(([key, value]) => value);
+            console.log(
+                newTrack
+            );
+            const rawP = newTrack.map(item => item.percentage);
+            console.log(
+                rawP
+            );
+
+            const averageAcc = @json($averageAcc);
+            const filteredAcc = Object.entries(averageAcc).filter(([key, item]) => key);
+            const average = filteredAcc.map(([key, item]) => item.toFixed(2));
+            console.log(
+                average
+            );
+
+
+            const ctx = document.getElementById('stackedLineChart').getContext('2d');
+
+                    
             const data = {
                 labels: labels,
                 datasets: [{
                     axis: 'y',
                     label: labels,
-                    data: scores,
+                    data: percentage,
                     barThickness: 16,    // Height of the bar in pixels
                     maxBarThickness: 40, // Ensures it never gets too chunky'
                     // categoryPercentage: 0.8,   // more vertical spacing
@@ -373,54 +487,42 @@
                         legend: {
                             display: false
                         },
-                        // datalabels: {
-                        //     anchor: 'end',
-                        //     align: 'end',
-                        //     offset: 8,
-                        //     color: '#666', // Matches the gray in your image
-                        //     formatter: (value) => `${value.toFixed(0)}%`,
-                        //     font: { weight: 'bold' }
-                        // },
                         datalabels: { display: false },
-                        // Tooltip
                         tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    // Main Bar Label
-                                    return `Total Score: ${context.parsed.x.toFixed(2)}%`;
-                                },
-                                afterLabel: function(context) {
-                                    const label = context.label;
-                                    let lines = [];
-
-                                    // 1. Define which sub-keys belong to which bar
-                                    const mapping = {
-                                        'Logical-Mathematical Reasoning': ['logical_reasoning', 'algorithmic_thinking', 'problem_solving'],
-                                        'Syntax & Structure Analysis': ['syntax_analysis'],
-                                        'Systems Hardware & Networking': ['hardware_systems', 'networking_systems', 'system_organization'],
-                                        'Digital Aesthetics & UI Design': ['ui_design', 'digital_creativity']
-                                    };
-
-                                    // 2. Get the sub-keys for the current hovered bar
-                                    const subKeys = mapping[label] || [];
-
-                                    // 3. Loop through sub-keys and pull data from your 'detailedCompetencies' object
-                                    subKeys.forEach(key => {
-                                        if (detailedCompetencies[key]) {
-                                            const score = (detailedCompetencies[key].score * 100).toFixed(2);
-                                            const name = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
-                                            lines.push(`${name}: ${score}%`);
-                                        }
-                                    });
-
-                                    return lines; // This returns each sub-item on a new line
-                                }
-                            }
+                            enabled: false
                         }
+                        // tooltip: {
+                        //     callbacks: {
+                        //         label: function(context) {
+                        //             // Main Bar Label
+                        //             return `Total Score: ${context.parsed.x.toFixed(2)}%`;
+                        //         },
+                        //         afterLabel: function(context) {
+                        //             // const averageLabel = context.label;
+                        //             let lines = [];
+                        //             // if(tracks[key]) {
+                        //             //     const nameL = "Average Accuracy";
+                        //             //     const avrg = average[key];
+                        //             //     lines.push(`$(name): $(avrg)`);
+                        //             // }
+
+                        //             const index = context.dataIndex;
+                        //             const rawTP = rawP[index];
+                        //             const avrg = average[index];
+                                    
+                        //             if (avrg !== undefined) {
+                        //                 lines.push(`Raw Percentage: ${rawTP}%`);
+                        //                 lines.push(`Average Accuracy: ${avrg}%`);
+                        //                 return lines;
+                        //             }
+
+                        //         }
+                        //     }
+                        // }
                     },
                     scales: {
                         // 2. Hide the Labels on the left (Y-axis)
-                         y: {
+                            y: {
                             ticks: {
                                 display: false
                             },
@@ -443,98 +545,20 @@
                     }
                 }
             };
-            new Chart(ctx_bar, config);
+            new Chart(ctx, config);
 
+            // Custom labels
             const labelsContainer = document.getElementById('custom-labels');
 
             labelsContainer.innerHTML = labels.map((label, index) => {
-                const level = levels[index];
-                const percentage = scores[index].toFixed(2) + '%';
-
                 return `
-                    <div style="
-                        display: flex;
-                        justify-content: space-between;
-                        flex: 1;
-                        color: #666;
-                        padding: 16px 0 0 10px;
-                    ">
-                        <span>${label} — ${level}</span>
-                        <span style="color:#666;">${percentage}</span>
+                    <div style="flex:1;display:flex;justify-content:space-between;padding-left:10px;">
+                        <span>${label}</span>
+                        <span>${percentage[index]} %</span>
                     </div>
                 `;
-            }).join('');
-
+            }).join('');  
         </script>
-    @elseif (isset($examResult) && $action === 'all')
-        <script>
-
-
-            const tracks = @json($trackPercentage);
-            const filterTracks = Object.entries(tracks).filter(([key, item]) => item.percentage > 0);
-            const labels = filterTracks.map(([key, item]) => item.track);
-            const percentage = filterTracks.map(([key, item]) => item.percentage);
-
-
-            const ctx = document.getElementById('stackedLineChart').getContext('2d');
-
-            Chart.defaults.font.size = 16;
-            const data = {
-                labels: labels,
-                datasets: [{
-                    axis: 'y',
-                    label: 'Track Percentage',
-                    data: percentage,
-                    barThickness: 30,    // Height of the bar in pixels
-                    maxBarThickness: 40, // Ensures it never gets too chunky
-                    fill: false,
-                    backgroundColor: [
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 200, 102, 0.5)',
-                        'rgba(120, 255, 102, 0.5)',
-                        'rgba(102, 232, 255, 0.5)',
-                    ],
-                    borderColor: [
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 200, 102)',
-                        'rgb(120, 255, 102)',
-                        'rgb(102, 232, 255)',
-                    ],
-                    borderWidth: 1
-                }]
-            };
-
-            const config = {
-                type: 'bar',
-                data: data,
-                plugins: [ChartDataLabels],
-                options: {
-                    indexAxis: 'y',
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: { left: 50, right: 200 }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        // 2. Hide the Labels on the left (Y-axis)
-                        y: {
-                            display: true,
-                            grid: {
-                                display: false // Optional: hides the horizontal grid lines
-                            }
-                        },
-                        x: {
-                            max: 100
-                        }
-                    }
-                }
-            };
-            new Chart(ctx, config);    
-        </script>	
 
     @endif
 

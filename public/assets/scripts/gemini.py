@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import pymysql
 import time
 
-DEBUG_FILE = r"C:\xampp\htdocs\first-step\storage\logs\gemini_debug.txt"
 db = None
 cursor = None
 job_id = None
@@ -15,6 +14,9 @@ div3 = 0.3333
 
 # ------------------ DB CONNECT ------------------
 def ensure_db_connection():
+    print("Connecting to TiDB...", flush=True)
+
+
     global db, cursor
 
     try:
@@ -25,10 +27,11 @@ def ensure_db_connection():
         pass
 
     db = pymysql.connect(
-        host="127.0.0.1",
-        user="root",
-        password="",
-        database="firststep",
+        host=os.getenv('DB_HOST'),
+        user=os.getenv('DB_USERNAME'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_DATABASE'),
+        ssl={'ca': os.getenv('MYSQL_ATTR_SSL_CA')},
         charset="utf8mb4",
         cursorclass=pymysql.cursors.DictCursor
     )
@@ -69,8 +72,8 @@ def update_job(status, *, output=None, error=None, message=None, progress=None):
     values.append(job_id)
 
     sql = f"UPDATE exam_jobs SET {', '.join(fields)} WHERE id = %s"
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"🔄 values: {values}\n")
+
+
     cursor.execute(sql, values)
     db.commit()
 
@@ -114,7 +117,6 @@ def parse_questions(text):
         if question_text and choices:
             parsed.append([question_text.strip(), choices, key])
 
-    # print(json.dumps(parse_questions(response.text), indent=2))
 
     return parsed
 
@@ -122,23 +124,21 @@ def parse_questions(text):
 
 
 def main():
+    print("Main Python Called", flush=True)
+
     global job_id
 
     ensure_db_connection()
 
     job_id = int(sys.argv[1])
-    
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"🎯 Received job ID: {sys.argv[1]}\n")
 
     update_job(
-        'started',
+        'processing',
         message="Preparing Environment...",
         progress=0
     )
     time.sleep(sleep_t)
 
-    load_dotenv()
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise Exception("GOOGLE_API_KEY is missing")
@@ -150,7 +150,7 @@ def main():
         "response_mime_type": "application/json", # <--- THIS IS THE KEY SETTING
     }
     model = genai.GenerativeModel(
-        model_name="gemini-2.5-flash",
+        model_name="gemini-3.1-flash-lite-preview",
         generation_config=generation_config,
     )
 
@@ -186,16 +186,11 @@ def main():
     if isinstance(payload_, str):
         payload_ = json.loads(payload_)
 
-    # Debug once (remove later)
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write(f"📦 Payload parsed: {json.dumps(payload_, indent=2)}\n")
 
     # Normalize interest 
     if isinstance(payload_, dict):
         interests = payload_.get("interest")
 
-        with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(interests, indent=2))
 
     elif isinstance(payload_, list):
         # Case 1: list of interests directly
@@ -309,12 +304,8 @@ def main():
     """
 
     response = model.generate_content(prompt)
+    print("Sending request to Gemini...", flush=True)
 
-    with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-        f.write("\n🤖 RAW AI RESPONSE:\n")
-        f.write(str(response) + "\n")
-        f.write("🤖 response.text:\n")
-        f.write(str(response.text) + "\n")
 
 
     update_job(
@@ -350,9 +341,6 @@ def main():
     except json.JSONDecodeError as e:
         raise Exception(f"Failed to parse AI output: {e}")
 
-
-    with open(DEBUG_FILE, "a", encoding="UTF-8") as f:
-        f.write(json.dumps(parsed_questions, indent=2))
         
 
     update_job(
@@ -368,10 +356,8 @@ if __name__ == "__main__":
             raise ValueError("Missing job ID argument")
         main()
     except Exception as e:
-        with open(DEBUG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"❌ Error in main: {e}\n")
-            f.write(traceback.format_exc() + "\n")
-        sys.exit(1)
+        print(f"PYTHON CRASH: {str(e)}", flush=True)
+        print(traceback.format_exc(), flush=True)
 
         try:
             update_job('failed', error=str(e))

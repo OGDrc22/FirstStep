@@ -1,32 +1,14 @@
-:root {
-    --primary-color: #19429C;
-    --accent-blue: #3498db;
-    --secondbry-color: #000A21;
-    --bg-color: #F5F5F5;
-    --font-family: 'Poppins', sans-serif;
-    --bg-color-alt: hsl(0, 0%, 92%);
-    --bg-color-dark: #171718;
-
-    --grid-size: 30px;
-    --base-grid-color: rgba(255, 255, 255, 0.08);
-    --grid-strength: 1px;
-    --glow-color: rgba(52, 152, 219, 0.6);
-
-    --light-gray: #bbbbbb;
-
-    --glass-bg: rgba(255, 255, 255, 0.85); 
-    --glass-border: rgba(220, 220, 220, 0.5);
-    --glass-blur: 10px;
-}
+@import "./variables.css";
+@import "./icons.css";
 
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: var(--font-family);
+    font-family: var(--inter-font);
     color: var(--secondary-color);
-    background-color: var(--bg-color-dark);
+    background-color: var(--color-white-dark);
     /* This creates the radial dot pattern from your code */
-    background-image: radial-gradient(var(--primary-color) 1px, transparent 1px);
+    background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
     background-size: 30px 30px;
     display: flex;
     flex-direction: column;
@@ -46,70 +28,30 @@ body {
 
 /* Main Content */
 .container {
+    flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 50px;
+    padding: 48px 0 48px 0;
+    
 }
 
 .assessment-card {
-    background-color: var(--card-bg);
+    background-color: var(--card-bg-assessment);
     width: 90%;
     max-width: 950px;
     padding: 40px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-sm);
 }
 
 .card-title {
     font-size: 1.1rem;
     margin-bottom: 30px;
-    color: #333;
+    color: var(--color-text-main);
 }
 
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: grid;
-    place-items: center;
-    justify-content: center;
-    z-index: 10;
-    color: #FFFFFF;
-    font-size: 1.5rem;
-    display: none;
-}
-
-.loader-container {
-    background-color: var(--bg-color-dark);
-    padding: 32px;
-    border-radius: 8px;
-    text-align: center;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid var(--primary-color);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 16px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 
 /* Stacks and centers the Name and Email boxes */
 .input-stacked-container {
@@ -120,38 +62,51 @@ body {
     margin: 40px auto;
     width: 100%;
 }
-/* Styles the actual white input boxes */
-.pcu-field {
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     width: 100%;
-    max-width: 500px; /* Forces them to stay within a clean width */
+}
+.input-container label {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.input-container input {
+    width: 100%;
     padding: 16px 20px;
-    border: 1px solid #dcdcdc; 
-    border-radius: 4px; 
-    background-color: #ffffff;
-    font-size: 1rem;
-    color: #333333;
+    border: var(--border-subtle); 
     outline: none;
+    border-radius: 4px;
+    background-color: var(--color-surface-gray-300);
+    font-size: 1rem;
+    color: var(--color-text-main);
     transition: border-color 0.3s;
 }
 
-.pcu-field:focus {
-    border-color: var(--accent-blue); /* Blue outline when active */
+.input-container input:focus {
+    color: var(--color-text-main);
+    border-color: var(--color-black);
 }
 
 /* ----General Design */
 .buttons {
     display: flex;
     justify-content: space-between; 
-    width: 100%; 
+    width: 100%;
+    padding-top: 32px;
     margin-bottom: 20px;
+    border-top: var(--border-subtle);   
 }
 
 .btn {
     width: auto;
-    padding: 12px 35px;
-    border-radius: 50px; 
-    background-color: var(--accent-blue); 
-    color: #ffffff;
+    padding: 16px 32px;
+    border-radius: 8px; 
+    background-color: var(--color-black); 
+    color: var(--color-white);
     font-weight: 600;
     font-size: 1rem;
     border: none;
@@ -162,94 +117,84 @@ body {
 .next-btn {
     margin-left: auto; 
     padding: 12px 40px;
-    background-color: var(--accent-blue);
-    color: #ffffff;
+    background-color: var(--color-black);
+    color: var(--color-white);
     border: none;
 }
 .next-btn i {
-    background-color: var(--bg-color);
+    background-color: var(--color-white);
 }
 
 .next-btn:hover {
-    background-color: var(--primary-color); 
+    background-color: var(--color-black-hover); 
 }
 
 .prev-btn {
-    padding: 12px 35px; /* Matches the next button padding */
-    background-color: var(--accent-blue);
-    color: #ffffff; /* Changes text to white */
-    border: none; /* Removes the gray border */
-    border-radius: 50px; 
-    font-weight: 600;
-    font-size: 1rem;
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: none;
     transition: background-color 0.3s;
 }
 .prev-btn i {
-    background-color: var(--bg-color);
+    background-color: var(--color-text-muted);
 }
 
 .prev-btn:hover {
-    background-color: var(--primary-color) !important; /* Darker blue on hover */
-    color: #ffffff !important;
+    background-color: var(--accent-chip-bg-muted);
+    color: var(--color-text-muted-alpha);
 }
-form {
-    background-color: var(--bg-color-alt);
-    padding: 16px;
-    margin: 24px 16%;
-    border-radius: 16px;
+.prev-btn:hover i {
+    background-color: var(--color-text-muted-alpha);
 }
 
+
+
+.assessment-top {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.assessment-top .header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.header h3 {
+    font-family: var(--inter-font);
+    font-size: 3rem;
+    color: var(--color-black);
+    margin: 0;
+}
+.header p {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    margin: 0;
+}
 /* ProgressBar */
 .progressbar {
     position: relative;
     display: flex;
     justify-content: space-between;
-    counter-reset: step;
-    margin: 24px 32px;
+    gap: 16px;
+    width: 100%;
 }
 
-.progressbar::before, .progress {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 4px;
-    width: 100%;
-    background-color: var(--light-gray);
-}
 
 .progress-step {
-    width: 32px;
-    aspect-ratio: 1/1;
-    background-color: var(--light-gray);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
+    flex: 1;
+    height: 16px;
+    background-color: var(--card-bg-4);
 }
 
 .progress-step.active {
-    background-color: var(--primary-color);
+    background-color: var(--color-primary);
 }
 
-.progress-step::before {
-    counter-increment: step;
-    content: counter(step);
-}
-.progress-step.active::before {
-    color: var(--bg-color);
-}
 
-.progress-step::after {
-    content: attr(data-title);
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    width: max-content;
-}
+
 
 .progress {
-    background-color: var(--primary-color);
+    background-color: var(--color-primary);
     width: 0%;
     transition: 0.3s ease-in-out;
 }
@@ -264,35 +209,62 @@ form {
 
 /* 2. Remove invisible width limits on whatever step is currently active */
 .form-step.active {
-    width: 100% !important;
-    max-width: 100% !important;
-    display: flex !important;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
     flex-direction: column;
-    /* This makes Step 2, 3, and 4 use the full width */
-    align-items: stretch !important; 
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    margin-top: 32px;
+    background-color: var(--color-white);
 }
 
 #step-1.active {
-    /* This overrides the global 'stretch' ONLY for the first step */
-    align-items: center !important; 
+    padding: 32px;
+    align-items: center; 
+}
+#step-1 .buttons p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text-muted);
+    font-size: small;
+    font-family: var(--inter-font);
+    font-weight: 300;
+}
+#step-1 .buttons p i {
+    background-color: var(--color-text-muted);
+    width: 16px;
+    height: 16px;
 }
 
 /* 1. Force the main data collection wrapper to stretch fully */
 .forms-data-collection {
-    width: 100% !important;
+    background-color: var(--card-bg-1);
+    border-radius: 8px;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch !important; /* 👈 THE FIX: Forces all steps to fill the entire left-to-right space */
+    align-items: stretch; /* 👈 THE FIX: Forces all steps to fill the entire left-to-right space */
 }
 
-.form-step.active#diagnostic-mini-test {
-    align-items: flex-start !important; /* Keeps the text aligned to the left edge */
+
+.assessment-card:has(#step-2.active) {
+    max-width: 100%;
 }
 
+#step-2 {
+    padding: 32px;
+}
 /* --- 1. THE GRID (Fixed to 5 columns and centered) --- */
+.interest-selection {
+    margin-bottom: 32px;
+}
 .interest-options {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); 
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-auto-rows: 1fr;
+    grid-auto-flow: row;
     gap: 16px; 
     width: 100%;
     margin: 20px 0;
@@ -300,98 +272,94 @@ form {
 
 /* --- 3. THE CARDS --- */
 .interest-card {
-    background-color: #ffffff;
+    background-color: var(--color-surface-gray-200);
     border-radius: 8px; 
-    padding: 20px 10px;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #dcdcdc; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    cursor: pointer; 
+    box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
 }
 
 .interest-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-md);
+    background-color: var(--color-surface-gray-200-hover);
 }
 
 .interest-card.selected {
-    border: 2px solid var(--accent-blue); 
-    background-color: #f4f9fd; 
+    box-shadow: var(--shadow-md);
+    outline-offset: 4px;
+    outline: 2px solid var(--color-black); 
+    background-color: var(--color-surface-light-blue-300); 
 }
 
-.interest-card img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin: 0 auto 15px auto;
-    display: block;
+.interest-card .icon-container {
+    background-color: var(--color-surface-gray-300);
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.interest-card .icon-container i {
+    background-color: var(--color-surface-gray-900)
+}
+
+.interest-card.selected .icon-container {
+    background-color: var(--color-black);
+}
+.interest-card.selected .icon-container i {
+    background-color: var(--color-white);
 }
 
 .interest-card h3 {
-    font-size: 0.9rem;
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #000000;
+    color: var(--color-text-main);
     margin: 0;
-    line-height: 1.2;
+    line-height: 1;
+}
+.interest-card p {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 8px 0 0 0;
+    font-weight: 500;
 }
 
 /* --- 4. THE 'OTHER' INPUT BAR --- */
 .interest-other-container {
-    width: 100% !important;
+    width: 100%;
     /* Use padding to align the text, but use border-box to keep width at 100% */
-    padding: 0 !important; 
-    margin: 30px 0 !important;
-    box-sizing: border-box !important;
-    position: relative;
-}
-#other-interest-input {
-    width: 100% !important; /* Forces it to stay exactly 100% of the parent */
-    max-width: 100% !important;
-    padding: 16px 50px 16px 20px !important; /* Right padding (50px) protects the '+' button area */
-    border-radius: 8px;
-    border: 1px solid #dcdcdc;
-    font-size: 1rem;
-    box-sizing: border-box !important; /* 👈 THE FIX: Prevents padding from making the box wider */
-    outline: none;
+    padding: 0; 
+    margin: 30px 0;
+    box-sizing: border-box;
 }
 
-#other-interest-input:focus {
-    border-color: var(--accent-blue);
+.interest-other-list {
+    display: flex;
+    gap: 12px;
+    margin: 0 0 32px 0;
+    width: 100%;
 }
-
-.add-other-interest {
-    position: absolute;
-    right: 15px; /* Keeps the button inside the far-right edge of the bar */
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    font-size: 1.8rem;
-    cursor: pointer;
-    z-index: 5;
+.other-interest {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 12px;
+    width: 100%;
 }
-#diagnostic-interest-test.active {
-    width: 100% !important;
-    max-width: 100% !important;
-    align-items: stretch !important; /* 👇 Forces contents to fill card width */
-}
-
-.interest-other-list #other-interest li {
+.interest-other-list .other-interest .other-interest-item {
+    width: 100%;
     list-style: none;
-    width: fit-content;
-    padding: 8px;
-    background-color: var(--bg-color-alt);
-    border-radius: 32px;
-    border: 2px solid var(--primary-color);
+    padding: 20px;
+    background-color: var(--color-surface-light-blue-300);
+    border: 2px solid var(--color-black);
+    border-radius: 8px;
     cursor: pointer;
-}
-
-.interest-other-list #other-interest li::after {
-    content: '×';
-    margin-left: 16px;
 }
 /* =========================================
    STEP 3: SELF SKILL RATING (INLINE LABELS)
@@ -401,94 +369,124 @@ form {
    STEP 3: SELF SKILL RATING (LEFT ALIGNED)
    ========================================= */
 
+
+.assessment-card:has(#diagnostic-skill-test.active) {
+    max-width: max-content;
+    
+}
 #diagnostic-skill-test {
+    padding: 32px;
     width: 100%;
-}
-
-#likert-container {
-    margin: 10px 0 40px 0;
-    width: 100%;
-}
-
-/* --- Category Grouping --- */
-.skill-category {
-    margin-bottom: 40px;
-}
-
-.category-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 15px;
-    padding-left: 5px;
-    border-bottom: 2px solid #dcdcdc;
-    padding-bottom: 8px;
-}
+} 
 
 /* --- 1. The Main Row Layout --- */
 .likert-interest .interest-header {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    gap: 16px;
+
     padding: 4px 0 4px 0;
 }
-.interest-header .scale-hint {
+/* .interest-header .scale-hint {
     justify-content: flex-end;
+} */
+
+.likert-interest h4 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-main);
+    background-color: var(--accent-chip-bg);
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+.likert-interest .scale-hint {
+    font-size: 1.3rem;
+    color: var(--color-text-main);
+    font-weight: 700;
+    font-family: var(--inter-font);
 }
 
 .likert-row {
     display: flex;
-    align-items: center;
-    /* 👇 THE FIX: This forces the question to the far left and options to the far right */
-    justify-content: space-between !important; 
-    padding: 18px 20px;
-    background-color: #ffffff; 
-    margin-bottom: 8px; 
-    border-radius: 6px; 
-    border: 1px solid #eeeeee;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02); 
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
 }
-
-/* --- 2. The Question Text (Left Side) --- */
-.likert-question {
-    width: 30%; 
-    /* This padding acts as the buffer between the question and the first radio button */
-    padding-right: 30px !important; 
-    font-size: 0.95rem;
-    color: #333333;
-    font-weight: 600;
-    box-sizing: border-box;
+.likert-row label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: var(--inter-font);
+    color: var(--color-text-main);
 }
-
 /* --- 3. The Choices Container (NOW LEFT ALIGNED) --- */
 .likert-scale {
-    flex: 1; /* Tells the container to stretch and fill the empty space */
+    flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Packs the buttons to the right inside the container */
-    margin-left: auto !important; /* 👇 THE BULLETPROOF FIX: Forces this entire block to the right edge */
     flex-wrap: wrap; 
-    gap: 24px;
+    gap: 8px;
+    counter-reset: my-counter;
 }
 
 .likert-choices {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    height: stretch;
+    border-radius: 8px;
+    background-color: var(--color-surface-gray-200);
+    counter-increment: my-counter;
+}
+.likert-choices:has(input[type="radio"]:checked) {
+    background-color: var(--color-black);
+}
+
+.likert-choices label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: clamp(0.7rem, 14px, 1rem);
+    font-family: var(--inter-font);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+}
+.likert-choices label::after {
+    content: counter(my-counter);
+    font-size: 0.9rem;
+    font-family: var(--inter-font);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    margin-top: 4px;
+    transition: transform 0.2s ease;
+}
+.likert-choices label:hover::after {
+    color: var(--color-text-muted);
+}
+.likert-choices label:hover {
+    background-color: var(--color-surface-gray-200-hover);
+    color: var(--color-text-muted);
+}
+.likert-choices:has(input[type="radio"]:checked) label,
+.likert-choices:has(input[type="radio"]:checked) label::after {
+    color: var(--color-white);
 }
 
 /* --- 4. Custom Minimalist Radio Buttons --- */
-.radio-cell {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    margin: 0 !important; 
-}
-
-/* Hide the default HTML radio button */
-.radio-cell input[type="radio"] {
+.likert-choices input[type="radio"] {
+    appearance: none;
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -496,99 +494,96 @@ form {
     width: 0;
 }
 
-/* The custom circle */
-.checkmark {
-    position: relative;
-    height: 20px;
-    width: 20px;
-    background-color: #fafafa;
-    border-radius: 50%;
-    border: 2px solid #cccccc; 
+
+#diagnostic-skill-test .info-cards {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 16px;
+}
+.info-cards .card {
+    border-radius: 8px;
+    padding: 32px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0; 
-    /* This keeps the 8px gap between the circle and its text label */
-    margin-right: 8px !important; 
+    flex-direction: column;
+    gap: 12px;
 }
-
-/* The text label ("Novice", "Beginner", etc.) */
-.choice-text {
-    font-size: 0.85rem;
-    color: #555555;
-    font-weight: 500;
-    user-select: none;
-    transition: color 0.2s ease;
+.info-cards .card:nth-child(1) {
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: var(--color-surface-blue-900);
 }
-
-/* Hover effect */
-.radio-cell:hover input ~ .checkmark {
-    border-color: var(--accent-blue);
-    background-color: #f4f9fd;
+.info-cards .card:nth-child(2) {
+    grid-area: 1 / 2 / 2 / 3;
+    background-color: var(--color-surface-gray-300);
 }
-.radio-cell:hover .choice-text {
-    color: var(--accent-blue);
+.info-cards .card:nth-child(1) i {
+    width: 32px;
+    height: 32px;
+    background-color: rgb(255, 217, 168);
 }
-
-/* Checked state (When selected) */
-.radio-cell input:checked ~ .checkmark {
-    background-color: #ffffff;
-    border-color: var(--accent-blue); 
+.info-cards .card:nth-child(2) i {
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-surface-gray-700);
 }
-.radio-cell input:checked ~ .choice-text {
-    color: #000000;
+.info-cards .card h3 {
+    font-size: 1.2rem;
+    font-family: var(--inter-font);
     font-weight: 700;
+    color: var(--color-text-main-white);
+}
+.info-cards .card:nth-child(2) h3 {
+    color: var(--color-text-main);
+}
+.info-cards .card p {
+    font-size: 1rem;
+    font-family: var(--inter-font);
+    color: var(--color-text-main-white-muted);
+    margin: 4px 0 0 0;
+    font-weight: 400;
+}
+.info-cards .card:nth-child(2) p {
+    color: var(--color-text-muted);
 }
 
-/* Inner blue dot when checked */
-.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--accent-blue); 
-}
 
-.radio-cell input:checked ~ .checkmark:after {
-    display: block;
-}
+
 
 /* =========================================
    STEP 4: MINI TEST (Final Updated Layout)
    ========================================= */
 
 /* 1. Visibility & Progress Bar Spacing */
-.form-step#diagnostic-mini-test {
-    display: none !important;
-    width: 100% !important;
-    margin-top: 50px !important; /* 👈 THE FIX: Creates space between progress bar and test */
+.form-step #diagnostic-mini-test {
+    display: none;
+    width: 100%;
 }
 
 .form-step.active#diagnostic-mini-test {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important; /* 👈 THE FIX: Maximizes space to full card width */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 32px;
 }
 
 /* 2. Header: Title Left, Timer Right, Full Width Line */
 #diagnostic-mini-test .inf {
-    display: flex !important;
-    flex-direction: row !important; /* 👈 THE FIX: Title Left, Timer Right */
-    justify-content: space-between !important; /* Pushes to far edges */
-    align-items: center !important;
-    width: 100% !important;
-    padding-bottom: 15px !important;
-    margin-bottom: 30px !important;
-    border-bottom: 2px solid #dddddd !important; /* Full width line */
+    display: flex;
+    flex-direction: row; /* 👈 THE FIX: Title Left, Timer Right */
+    justify-content: space-between; /* Pushes to far edges */
+    align-items: center;
+    width: 100%;
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+    border-bottom: var(--border-subtle);
 }
 
 #diagnostic-mini-test .inf h3 {
-    margin: 0 !important;
+    margin: 0;
     font-size: 1.15rem;
     font-weight: 700;
+    font-family: var(--inter-font);
 }
 
 /* Timer Pill styling */
@@ -603,64 +598,110 @@ form {
 
 /* 3. Main Container & Questions (Maximized & Left-Aligned) */
 #mini-test-container {
-    width: 100% !important;
-    max-width: 100% !important; /* 👈 Maximizes the space */
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    width: 100%;
+    max-width: 100%; /* 👈 Maximizes the space */
+    margin-left: 0;
+    margin-right: 0;
     text-align: left;
 }
 
 .mini-question {
-    width: 100% !important;
+    width: 100%;
     counter-reset: option-letters;
-    margin-bottom: 35px !important;
+    margin-bottom: 35px;
+}
+.mini-question .question-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.mini-question .question-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-white);
+    background-color: var(--color-black);
+    border-radius: 8px;
+    border: var(--border-subtle);
+    width: 32px;
+    height: 32px;
 }
 
 .mini-question p {
     font-size: 1rem;
     font-weight: 600;
     color: #222222;
-    margin: 0 0 15px 0 !important;
 }
 
-/* 4. Options Formatting (a, b, c, d) */
+.mini-question .mini-test-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+    margin-left: 48px;
+}
 .mini-question label {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    margin-bottom: 12px !important;
-    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
     cursor: pointer;
-    width: fit-content !important; /* Keeps clickable area on text only */
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: var(--border-subtle);
+    box-shadow: var(--shadow-sm);
 }
-
+.mini-question label p {
+    flex: 1;
+    font-size: 0.95rem;
+    font-family: var(--inter-font);
+}
 .mini-question label::before {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     counter-increment: option-letters;
-    content: counter(option-letters, lower-alpha) "."; 
+    content: counter(option-letters, upper-alpha); 
     font-weight: 700;
-    color: #19429C;
-    margin-right: 8px !important;
-    min-width: 15px;
+    font-family: var(--inter-font);
+    color: var(--color-text-muted);
+    width: 28px;
+    height: 28px;
+    border: var(--border-subtle);
+    border-radius: 8px;
+}
+.mini-question label:hover {
+    background-color: var(--color-surface-gray-200-hover);
 }
 
 .mini-question input[type="radio"] {
-    margin: 0 10px 0 0 !important;
-    width: 16px;
-    height: 16px;
+    appearance: none;
     flex-shrink: 0;
 }
 
+.mini-question .mini-test-options label:has(input[type="radio"]:checked)  {
+    border-color: var(--color-primary);
+    background-color: var(--color-surface-light-blue-300);
+}
+.mini-question .mini-test-options label:has(input[type="radio"]:checked)::before {
+    background-color: var(--color-surface-light-blue-700);
+    color: var(--color-text-main-white);
+}
+
 .mini-question br {
-    display: none !important;
+    display: none;
 }
 
 /* 5. Buttons (Far Left and Far Right) */
 #diagnostic-mini-test .buttons {
-    display: flex !important;
-    justify-content: space-between !important; /* 👈 Pushes buttons to far corners */
-    width: 100% !important;
-    margin-top: 40px !important;
-    padding: 0 !important;
+    display: flex;
+    justify-content: space-between; /* 👈 Pushes buttons to far corners */
+    width: 100%;
 }
 
 
@@ -711,62 +752,8 @@ form {
    ========================================= */
 
 /* 1. The Full-Screen Overlay */
-.loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(248, 250, 252, 0.7); 
-    backdrop-filter: blur(8px); 
-    z-index: 10000;
-    display: none; /* Completely hides it from the browser until needed */
-    justify-content: center;
-    align-items: center;
-}
 
-/* When JavaScript adds this class, it WILL appear */
-.loading-screen.active {
-    display: flex !important; 
-}
 
-/* 2. The White Card */
-.loader-container {
-    background-color: #ffffff;
-    padding: 40px 65px;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-/* 3. The Blue Gradient Spinner */
-.loader {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #e0f2fe 10%, var(--primary-color) 70%);
-    box-shadow: 0 4px 15px rgba(25, 66, 156, 0.2);
-    animation: pulseSpinner 1.2s infinite ease-in-out;
-}
-
-@keyframes pulseSpinner {
-    0% { transform: scale(0.85); opacity: 0.8; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(0.85); opacity: 0.8; }
-}
-
-/* 4. The Text */
-#text-loader {
-    font-family: var(--font-family);
-    color: var(--secondary-color);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 0;
-    letter-spacing: 0.5px;
-}
 
 .home-btn-container {
     display: flex;
@@ -777,7 +764,7 @@ form {
     align-items: center;
     gap: 8px;
     margin: 20px 0 40px 0; /* Breathing room below the form */
-    color: var(--accent-blue);
+    color: var(--color-primary);
     font-family: var(--font-family);
     font-size: 0.95rem;
     font-weight: 500;
@@ -789,13 +776,12 @@ form {
     padding: 8px;
 }
 .home-link i {
-    background-color: var(--accent-blue);
+    background-color: var(--color-primary);
 }
 
 /* Hover State - Changes color and lifts slightly */
 .home-link:hover {
-    color: var(--accent-blue); /* Uses the light gray from your :root */
-    transform: translateY(-2px);
+    color: var(--color-primary);
 }
 
 /* The Magic Underline Animation */
@@ -807,7 +793,7 @@ form {
     display: block;
     margin-top: 26px;
     right: 0;
-    background: #ffffff;
+    background: var(--color-white);
     transition: width 0.3s ease, background-color 0.3s ease;
 }
 
@@ -815,5 +801,5 @@ form {
 .home-link:hover::after {
     width: 100%;
     left: 0;
-    background: var(--primary-color); /* The underline turns your PCU blue */
+    background: var(--color-primary); /* The underline turns your PCU blue */
 }

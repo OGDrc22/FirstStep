@@ -1,0 +1,125 @@
+:root {
+    /* =========================================
+     🔵 Primary & Brand Colors
+     ========================================= */
+
+    /* Vibrant Blue - Primary buttons, progress bars, highlighted text */
+    --color-primary: hsl(211, 73%, 48%);
+
+    /* Vibrant Blue (Hover state with 85% opacity) */
+    --color-primary-hover: hsla(211, 73%, 48%, 0.85);
+
+    /* Pale Blue - Pill tags, light card backgrounds */
+    --color-primary-light: hsl(212, 88%, 93%);
+
+    /* Pale Blue (Transparent variant for overlays) */
+    --color-primary-light-alpha: hsla(212, 88%, 93%, 0.5);
+
+    /* =========================================
+     ⚫ Typography
+     ========================================= */
+
+    /* Near Black - Main headings, primary text, logo */
+    --color-text-main: hsl(220, 10%, 11%);
+
+    /* Slate Gray - Body copy, descriptions, footer text */
+    --color-text-main-muted: hsl(218, 8%, 38%);
+
+    --color-text-muted-alpha: hsla(218, 8%, 38%, 0.6);
+
+    --color-text-main-white: var(--color-white);
+
+    --color-text-main-white-muted: hsl(0, 0%, 98%);
+    
+    --color-text-main-white-alpha: hsla(0, 0%, 100%, 0.6);
+
+
+    /* Fonts */
+    --inter-font: 'Inter', sans-serif;
+    --manrope-font: 'Manrope', sans-serif;
+
+
+    /* =========================================
+     🔘 Accents & UI Elements
+     ========================================= */
+
+    /* Cool Solid Gray - Graphic backgrounds (e.g. matrix graphic) */
+    --color-surface-blue-900: hsl(220, 100%, 15%);
+    --color-surface-blue-900-hover: hsl(220, 100%, 45%);
+
+
+    --color-surface-gray-100: hsl(213, 4%, 98%);
+    --color-surface-gray-200: hsl(213, 4%, 96%);
+    --color-surface-gray-300: hsl(213, 4%, 92%);
+    --color-surface-gray-400: hsl(213, 4%, 85%);
+    --color-surface-gray-500: hsl(213, 4%, 78%);
+    --color-surface-gray-600: hsl(213, 4%, 71%);
+    --color-surface-gray-700: hsl(213, 4%, 64%);
+    --color-surface-gray-800: hsl(213, 4%, 57%);
+    --color-surface-gray-900: hsl(213, 4%, 50%);
+
+    --color-surface-gray-200-hover: hsla(213, 4%, 70%, 0.5);
+    --color-surface-gray-300-hover: hsla(213, 4%, 64%, 0.5);
+
+
+    --color-surface-light-blue-200: hsl(213, 40%, 96%);
+    --color-surface-light-blue-300: hsl(213, 40%, 92%);
+    --color-surface-light-blue-400: hsl(213, 40%, 85%);
+    --color-surface-light-blue-500: hsl(213, 40%, 78%);
+    --color-surface-light-blue-600: hsl(213, 40%, 71%);
+    --color-surface-light-blue-700: hsl(213, 40%, 64%);
+    --color-surface-light-blue-800: hsl(213, 40%, 57%);
+
+    /* Light Border Gray - Button outlines, dividers, empty progress bars */
+    --color-border: hsl(216, 12%, 84%);
+
+    /* True Black - Inner icons, high contrast elements */
+    --color-black: hsl(0, 0%, 0%);
+
+    --color-black-hover: hsl(0, 0%, 30%);
+
+    --color-white: hsl(0, 0%, 100%);
+
+    --color-white-hover: hsl(0, 0%, 80%);
+
+    /* Chips */
+    --accent-chip-bg: hsla(216, 100%, 85%, 0.8);
+    --accent-chip-bg-muted: hsla(210, 10%, 88%, 0.8);
+
+    /* Cards */
+    --card-bg-1: hsl(0, 0%, 98%);
+    --card-bg-2: hsl(210, 18%, 96%);
+    --card-bg-3: hsl(210, 50%, 96%);
+    --card-bg-4: hsl(220, 11%, 95%);
+
+    --card-bg-assessment: hsl(210, 33%, 98%);
+
+    /* Icon Colors */
+    --icon-color: var(--color-primary);
+    --icon-color-light: var(--color-text-main-white);
+    --icon-color-dark: var(--color-text-main);
+    --icon-color-muted: var(--color-text-muted);
+    --icon-color-muted-alpha: var(--color-text-muted-alpha);
+
+    /* =========================================
+     🌫️ Utility (Shadows / Border)
+     ========================================= */
+
+    /* Soft shadow for cards using the Near Black color with low opacity */
+    --shadow-sm: 0 2px 8px hsla(220, 10%, 11%, 0.04);
+    --shadow-sm-hover: 0 4px 12px hsla(220, 10%, 11%, 0.1);
+    --shadow-md: 0 4px 16px hsla(220, 10%, 11%, 0.08);
+    --shadow-md-hover: 0 8px 24px hsla(220, 10%, 11%, 0.15);
+
+    --shadow-sm-hard:  0 4px 4px rgba(0,0,0,0.1);
+    --shadow-sm-hard-hover: 0 8px 8px rgba(0,0,0,0.15);
+
+    /* Border Colors */
+    --border-color-1: hsla(220, 10%, 11%, 0.1);
+    --border-color-2: hsla(220, 10%, 11%, 0.2);
+    --border-color-3: hsla(220, 10%, 11%, 0.4);
+    /* Subtle border */
+    --border-subtle: 2px solid var(--border-color-1);
+    --border-subtle-dark: 2px solid var(--border-color-2);
+    --border-subtle-dark-1: 2px solid var(--border-color-3);
+}

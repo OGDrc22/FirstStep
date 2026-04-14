@@ -1,10 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const qCard = document.querySelectorAll('.question-card');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const submitBtn = document.getElementById('submitBtn');
     const navBtn = Array.from(document.querySelectorAll('.nav-q-btn'));
     const navContainer = document.querySelector('.question-navigator');
+
+    const progressContainer = document.querySelector('.progressbar');
 
     const choices = document.querySelectorAll('.choices');
 
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    const questionData = Array.from({length: qCard.length}, (_, index) => ({
+    const questionData = Array.from({ length: qCard.length }, (_, index) => ({
         index: index,
         type: qCard[index].dataset.qType,
         questionText: qCard[index].querySelector('.question').innerText,
@@ -47,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let timerInterval;
     const timerDisplay = document.getElementById('timerD');
     // const displayF = document.getElementById('timerDF');
+
+    qCard.forEach(() => {
+        const prgressStep = document.createElement('div');
+        prgressStep.className = "progress-step";
+        progressContainer.appendChild(prgressStep);
+    });
 
     function onQuestionViewed(index) {
         // console.log('Viewing index:', index);
@@ -85,8 +93,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function startTimer() {
         if (!timerInterval) { // Prevent multiple intervals
             timerInterval = setInterval(() => {
-                    seconds++
-                    updateDisplay();
+                seconds++
+                updateDisplay();
             }, 1000);
         }
     }
@@ -134,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     qCard.forEach(card => {
         const cardIndex = parseInt(card.dataset.index, 10);
-        card.addEventListener('click', function(e) {
+        card.addEventListener('click', function (e) {
             const choiceLi = e.target.closest('.choices');
             if (!choiceLi) return;
             const radio = choiceLi.querySelector('.radio');
@@ -146,13 +154,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const siblingLis = card.querySelectorAll('.choices');
             siblingLis.forEach(li => li.classList.remove('active'));
             choiceLi.classList.add('active');
-            
+
             // set radio and store answer
             radio.checked = true;
             answers[cardIndex] = radio.value;
 
             onAnswerSelected(cardIndex, radio.value, textAns.value)
-            
+
             // console.log('Stored answer for', cardIndex, answers[cardIndex]);
             setCheck(cardIndex, answers[cardIndex])
             // recordAnswerTime(cardIndex);
@@ -160,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     choices.forEach(choice => {
-        choice.addEventListener('click', function() {
+        choice.addEventListener('click', function () {
             choice.classList.add('active')
 
             const childElm = choice.querySelector('.radio')
@@ -168,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     })
 
-    document.querySelector('.questions').addEventListener('change', function(e) {
+    document.querySelector('.questions').addEventListener('change', function (e) {
         const target = e.target;
         if (!target || !target.classList.contains('radio')) return;
         const card = target.closest('.question-card')
@@ -232,17 +240,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setCheck(cardIndex) {
-        scrollActiveNav(index);
+        scrollActiveNav(cardIndex);
         navBtn.forEach((btn, indx) => {
             if (indx === cardIndex) {
                 btn.classList.add('active')
             }
             if (btn.classList.contains('active')) {
-            // PASS A CALLBACK FUNCTION to findIndex()
+                // PASS A CALLBACK FUNCTION to findIndex()
                 const activeIndex = navBtn.findIndex(
                     (element) => element.classList.contains('active')
                 );
-                
+
                 // console.log("Active Btn index: ", activeIndex);
             }
         })
@@ -269,27 +277,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
         onQuestionViewed(index);
         startTimer();
-        
-        if ((currentQuestionIndex + 1 ) === qCard.length) {
+
+        if ((currentQuestionIndex + 1) === qCard.length) {
             // console.log("Q.", currentQuestionIndex + 1, "CL", qCard.length);
-            nextBtn.innerHTML = "Submit  <i class=\"icon-arrow-right\"></i>";
-            
+            nextBtn.innerHTML = "Submit  <i class=\"icon icon-arrow-right\"></i>";
+
         } else {
-            nextBtn.innerHTML = "Next  <i class=\"icon-arrow-right\"></i>";
+            nextBtn.innerHTML = "Next  <i class=\"icon icon-arrow-right\"></i>";
         }
     }
 
-    prevBtn.addEventListener('click', function() {
+    prevBtn.addEventListener('click', function () {
         if (currentQuestionIndex > 0) {
             currentQuestionIndex--;
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
         }
 
-        
+
     });
 
-    nextBtn.addEventListener('click', function() {
+    nextBtn.addEventListener('click', function () {
         if (currentQuestionIndex === qCard.length - 1) {
             stopTimer();
             // console.log(questionData);
@@ -298,12 +306,13 @@ document.addEventListener('DOMContentLoaded', function() {
             currentQuestionIndex++;
             showQuestion(currentQuestionIndex);
             updateNavButtons(currentQuestionIndex);
+            updateProgress();
         }
     });
     showQuestion(currentQuestionIndex);
 
     navBtn.forEach((button, index) => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             currentQuestionIndex = index;
             showQuestion(parseInt(button.dataset.index, 10));
 
@@ -329,26 +338,38 @@ document.addEventListener('DOMContentLoaded', function() {
     //     console.log(questionData)
     // });
 
-    const alertBgSimpleFlash = document.querySelector('.alert-bg.simple-flash');
-    const alert_SFM = alertBgSimpleFlash.querySelector('.alert');
-    const alertMessage_SFM = alert_SFM.querySelector('.simple-flash-message');
+    // console.log(qCard.length);
+    const progressStep = document.querySelectorAll('.progress-step');
+    function updateProgress() {
+        const answeredIndex = getAnsweredIndexes();
+        progressStep.forEach((li, i) => {
+            if (answeredIndex.includes(i)) {
+                li.classList.add('q-done');
+            } else {
+                li.classList.remove('q-done');
+            }
+        });
+    }
+
+    const alertBgSimpleFlash = document.querySelector('.alert-bg.modal-warning');
+    const alertMessage_SFM = alertBgSimpleFlash.querySelector('.modal');
     const btnContainer_SFM = alertMessage_SFM.querySelector('.alert-button-container');
     const btnPrimary_SFM = btnContainer_SFM.querySelector('.btn-primary');
     const btnSecondary_SFM = btnContainer_SFM.querySelector('.btn-secondary');
     // const btnMiddle = btnContainer_SFM.querySelector('.btn-middle');
-    document.getElementById('btn-submit').addEventListener('click', function(e) {
+    document.getElementById('btn-submit').addEventListener('click', function (e) {
         e.preventDefault();
         stopTimer();
         alertBgSimpleFlash.style.display = 'flex';
     });
 
 
-    btnSecondary_SFM.addEventListener('click', function() {
+    btnSecondary_SFM.addEventListener('click', function () {
         continueTimer();
         alertBgSimpleFlash.style.display = 'none';
     });
 
-    btnPrimary_SFM.addEventListener('click', function() {
+    btnPrimary_SFM.addEventListener('click', function () {
         alertBgSimpleFlash.style.display = 'none';
 
         const alertBgFeedback = document.querySelector('.alert-bg.feedback-form');
@@ -357,31 +378,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const alertBgFeedback = document.querySelector('.alert-bg.feedback-form');
-    const feedbackForm = alertBgFeedback.querySelector('.alert');
+    const feedbackForm = alertBgFeedback.querySelector('.modal');
     const feedbackInput = feedbackForm.querySelector('.feedback-input');
     const feedBackSkip = feedbackForm.querySelector('.btn-middle');
     const feedbackCancel = feedbackForm.querySelector('.btn-secondary');
     const feedbackSubmit = feedbackForm.querySelector('.btn-primary');
 
-    feedbackCancel.addEventListener('click', function() {
+    feedbackCancel.addEventListener('click', function () {
         alertBgFeedback.style.display = 'none';
         continueTimer();
     });
 
-    feedBackSkip.addEventListener('click', function() {
+    feedBackSkip.addEventListener('click', function () {
         alertBgFeedback.style.display = 'none';
-        
+
         document.getElementById("questionData").value = JSON.stringify(questionData);
         const questionTexts = questionData.map(q => q.questionText);
         document.getElementById("questionText").value = JSON.stringify(questionTexts);
         const qCat = questionData.map(q => q.category);
         document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
-        console.log(questionData)
+        console.log(questionData);
+        document.getElementById("examForm").submit();
+
+        showLoadingScreen();
     });
 
-    feedbackSubmit.addEventListener('click', function(e) {
+    feedbackSubmit.addEventListener('click', function (e) {
         e.preventDefault();
+
+        submitFeedback();
+
         alertBgFeedback.style.display = 'none';
 
         let feedbackHiddenInput = document.getElementById("feedback-input-hidden");
@@ -394,19 +421,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const qCat = questionData.map(q => q.category);
         document.getElementById("try").value = JSON.stringify(qCat);
         console.log('Clicked submit');
-        console.log(questionData)
-        console.log("Feedback: ", feedbackInput.value)        
+        console.log(questionData);
+        console.log("Feedback: ", feedbackInput.value);
         document.getElementById("examForm").submit();
+
+        showLoadingScreen();
     });
+
+
+    function submitFeedback() {
+        // Pass the form ID or the element itself as the 3rd argument
+        emailjs.sendForm(
+            "service_a7ecfr6",
+            "template_jtx307u",
+            "#feedback-form" // This is the CSS selector for your form
+        ).then(function () {
+            Toast.create(document.body, "success", "Message sent successfully!");
+            document.getElementById("feedback-form").reset();
+            console.log("Success!");
+
+        }, function (error) {
+            Toast.create(document.body, "err", "Failed to send message.");
+            console.log(error);
+        });
+    }
 
 
 
     function showLoadingScreen() {
+        console.log("Show Loading")
         const loadingScreen = document.getElementById('loading-screen');
-        loadingScreen.style.display = 'block';
+        loadingScreen.style.display = 'grid';
+        const loadingText = loadingScreen.querySelector('p');
     }
-    window.onload = function() {
-        showLoadingScreen();
-    }
-    
 });

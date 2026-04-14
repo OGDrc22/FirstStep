@@ -1,24 +1,5 @@
-:root {
-    --primary-color: #19429C;
-    --accent-blue: #3498db;
-    --secondbry-color: #000A21;
-    --bg-color: #F5F5F5;
-    --font-family: 'Poppins', sans-serif;
-    --bg-color-alt: hsl(0, 0%, 92%);
-    --bg-color-dark: #171718;
-
-    --grid-size: 30px;
-    --base-grid-color: rgba(255, 255, 255, 0.08);
-    --grid-strength: 1px;
-    --glow-color: rgba(52, 152, 219, 0.6);
-
-    --light-gray: #bbbbbb;
-
-    --glass-bg: rgba(255, 255, 255, 0.85); 
-    --glass-border: rgba(220, 220, 220, 0.5);
-    --glass-blur: 10px;
-}
-
+@import "./variables.css";
+@import "./icons.css";
 
 * {
     box-sizing: border-box;
@@ -30,11 +11,10 @@
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: var(--font-family);
-    background-color: var(--bg-color); 
+    background-color: var(--color-white); 
     overflow-x: hidden; 
     position: relative;
-    color: #333333;
+    font-family: var(--inter-font);
 } 
 
 .bg-overlay {
@@ -49,76 +29,103 @@ body {
 }
 
 
-
+/* TODO */
 /* --- Main Layout (Two Columns) --- */
 .main-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 90%;
+    width: 100%;
     max-width: 1300px;
     margin: 50px auto;
-    gap: 40px; /* Space between questions and navigator */
+    gap: 32px; /* Space between questions and navigator */
     z-index: 1;
 }
 
 /* --- 4. Left Column: Questions & Choices --- */
 .left {
     flex: 3;
-    padding: 20px;
-    background: var(--glass-bg); /* No solid box, blends with background */
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-}
-
-
-.text_h {
-    display: none;
-}
-
-.question {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: #222222;
-    margin-bottom: 25px;
-    line-height: 1.6;
 }
 
 .question-card {
     display: none;
 }
 .question-card.active-q {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
+
+.text_h {
+    font-family: var(--manrope-font);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    height: 42px;
+    padding-top: 8px;
+}
+
+
+.question-card-a {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+    background: var(--card-bg-1);
+    border-radius: 16px 16px 0 0;
+    box-shadow: var(--shadow-md);
+}
+
+.qNum {
+    background-color: var(--color-black);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-family: var(--manrope-font);
+    color: var(--color-text-main-white);
+    text-transform: uppercase;
+    padding: 8px 12px;
+    width: max-content;
+}
+.question {
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-family: var(--inter-font);
+    color: var(--color-text-main);
+}
 /* Choices Layout */
 .choices-holder {
     list-style-type: none;
-    margin: 0 0 40px 10px;
     padding: 0;
 }
 
 .choices {
-    background-color: transparent;
-    margin: 12px 0;
-    padding: 8px 10px;
+    background-color: var(--color-surface-gray-200);
+    margin: 16px 0;
+    padding: 24px 32px;
     border-radius: 8px;
-    border: none;
+    border: var(--border-subtle);
     cursor: pointer;
     display: flex;
     align-items: center;
     font-size: 1rem;
     font-weight: 500;
-    color: var(--bg-color-dark);
+    color: var(--color-white-dark);
     transition: background-color 0.2s;
 }
-
 .choices:hover {
-    background-color: rgba(52, 152, 219, 0.1); /* Subtle blue hover */
+    background-color: var(--color-surface-gray-200-hover);
+}
+.choices:has(input[type="radio"]:checked) {
+    background-color: var(--color-surface-light-blue-200);
+    border-color: var(--color-primary);
 }
 .choices label {
     display: flex;
     align-items: center;
+    font-family: var(--inter-font);
+    font-weight: 600;
+    font-size: 1rem;
 }
 
 /* Native Radio Button Styling */
@@ -127,158 +134,242 @@ body {
     height: 18px;
     margin-right: 15px;
     cursor: pointer;
-    accent-color: var(--accent-blue); /* Turns the radio button blue when clicked */
+    accent-color: var(--accent-blue);
 }
-
 .active-choice {
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--color-primary);
 }
 
-#controls {
+
+
+.buttons {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between; /* 👈 This is the magic rule that pushes them apart */
-    align-items: center;
-    width: 100%; /* Ensures the container stretches across the whole left column */
-    margin-top: 40px; /* Gives some breathing room below the choices */
-}
-
-.btn-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: var(--accent-blue);
-    color: #ffffff;
-    border: none;
-    padding: 12px 35px;
-    border-radius: 50px; /* Pill shape from your design */
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-    transition: background-color 0.3s, transform 0.1s;
-}
-.btn-controls i {
-    background-color: var(--bg-color);
-}
-
-.btn-controls:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-2px);
-}
-
-.action-buttons {
-    display: flex;
-    flex-direction: row;
     justify-content: space-between; 
-    align-items: center;
-    width: 100%; 
-    margin-top: 30px; 
+    width: 100%;
+    padding: 32px;
+    background-color: var(--color-surface-gray-300);
+    border-radius: 0 0 16px 16px;
+    box-shadow: var(--shadow-md);
 }
 
-.left button, 
-.action-buttons button {
-    background-color: var(--accent-blue);
-    color: #ffffff;
-    border: none;
-    padding: 12px 35px;
-    border-radius: 50px; /* Fully rounded pill shape */
-    font-size: 0.95rem;
+.btn {
+    width: auto;
+    padding: 16px 32px;
+    border-radius: 8px; 
+    background-color: var(--color-black); 
+    color: var(--color-white);
     font-weight: 600;
+    font-size: 1rem;
+    border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-    transition: background-color 0.3s, transform 0.1s;
+    transition: background-color 0.3s;
 }
 
-.left button:hover {
-    background-color: var(--primary-color);
-    transform: translateY(-2px);
+.next-btn {
+    margin-left: auto; 
+    padding: 12px 40px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border: none;
+}
+.next-btn i {
+    background-color: var(--color-white);
+}
+
+.next-btn:hover {
+    background-color: var(--color-black-hover); 
+}
+
+.prev-btn {
+    background-color: transparent;
+    color: var(--color-text-muted);
+    border: none;
+    transition: background-color 0.3s;
+}
+.prev-btn i {
+    background-color: var(--color-text-muted);
+}
+
+.prev-btn:hover {
+    background-color: var(--accent-chip-bg-muted);
+    color: var(--color-text-muted-alpha);
+}
+.prev-btn:hover i {
+    background-color: var(--color-text-muted-alpha);
 }
 
 /* --- 5. Right Column: Question Navigator --- */
 .right {
     flex: 1;
-    background-color: rgba(255, 255, 255, 0.85); /* Frosty white card */
-    backdrop-filter: blur(8px);
-    border: 1px solid #e0e0e0;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    max-height: 70vh; /* Prevents it from getting too long */
-    overflow-y: auto; /* Makes the list scrollable */
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
-/* Custom Scrollbar for Navigator */
-.right::-webkit-scrollbar {
-    width: 6px;
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 8px;
 }
-.right::-webkit-scrollbar-thumb {
-    background-color: #cccccc;
-    border-radius: 10px;
+.progress-container h3 {
+    font-family: var(--inter-font);
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--color-text-main);
+}
+.progressbar {
+    width: 100%;
+    height: 16px;
+    border-radius: 9999px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-surface-gray-200);
+    overflow: hidden;
+}
+.progressbar .progress-step {
+    flex: 1;
+    position: relative; /* Required to contain the absolutely positioned pseudo-element */
+}
+
+/* This creates the empty "fill" bar inside each step */
+.progressbar .progress-step::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%; /* Starts empty */
+    background-color: var(--color-primary);
+    transition: width 0.4s ease-in-out; /* The sliding animation */
+}
+
+/* When the step is marked done, slide the width to 100% */
+.progressbar .progress-step.q-done::before {
+    width: 100%;
+}
+
+.q-nav-container {
+    background-color: var(--color-surface-gray-200);
+    padding: 16px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.q-nav-container .q-nav-header {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+.q-nav-container .q-nav-header i {
+    background-color: var(--color-text-muted);
+}
+.q-nav-container .q-nav-header h3 {
+    font-family: var(--inter-font);
 }
 
 .question-navigator {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+    grid-auto-rows: 1fr;
+    grid-auto-flow: row;
+    gap: 8px;
 }
 
 /* Outline style buttons for inactive questions */
 .question-navigator .nav-q-btn {
-    background-color: transparent;
-    color: var(--accent-blue);
-    border: 1.5px solid var(--accent-blue);
-    padding: 10px 15px;
-    border-radius: 8px; /* Slightly rounded rectangles */
+    background-color: var(--color-surface-gray-300);
+    color: var(--color-text-muted);
+    height: 52px;
+    border: none;
+    border-radius: 8px;
     font-family: var(--font-family);
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
 }
+.question-navigator .nav-q-btn:hover {
+    background-color: var(--color-surface-gray-200-hover);
+}
 
 .question-navigator .nav-q-btn.q-done {
-    background-color: var(--primary-color) !important; /* Fills it with solid PCU Dark Blue */
-    color: #ffffff !important; /* Changes text to white */
-    border: 1.5px solid var(--primary-color) !important;
-    box-shadow: 0 2px 5px rgba(25, 66, 156, 0.3); /* Adds a slight shadow so it pops */
+    background-color: var(--color-black);
+    color: #ffffff;
+    border: none;
     transition: all 0.3s ease;
 }
 
 /* Solid blue for the active question */
 .question-navigator .nav-q-btn.active {
-    background-color: var(--accent-blue);
-    color: #ffffff;
-    border-color: var(--accent-blue);
-    box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    outline:  2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
-
+.q-nav-info {
+    width: 100%;
+    padding:  32px 0 32px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    border-top: var(--border-subtle);
+    gap: 16px;
+}
+.q-nav-info .q-nav-ind {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+.q-nav-info .q-nav-ind .indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+.q-nav-info .q-nav-ind h3 {
+    font-family: var(--inter-font);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+.q-nav-info .q-nav-ind:nth-child(1) .indicator {
+    background-color: var(--color-primary);
+}
+.q-nav-info .q-nav-ind:nth-child(2) .indicator {
+    background-color: var(--color-black);
+}
+.q-nav-info .q-nav-ind:nth-child(3) .indicator {
+    background-color: var(--color-surface-gray-300);
+}
+.q-nav-info .q-nav-ind:nth-child(4) .indicator {
+    background-color: var(--color-primary);
+}
 
 /* --- Final Submit Button (Inside Navigator) --- */
 #btn-submit {
-    background-color: var(--primary-color); /* PCU Dark Blue to stand out */
-    color: #ffffff;
+    background-color: var(--color-surface-blue-900);
+    color: var(--color-white);
     border: none;
-    padding: 14px 20px;
-    margin-top: 30px; /* Creates a clear visual break from the question list */
-    border-radius: 8px; /* Matches the slightly rounded edges of your nav buttons */
+    padding: 16px 32px;
+    border-radius: 8px;
     font-family: var(--font-family);
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--inter-font);
     cursor: pointer;
-    width: 100%; /* Forces it to stretch across the entire right panel */
+    width: 100%;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(25, 66, 156, 0.3); /* Soft glowing drop-shadow */
     transition: all 0.3s ease;
     display: block; 
 }
 
 /* Hover State - Slight lift and darker color */
 #btn-submit:hover {
-    background-color: var(--secondary-color); /* Deepest blue/black */
-    transform: translateY(-2px); 
+    background-color: var(--color-surface-blue-900-hover);
     box-shadow: 0 6px 15px rgba(25, 66, 156, 0.4);
 }
 
@@ -300,7 +391,8 @@ body {
     border: 1px solid #eeeeee; /* Extremely subtle outline */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); /* Ultra-soft floating shadow */
     
-    display: inline-flex;
+    /* display: inline-flex; */
+    display: none;
     align-items: center;
     justify-content: center;
     letter-spacing: 1px;

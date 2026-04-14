@@ -168,20 +168,37 @@ class AssessmentController extends Controller
             ]);
 
 
-            // WINDOWS-SAFE background execution
+            // LOCAL MACHINE USE -->/gemini0.py
             $pythonPath = 'C:\Users\admin\AppData\Local\Programs\Python\Python312\python.exe';
-            $scriptPath = base_path('public/assets/scripts/gemini.py');
+            $scriptPath = base_path('public/assets/scripts/gemini0.py');
             $command = sprintf(
                 'start "" /B "%s" -u "%s" %d',
                 $pythonPath,
                 $scriptPath,
                 $job->id,
             );
-
             // RUN IN BACKGROUND 
             pclose(popen($command, "r"));
-            // $command = "\"$pythonPath\" \"$scriptPath\" {$job->id}";
+
+            
+
+            // DEPLOYMENT USE -->/gemini.py
+            // $pythonPath = 'python3'; 
+
+            // // 2. Make sure the script path matches where it is in your repo
+            // $scriptPath = base_path('public/assets/scripts/gemini.py');
+
+            // // 3. Use a standard Linux command string
+            // // We remove 'start "" /B' and use '2>&1' so we can see errors in the logs
+            // $command = sprintf(
+            //     '%s -u "%s" %d > /dev/null 2>&1',
+            //     $pythonPath,
+            //     $scriptPath,
+            //     $job->id
+            // );
+
             // exec($command);
+
 
 
             return response()->json([
@@ -204,6 +221,9 @@ class AssessmentController extends Controller
     {
 
         $student = Auth::guard('web')->user();
+
+        $username = $student->name;
+        $useremail = $student->email;
 
         if ($job->student_id !== $student->id) {
             abort(403, 'Unauthorized access to this exam.');
@@ -260,7 +280,9 @@ class AssessmentController extends Controller
             'data' => [
                 'data' => $questions
             ],
-            'job' => $job
+            'job' => $job,
+            'username' => $username,
+            'useremail' => $useremail
         ]);
     }
 
