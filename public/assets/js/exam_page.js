@@ -13,6 +13,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const answers = new Array(qCard.length).fill(null);
 
     // const competencies = 
+    fetch("{{ route('send.result.email') }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            results: "{{ base64_encode(json_encode($resultN)) }}"
+        })
+    })
+    .then(res => res.text())
+    .then(data => Toast.create(document.body, "sucess", "Email sent!"));
+
 
     function parseDatasetJson(el, key, fallback = null) {
         const raw = el?.dataset?.[key];

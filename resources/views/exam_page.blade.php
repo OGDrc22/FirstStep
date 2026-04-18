@@ -163,6 +163,10 @@
         </div>
     </div>
 
+    
+
+
+    <script type="module" src="{{ asset('assets/js/flash_message.js') }}"></script>
 
     <!-- 1️⃣ Load EmailJS FIRST -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>

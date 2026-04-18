@@ -6,42 +6,52 @@ use Illuminate\Http\Request;
 use App\Models\ExamResult;
 use App\Models\student_tb;
 use App\Services\RetrieveResultService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExamResultMail;
+use Illuminate\Support\Facades\RateLimiter;
 
 class RetrieveResultController extends Controller
 {
-    public function showForm() {
+    public function showForm()
+    {
         return view('retrieve_result');
     }
 
-    public function getResult(Request $request) {
+    public function processResult(Request $request)
+    {
         $request->validate([
             'email' => 'required|email',
         ]);
+        session(['resultRequest' => $request->all()]);
+        // dd($request);
+        return redirect()->route('get.result');
+    }
+
+    public function getResult()
+    {
+        $request = session('resultRequest');
+        // dd($request);
         $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
-                $query->where('email', $request->email);
-            })
+            $query->where('email', $request['email']);
+        })
             ->orderBy('id', 'desc')
             ->first();
-        $email = $request->email;
+        $email = $request['email'];
         // dd($examResult);
         if ($examResult) {
-            $action = $request->input('action');
+            $action = $request['action'];
 
             if ($action === 'latest') {
-                $action = $request->input('action');
-                $request->validate([
-                    'email' => 'required|email'
-                ]);
-
+                $action = $request['action'];
                 $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
-                    $query->where('email', $request->email);
+                    $query->where('email', $request['email']);
                 })
-                ->latest('id')
-                ->first();
+                    ->latest('id')
+                    ->first();
 
                 if ($examResult === null) {
                     return redirect()->back()
-                        ->withErrors(['email' => 'No exam results found for ' . $request->email]);
+                        ->withErrors(['email' => 'No exam results found for ' . $request['email']]);
                 }
 
                 // dd($examResult);
@@ -62,7 +72,7 @@ class RetrieveResultController extends Controller
                 $secondaryTrack = $examResult ? $examResult->secondary_track : null;
 
                 $aptitude = $examResult ? number_format($examResult->aptitude, 0) : null;
-            
+
                 $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
                 $coreCompetencies = $examResult ? $examResult->core_competencies : null;
@@ -76,7 +86,24 @@ class RetrieveResultController extends Controller
                 $note = $examResult ? $examResult->evaluation_note : null;
 
                 $model_accuracy = $examResult ? $examResult->model_accuracy : null;
-                
+
+                $resultN = compact(
+                    'username',
+                    'useremail',
+                    'questionsData',
+                    'predictedTrack',
+                    'secondaryTrack',
+                    'aptitude',
+                    'trackPercentage',
+                    'coreCompetencies',
+                    'detailedCompetencyLevels',
+                    'acc_per_category',
+                    'duration_per_category',
+                    'note',
+                    'model_accuracy'
+                );
+
+                session(['resultN' => $resultN]);
 
                 // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
                 $redirect = view('retrieve_result', compact(
@@ -95,30 +122,28 @@ class RetrieveResultController extends Controller
                     'duration_per_category',
                     'coreCompetencies',
                     'detailedCompetencyLevels',
-                    'note'
+                    'note',
+                    'resultN'
                 ));
 
                 if ($examResult) {
                     return $redirect;
                 } else {
-                    return redirect()->back()->withErrors(['email' => 'No results found for this email.']);
+                    return redirect()->route('get.result')->withErrors(['email_err' => 'No results found for this email.']);
                 }
             } elseif ($action === 'all') {
 
-                $action = $request->input('action');
-                $request->validate([
-                    'email' => 'required|email'
-                ]);
+                $action = $request['action'];
 
                 $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
-                    $query->where('email', $request->email);
+                    $query->where('email', $request['email']);
                 })
-                ->latest('id')
-                ->get();
+                    ->latest('id')
+                    ->get();
 
                 if ($examResult->isEmpty()) {
                     return redirect()->back()
-                        ->withErrors(['email' => 'No exam results found for ' . $request->email]);
+                        ->withErrors(['email_err' => 'No exam results found for ' . $request['email']]);
                 }
 
                 $firstAttempt = $examResult->first();
@@ -144,28 +169,28 @@ class RetrieveResultController extends Controller
 
                 foreach ($examResult as $attempt) {
                     $dateAttmpt[] = $attempt->created_at->format('Y-m-d H:i:s');
-                    
+
                 }
                 $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
                     $query->where('email', $request->email);
                 })
-                ->latest('id')
-                ->take(4)
-                ->get();
+                    ->latest('id')
+                    ->take(4)
+                    ->get();
                 // $trackPercentageA = [];
 
                 // foreach ($examResult as $attempt => $data) {
                 //     $trackPercentageA[$attempt]['percentage'] = $attempt->track_percentage;
                 // }
                 // dd($averageAcc);
-                
+
                 return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'note', 'secondaryTrack', 'averageAcc', 'averageDuration', 'examResult', 'computedTrackPercentage', 'trackPercentage', 'dateAttmpt'));
 
             } else {
-                return redirect()->back()->withErrors(['action' => 'Invalid action specified.']);
+                return redirect()->route('get.result')->withErrors(['action' => 'Invalid action specified.']);
             }
         } else {
-            return redirect()->back()->withErrors(['email' => 'No result for ' . $email]);
+            return redirect()->route('get.result')->withErrors(['email_err' => 'No result for ' . $email]);
         }
     }
 
@@ -176,9 +201,9 @@ class RetrieveResultController extends Controller
         $username = $examResult ? $examResult->student->name : null;
 
         $useremail = $examResult ? $examResult->student->email : null;
-        
+
         $questions = $examResult ? $examResult->questions : null;
-    
+
         $questionsData = $examResult ? $examResult->questionsData : null;
 
         $predictedTrack = $examResult ? $examResult->predicted_track : null;
@@ -186,7 +211,7 @@ class RetrieveResultController extends Controller
         $secondaryTrack = $examResult ? $examResult->secondary_track : null;
 
         $aptitude = $examResult ? number_format($examResult->aptitude, 0) : null;
-    
+
         $trackPercentage = $examResult ? $examResult->track_percentage : null;
 
         $coreCompetencies = $examResult ? $examResult->core_competencies : null;
@@ -203,7 +228,7 @@ class RetrieveResultController extends Controller
 
         $examID = $id;
 
-        
+
         // dd($questionsData, $predictedTrack, $secondaryTrack, $trackPercentage, $coreCompetencies, $detailedCompetencyLevels, $acc_per_category, $duration_per_category, $note, $model_accuracy);
         $redirect = view('retrieve_specific_result', compact(
             'username',
@@ -225,6 +250,35 @@ class RetrieveResultController extends Controller
         ));
 
         return $redirect;
-        
+
+    }
+
+    public function sendResultEmail(Request $request)
+    {
+        // Unique key for this user/action (e.g., based on their session or email)
+        $key = 'send-email:' . $request->session()->getId();
+
+        // Check if they've already sent an email in the last 10 seconds
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts = 1)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'status' => 'err',
+                'message' => "Please wait {$seconds}s before sending again."
+            ]);
+        }
+
+        // Process the email
+        $resultN = session('resultN');
+        $userEmail = $resultN['useremail'];
+        Mail::to($userEmail)->send(new ExamResultMail($resultN));
+
+        // Record the attempt for 10 seconds
+        RateLimiter::hit($key, $decaySeconds = 10);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Email sent successfully!'
+        ]);
     }
 }

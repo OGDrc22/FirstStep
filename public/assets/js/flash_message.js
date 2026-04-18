@@ -113,10 +113,17 @@ window.Toast = {
         toast.style.display = "flex"; // Ensure it is visible
         toast.style.opacity = "1";
 
+        let msgType = type;
+        if (msgType === 'err' | msgType === 'error') {
+            msgType = 'close'
+        } else {
+            msgType = type;
+        }
+
         toast.innerHTML = `
             <span></span>
             <div class="message-container">
-                <i class="icon icon-${type === 'err' ? 'close' : type}"></i>
+                <i class="icon icon-${msgType}"></i>
                 <p>${message}</p>
             </div>
             <div id="timerProgress">

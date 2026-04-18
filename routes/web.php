@@ -8,16 +8,30 @@ use App\Http\Controllers\RetrieveResultController;
 use App\Models\ExamJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\PreventDirectAccess;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
+Route::post('/send-result-email', [RetrieveResultController::class, 'sendResultEmail'])
+    ->name('send.result.email');
+
+
+Route::get('/test-email', function () {
+    Mail::raw('Test email from Laravel + SendGrid', function ($message) {
+        $message->to('coifirststep@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return 'Email sent!';
+});
 
 
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
 // Route::post('/logout', [AssessmentController::class, 'logout'])->name('logout');
-Route::get('/retrieve-result', [RetrieveResultController::class, 'showForm']);
-Route::post('/get-result', [RetrieveResultController::class, 'getResult']);
+Route::get('/retrieve-result', [RetrieveResultController::class, 'showForm'])->name('retrieve.result');
+Route::post('/get-result', [RetrieveResultController::class, 'processResult']);
+Route::get('/get-result', [RetrieveResultController::class, 'getResult'])->name('get.result');
 // Route::post('/get-all-result', [RetrieveResultController::class, 'getAllResult']);
 Route::post('/generate-exam', [AssessmentController::class, 'generateExam'])->name('generate-exam');
 // Route::post('/generate-exam', [StartExamController::class, 'getView'])->name('generate-exam');
