@@ -43,8 +43,7 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # 10. Start Command
 CMD php artisan migrate --force && \
-    php artisan config:clear && \
-    php artisan cache:clear && \
-    php artisan config:cache && \
+    php artisan optimize:clear && \
+    php artisan config:cache &&\
     service nginx start && \
     php-fpm

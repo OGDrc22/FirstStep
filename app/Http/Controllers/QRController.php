@@ -10,36 +10,6 @@ class QRController extends Controller
 {
     public function generateQRLink(Request $request)
     {
-        // try {
-        //     $imageData = $request->input('image');
-        //     $image = str_replace('data:image/png;base64,', '', $imageData);
-        //     $image = str_replace(' ', '+', $image);
-        //     $imageBinary = base64_decode($image);
-
-        //     // Generate a unique filename so results don't overwrite each other
-        //     $fileName = 'results/Report_' . time() . '_' . uniqid() . '.png';
-
-        //     // Save to storage/app/public/results
-        //     \Storage::disk('public')->put($fileName, $imageBinary);
-        //     $justTheName = basename($fileName);
-
-        //     return response()->json([
-        //         'success' => true,
-        //         'url' => route('download-result', ['file' => $justTheName]) // The direct link for the QR scan
-        //     ]);
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false], 500);
-        // }
-        // try {
-        //     $imageData = $request->input('image');
-
-        //     return response()->json([
-        //         'success' => true,
-        //         'url' => route('download-result', ['file' => $justTheName]) // The direct link for the QR scan
-        //     ]);
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false], 500);
-        // }
 
         $resultN = session('resultN');
 
@@ -64,7 +34,7 @@ class QRController extends Controller
 
         return response()->json([
             'success' => true,
-            'url' => route('view-result', ['token' => $token])
+            'url' => config('app.url') . '/view-result?token=' . $token
         ]);
     }
 

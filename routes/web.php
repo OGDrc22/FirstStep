@@ -33,7 +33,7 @@ Route::get('/download-result/{file}', function ($file) {
     return abort(404);
 })->name('download-result');
 
-Route::get('/view-result', [QRController::class, 'viewResult'])->name('view-result');
+Route::get('/view-result', [QRController::class, 'viewResult'])->name('view.result');
 
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
