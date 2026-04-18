@@ -48,12 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
     sendQR.addEventListener('click', function () {
         // This targets the specific row containing the two cards in your image
 
-        if (!target) {
-            // Fallback in case the class name is different in your "All Results" view
-            showResultQR_Fallback();
-            return;
-        }
-
         const btn = event.currentTarget;
         const originalText = btn.innerHTML;
         btn.innerHTML = "<span>Capturing Cards...</span>";
