@@ -15,6 +15,9 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::post('/send-result-email', [RetrieveResultController::class, 'sendResultEmail'])
     ->name('send.result.email');
 
+Route::post('/send-result-email', [ExamReasultController::class, 'sendResultEmail'])
+    ->name('send.result.email.from.exam');
+
 
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');

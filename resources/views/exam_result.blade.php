@@ -37,18 +37,23 @@
 
     <div class="content">
         @if (isset($resData))
-            <h3 class="result-title">Assessment Result</h3>
 
             <div class="dashboard-grid">
-                <div class="user-card">
+                <h3 class="result-title">Assessment Result</h3>                    
+
+                <div class="user-card card">
                     <div class="user-detail">
-                        <i class="icon-user" alt="User Icon"></i>
+                        <i class="icon icon-user" alt="User Icon"></i>
                         <span class="user-name">{{ $username }}</span>
                     </div>
                     <div class="user-detail">
-                        <i class="icon-email" alt="Email Icon"></i>
+                        <i class="icon icon-email" alt="Email Icon"></i>
                         <span class="user-email">{{ $useremail }}</span>
                     </div>
+                </div>
+                <div class="btn-container">
+                    <button type="submit" class="btn-sendEmail" id="sendEmail" data-url="{{ route('send.result.email.from.exam') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
+                    <button type="submit" class="btn-sendEmail" id=""><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
                 </div>
                 <div class="result-display-card card">
 
@@ -224,6 +229,7 @@
     </script>
 
     <script src="{{ asset('assets/js/charts.js') }}"></script>
+    <script src="{{ asset('assets/js/result.js') }}"></script>
 
 </body>
 

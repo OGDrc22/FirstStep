@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ExamJob;
 use App\Services\ExamResultService;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ExamResultMail;
+use Illuminate\Support\Facades\RateLimiter;
+
+
 class ExamReasultController extends Controller
 {
     public function submitExam(Request $request)
@@ -284,21 +289,40 @@ class ExamReasultController extends Controller
         // dd($keyAns);
         // Save results
         $correct = 0;
-        $service->saveToDB(
-            $student,
-            $correct,
-            $predictedTrack,
-            $secondaryTrack,
-            $trackPercentage,
-            $coreCompetencies,
-            $detailedCompetencyLevels,
-            $note,
-            $aptitude,
-            $duration_per_category,
-            $questions,
-            $questionsData,
-            $acc_per_category
+        // $service->saveToDB(
+        //     $student,
+        //     $correct,
+        //     $predictedTrack,
+        //     $secondaryTrack,
+        //     $trackPercentage,
+        //     $coreCompetencies,
+        //     $detailedCompetencyLevels,
+        //     $note,
+        //     $aptitude,
+        //     $duration_per_category,
+        //     $questions,
+        //     $questionsData,
+        //     $acc_per_category
+        // );
+
+        
+        $resultN = compact(
+            'username',
+            'useremail',
+            'questionsData',
+            'predictedTrack',
+            'secondaryTrack',
+            'aptitude',
+            'trackPercentage',
+            'coreCompetencies',
+            'detailedCompetencyLevels',
+            'acc_per_category',
+            'duration_per_category',
+            'note',
+            'model_accuracy'
         );
+
+        session(['resultN' => $resultN]);
 
         // dd($acc_per_category);
         // $accuracy = $model_accuracy * 100 . "%";
@@ -329,13 +353,13 @@ class ExamReasultController extends Controller
             'secondaryTrack',
             'aptitude',
             'trackPercentage',
-            'model_accuracy',
             'acc_per_category',
             'correct',
             'duration_per_category',
             'coreCompetencies',
             'detailedCompetencyLevels',
-            'note'
+            'note',
+            'model_accuracy'
         ));
 
         if ($feedback) {
@@ -344,6 +368,37 @@ class ExamReasultController extends Controller
 
         return $redirect;
     
+    }
+
+
+    public function sendResultEmail(Request $request)
+    {
+        // Unique key for this user/action (e.g., based on their session or email)
+        $key = 'send-email:' . $request->session()->getId();
+
+        // Check if they've already sent an email in the last 10 seconds
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts = 1)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'status' => 'err',
+                'message' => "Please wait {$seconds}s before sending again."
+            ]);
+        }
+
+        // Process the email
+        $resultN = session('resultN');
+        $userEmail = $resultN['useremail'];
+
+        Mail::to($userEmail)->send(new ExamResultMail($resultN));
+
+        // Record the attempt for 10 seconds
+        RateLimiter::hit($key, $decaySeconds = 10);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Email sent successfully!'
+        ]);
     }
 
 }

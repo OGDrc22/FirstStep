@@ -81,9 +81,7 @@
             @if ($action === 'latest')
 
                 <div class="dashboard-grid">
-                    <h3 class="result-title">Assessment Result</h3>
-
-                    
+                    <h3 class="result-title">Assessment Result</h3>                    
 
                     <div class="user-card card">
                         <div class="user-detail">
@@ -94,6 +92,10 @@
                             <i class="icon icon-email" alt="Email Icon"></i>
                             <span class="user-email">{{ $useremail }}</span>
                         </div>
+                    </div>
+                    <div class="btn-container">
+                        <button type="submit" class="btn-sendEmail" id="sendEmail" data-url="{{ route('send.result.email') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
+                        <button type="submit" class="btn-sendEmail" id=""><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
                     </div>
                     <div class="result-display-card card">
 
@@ -108,10 +110,7 @@
                             <span class="card-value highlight">{{ $secondaryTrack['track'] }}</span>
                         </div>
                     </div>
-                    <div class="btn-container">
-                        <button type="submit" class="btn-sendEmail" id="sendEmail"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
-                        <button type="submit" class="btn-sendEmail" id=""><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
-                    </div>
+                    
                     <div class="aptitude-card card">
                         <h1>{{ $aptitude }}%</h1>
                         <h3>APTITUDE SCORE</h3>
@@ -562,36 +561,7 @@
 
     @endif
 
-    <script>
-        const sendEmail = document.getElementById('sendEmail')
-
-        sendEmail.addEventListener('click', function () {
-            sendEmail.disabled = true;
-            sendEmail.innerText = "Sending...";
-            fetch("{{ route('send.result.email') }}", {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({})
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === "success") {
-                    Toast.create(document.body, "success", data.message);
-                } else {
-                    Toast.create(document.body, "error", data.message || "Something went wrong");
-                }
-                sendEmail.disabled = false;
-                sendEmail.innerHTML = "<i class=\"icon icon-email\" alt=\"Email Icon\"></i>  Send a Copy to Email";
-            })
-            .catch(err => {
-                console.error(err);
-                Toast.create(document.body, "error", "Request failed");
-            });
-        });
-    </script>
+    <script src="{{ asset('assets/js/result.js') }}"></script>
 
 </body>
 
