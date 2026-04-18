@@ -42,4 +42,9 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # 10. Start Command
-CMD php artisan migrate --force && service nginx start && php-fpm
+CMD php artisan migrate --force && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan config:cache && \
+    service nginx start && \
+    php-fpm
