@@ -200,7 +200,6 @@ class AssessmentController extends Controller
             exec($command);
 
 
-
             return response()->json([
                 'status' => 'started',
                 'job_id' => $job->id
