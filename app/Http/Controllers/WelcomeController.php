@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 class WelcomeController extends Controller
 {
     public function index() {
+        dd([
+            'env_app_url' => env('APP_URL'),
+            'config_app_url' => config('app.url'),
+        ]);
         $total = ExamResult::count();
 
         $tracks = ExamResult::selectRaw("JSON_UNQUOTE(JSON_EXTRACT(predicted_track, '$.track')) as track_name, COUNT(*) as total_count")
