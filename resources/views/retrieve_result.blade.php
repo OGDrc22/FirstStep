@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Retrieve Result</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
 
@@ -18,7 +19,7 @@
 
 
 
-<body class="bg-overlay">
+<body class="bg-overlay" id="target-content">
 
     <nav class="top-nav-pcu">
         <a class="top-nav-left" href="{{ route('welcome') }}">
@@ -93,9 +94,9 @@
                             <span class="user-email">{{ $useremail }}</span>
                         </div>
                     </div>
-                    <div class="btn-container">
+                    <div class="btn-container-result">
                         <button type="submit" class="btn-sendEmail" id="sendEmail" data-url="{{ route('send.result.email') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
-                        <button type="submit" class="btn-sendEmail" id=""><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
+                        <button type="submit" class="btn-sendEmail" id="send-qr" data-url="{{ uri('/generate-qr-link') }}" data-token="{{ csrf_token() }}"><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
                     </div>
                     <div class="result-display-card card">
 
@@ -255,9 +256,16 @@
 
             @elseif($action === 'all')
                 <div class="card-all-result">
-                    <div class="header">
-                        <h3>Assessment History and Results for {{ $username }}</h3>
-                        <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
+                    <div class="top-container">
+                        <div class="header">
+                            <h3>Assessment History and Results for {{ $username }}</h3>
+                            <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
+                        </div>
+
+                        <div class="btn-container-result">
+                            <button type="submit" class="btn-sendEmail" id="sendEmail" data-url="{{ route('send.result.email') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
+                            <button type="submit" class="btn-sendEmail" id="send-qr" data-url="{{ uri('/generate-qr-link') }}" data-token="{{ csrf_token() }}"><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
+                        </div>
                     </div>
 
                     <div class="result-info-container">
@@ -391,6 +399,20 @@
                 </div>
             @endif
         @endif
+    </div>
+
+    <div id="qrModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; flex-direction:column; backdrop-filter: blur(4px);">
+        <div style="background:white; padding:30px; border-radius:20px; text-align:center; width: 320px;">
+            <h3 style="color:#07182f; margin-bottom:10px;">Scan to Download</h3>
+            <p style="font-size:12px; color:#666; margin-bottom:20px;">Your report has been captured. Scan below to save the image to your phone.</p>
+            
+            <div id="qrcode_canvas" style="margin-bottom:20px; padding:10px; background:#f4f4f4; border-radius:10px; display:inline-block;"></div>
+            
+            <button onclick="document.getElementById('qrModal').style.display='none'" 
+                    style="background:#2D79C1; color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; width:100%; font-weight:bold;">
+                Done
+            </button>
+        </div>
     </div>
 
     <div class="footer">
@@ -560,6 +582,10 @@
         </script>
 
     @endif
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <script src="{{ asset('assets/js/result.js') }}"></script>
 

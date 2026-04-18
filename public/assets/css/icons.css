@@ -101,6 +101,7 @@
 .icon-email {
     -webkit-mask-image: url('/public/assets/icons/sms.svg');
     mask-image: url('icons/sms.svg');
+    /* background-image: url('icons/sms.svg'); */
 }
 
 .icon-lock {
@@ -184,5 +185,6 @@
 
 .icon-grid {
     -webkit-mask-image: url('/public/assets/icons/grids-4.svg');
-    mask-image: url('icons/grids-4.svg');    
+    mask-image: url('icons/grids-4.svg'); 
+    background-image: url('icons/grids-4.svg');
 }

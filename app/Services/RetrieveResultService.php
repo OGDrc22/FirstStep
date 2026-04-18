@@ -33,13 +33,13 @@ class RetrieveResultService
         $averageDuration = $this->calculateAverageDurationSingle($attempt);
 
         $finalScores = $this->computeScores($averageAccuracy, $averageDuration);
-        
+
         $rawTrackPercentage = $attempt->track_percentage;
         $rawScores = [];
         foreach ($rawTrackPercentage as $name => $p) {
             $rawScores[$name] = $p['percentage'];
         }
-        
+
 
         $note = $this->generateCounselorNote($rawScores);
 
@@ -88,7 +88,7 @@ class RetrieveResultService
             ->keys()
             ->get(0);
 
-        $secondRecommendation =  collect($finalScores)
+        $secondRecommendation = collect($finalScores)
             ->sortDesc()
             ->keys()
             ->get(1);
@@ -114,28 +114,29 @@ class RetrieveResultService
             'note' => $note
         ];
     }
-    private function computeRawTrackPercentage($examResult) {
-            $trackPercentage = [];
-            $count = count($examResult);
+    private function computeRawTrackPercentage($examResult)
+    {
+        $trackPercentage = [];
+        $count = count($examResult);
 
-            foreach ($examResult as $attempt) {
-                $attmp_tp = $attempt->track_percentage;
-                foreach ($attmp_tp as $name => $ex) {
-                    if (!isset($trackPercentage[$name])) {
-                        $trackPercentage[$name] = [
-                            'track' => $name,
-                            'percentage' => 0
-                        ];
-                    }
-                    $trackPercentage[$name]['percentage'] += $ex['percentage'];
+        foreach ($examResult as $attempt) {
+            $attmp_tp = $attempt->track_percentage;
+            foreach ($attmp_tp as $name => $ex) {
+                if (!isset($trackPercentage[$name])) {
+                    $trackPercentage[$name] = [
+                        'track' => $name,
+                        'percentage' => 0
+                    ];
                 }
+                $trackPercentage[$name]['percentage'] += $ex['percentage'];
             }
-
-            foreach ($trackPercentage as $name => $data) {
-                $trackPercentage[$name]['percentage'] = round($data['percentage'] / $count, 2);
-            }
-            return $trackPercentage;
         }
+
+        foreach ($trackPercentage as $name => $data) {
+            $trackPercentage[$name]['percentage'] = round($data['percentage'] / $count, 2);
+        }
+        return $trackPercentage;
+    }
     private function calculateAverageAccuracy($examResults)
     {
         $totals = [];
@@ -253,9 +254,12 @@ class RetrieveResultService
     private function aggregateMLPredictions($examResults)
     {
         $scores = [];
+        $counts = [];
+
+        $weight = 1;
+        $totalWeight = 0;
 
         foreach ($examResults as $attempt) {
-            // dd($attempt->predicted_track);
             $predicted = $attempt->predicted_track;
 
             if ($predicted) {
@@ -263,13 +267,26 @@ class RetrieveResultService
                 $percentage = $predicted['percentage'];
 
                 $scores[$track] = ($scores[$track] ?? 0) + $percentage;
+                $counts[$track] = ($counts[$track] ?? 0) + 1;
             }
+
+            $scores[$track] += $percentage * $weight;
+            $totalWeight += $weight;
+            $weight++; // newer attempts get higher weight
+        }
+
+        $scores[$track] /= $totalWeight;
+
+        // Convert to average
+        foreach ($scores as $track => $total) {
+            $scores[$track] = $total / $counts[$track];
         }
 
         return $scores;
     }
 
-    private function generateCounselorNote($scores) {
+    private function generateCounselorNote($scores)
+    {
         arsort($scores); // Sorts high to low
         $topTrack = array_key_first($scores);
         $topScore = reset($scores);
@@ -290,5 +307,5 @@ class RetrieveResultService
         return $note;
     }
 
-    
+
 }

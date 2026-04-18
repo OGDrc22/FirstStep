@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\ExamReasultController;
+use App\Http\Controllers\ExamResultController;
 use App\Http\Controllers\StartExamController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\RetrieveResultController;
@@ -9,15 +9,31 @@ use App\Models\ExamJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\PreventDirectAccess;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\QRController;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::post('/send-result-email', [RetrieveResultController::class, 'sendResultEmail'])
     ->name('send.result.email');
 
-Route::post('/send-result-email', [ExamReasultController::class, 'sendResultEmail'])
+Route::post('/send-result-email-exam', [ExamResultController::class, 'sendResultEmail'])
     ->name('send.result.email.from.exam');
 
+
+Route::post('/generate-qr-link', [QRController::class, 'generateQRLink']);
+
+Route::get('/download-result/{file}', function ($file) {
+    $path = storage_path('app/public/results/' . $file);
+    
+    if (file_exists($path)) {
+        // This 'download' function tells the phone: "Don't just show this, SAVE it."
+        return response()->download($path, 'CourseConnect_Report.png');
+    }
+    
+    return abort(404);
+})->name('download-result');
+
+Route::get('/view-result', [QRController::class, 'viewResult'])->name('view-result');
 
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
@@ -43,7 +59,7 @@ Route::middleware(['web'])->group(function () {
 
     
     // Protected route
-    Route::post('/submit-exam', [ExamReasultController::class, 'submitExam'])
+    Route::post('/submit-exam', [ExamResultController::class, 'submitExam'])
         ->name('submit.exam');
     // Route::post('/submit-exam', function () {
     //     dd("heellooo");;

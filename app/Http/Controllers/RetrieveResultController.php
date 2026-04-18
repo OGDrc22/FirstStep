@@ -175,7 +175,7 @@ class RetrieveResultController extends Controller
 
                 }
                 $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
-                    $query->where('email', $request->email);
+                    $query->where('email', $request['email']);
                 })
                     ->latest('id')
                     ->take(4)
@@ -185,7 +185,7 @@ class RetrieveResultController extends Controller
                 // foreach ($examResult as $attempt => $data) {
                 //     $trackPercentageA[$attempt]['percentage'] = $attempt->track_percentage;
                 // }
-                // dd($averageAcc);
+                // dd($computedTrackPercentage, $trackPercentage);
 
                 return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'note', 'secondaryTrack', 'averageAcc', 'averageDuration', 'examResult', 'computedTrackPercentage', 'trackPercentage', 'dateAttmpt'));
 
@@ -273,6 +273,7 @@ class RetrieveResultController extends Controller
 
         // Process the email
         $resultN = session('resultN');
+        dd($resultN);
         $userEmail = $resultN['useremail'];
         Mail::to($userEmail)->send(new ExamResultMail($resultN));
 

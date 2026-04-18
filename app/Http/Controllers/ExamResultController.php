@@ -11,7 +11,7 @@ use App\Mail\ExamResultMail;
 use Illuminate\Support\Facades\RateLimiter;
 
 
-class ExamReasultController extends Controller
+class ExamResultController extends Controller
 {
     public function submitExam(Request $request)
     {
