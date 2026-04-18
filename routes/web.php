@@ -16,16 +16,6 @@ Route::post('/send-result-email', [RetrieveResultController::class, 'sendResultE
     ->name('send.result.email');
 
 
-Route::get('/test-email', function () {
-    Mail::raw('Test email from Laravel + SendGrid', function ($message) {
-        $message->to('coifirststep@gmail.com')
-                ->subject('Test Email');
-    });
-
-    return 'Email sent!';
-});
-
-
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');
 // Route::post('/logout', [AssessmentController::class, 'logout'])->name('logout');
