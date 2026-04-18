@@ -9,6 +9,7 @@ use App\Services\RetrieveResultService;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ExamResultMail;
 use Illuminate\Support\Facades\RateLimiter;
+use function PHPUnit\Framework\isNull;
 
 class RetrieveResultController extends Controller
 {
@@ -23,7 +24,17 @@ class RetrieveResultController extends Controller
             'email' => 'required|email',
         ]);
         session(['resultRequest' => $request->all()]);
-        // dd($request);
+        $examResult = ExamResult::whereHas('student', function ($query) use ($request) {
+            $query->where('email', $request['email']);
+        })
+            ->orderBy('id', 'desc')
+            ->first();
+        $email = $request['email'];
+        // dd(empty($examResult), $email);
+        if (empty($examResult)) {
+            return redirect()->route('retrieve.result')->withErrors(['email_err' => 'No result for ' . $email]);
+            // dd(empty($examResult), $email);
+        }
         return redirect()->route('get.result');
     }
 
@@ -48,11 +59,6 @@ class RetrieveResultController extends Controller
                 })
                     ->latest('id')
                     ->first();
-
-                if ($examResult === null) {
-                    return redirect()->back()
-                        ->withErrors(['email' => 'No exam results found for ' . $request['email']]);
-                }
 
                 // dd($examResult);
 
@@ -126,11 +132,8 @@ class RetrieveResultController extends Controller
                     'resultN'
                 ));
 
-                if ($examResult) {
-                    return $redirect;
-                } else {
-                    return redirect()->route('get.result')->withErrors(['email_err' => 'No results found for this email.']);
-                }
+                return $redirect;
+
             } elseif ($action === 'all') {
 
                 $action = $request['action'];
@@ -190,7 +193,7 @@ class RetrieveResultController extends Controller
                 return redirect()->route('get.result')->withErrors(['action' => 'Invalid action specified.']);
             }
         } else {
-            return redirect()->route('get.result')->withErrors(['email_err' => 'No result for ' . $email]);
+            return redirect()->route('retrieve.result')->withErrors(['email_err' => 'No result for ' . $email]);
         }
     }
 
