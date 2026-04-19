@@ -289,21 +289,21 @@ class ExamResultController extends Controller
         // dd($keyAns);
         // Save results
         $correct = 0;
-        // $service->saveToDB(
-        //     $student,
-        //     $correct,
-        //     $predictedTrack,
-        //     $secondaryTrack,
-        //     $trackPercentage,
-        //     $coreCompetencies,
-        //     $detailedCompetencyLevels,
-        //     $note,
-        //     $aptitude,
-        //     $duration_per_category,
-        //     $questions,
-        //     $questionsData,
-        //     $acc_per_category
-        // );
+        $service->saveToDB(
+            $student,
+            $correct,
+            $predictedTrack,
+            $secondaryTrack,
+            $trackPercentage,
+            $coreCompetencies,
+            $detailedCompetencyLevels,
+            $note,
+            $aptitude,
+            $duration_per_category,
+            $questions,
+            $questionsData,
+            $acc_per_category
+        );
 
         
         $resultN = compact(
