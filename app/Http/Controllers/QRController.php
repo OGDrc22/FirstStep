@@ -61,7 +61,7 @@ class QRController extends Controller
         if (!$results) {
             abort(404, 'Invalid or expired data');
         }
-        // dd($results);
+        dd($results);
 
         return view('qr/result_qr', compact('results'));
     }
