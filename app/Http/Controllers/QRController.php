@@ -50,7 +50,6 @@ class QRController extends Controller
     {
         $data = QrResults::where('token', $request->token)->first();
 
-        dd($data);
 
         if ($data->expires_at && now()->gt($data->expires_at)) {
             abort(404);
@@ -64,7 +63,7 @@ class QRController extends Controller
         if (!$results) {
             abort(404, 'Invalid or expired data');
         }
-        dd($results);
+        // dd($results);
 
         return view('qr/result_qr', compact('results'));
     }
