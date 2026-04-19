@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QrResults;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -30,8 +31,13 @@ class QRController extends Controller
 
         $token = Str::random(10);
 
-        cache()->put('result_' . $token, $resultN, now()->addMinutes(30));
+        QrResults::create([
+            'token' => $token,
+            'payload' => $resultN,
+            'expires_at' => now()->addDay()
+        ]);
 
+        
         return response()->json([
             'success' => true,
             'url' => config('app.url') . '/view-result?token=' . $token
@@ -40,18 +46,21 @@ class QRController extends Controller
 
     public function viewResult(Request $request)
     {
-        $token = $request->query('token');
+        $data = QrResults::where('token', $request->token)->first();
 
-        if (!$token) {
+
+        if ($data->expires_at && now()->gt($data->expires_at)) {
+            abort(404);
+        }
+        if (!$data) {
             abort(400, 'Missing token');
         }
 
-        $results = cache()->get('result_' . $token);
+        $results = $data->payload;
 
         if (!$results) {
             abort(404, 'Invalid or expired data');
         }
-
         // dd($results);
 
         return view('qr/result_qr', compact('results'));

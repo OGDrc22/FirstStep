@@ -42,20 +42,42 @@
             <p style="margin:0; color:#777;">APTITUDE SCORE</p>
         </div>
 
+        <!-- CORE COMPETENCIES -->
+        <div style="margin-top:20px;">
+            <h3 style="color:#333;">Core Competencies</h3>
+
+            <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
+                <thead>
+                    <tr style="display: flex; justify-content: space-between; background:#eeeeee;">
+                        <th align="left">Area</th>
+                        <th align="left">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($results['coreCompetencies'] as $comp => $c)
+                        <tr style="display: flex; justify-content: space-between; width: 100%;">
+                            <td>{{ $comp }} — {{ $c['level'] }}</td>
+                            <td>{{ number_format($c['score'] * 100, 2)}}%</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         <!-- TRACK BREAKDOWN (TABLE INSTEAD OF CHART) -->
         <div style="margin-top:20px;">
             <h3 style="color:#333;">Track Breakdown</h3>
 
             <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
                 <thead>
-                    <tr style="background:#eeeeee;">
+                    <tr style="display: flex; justify-content: space-between; background:#eeeeee;">
                         <th align="left">Track</th>
                         <th align="left">Score</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($results['trackPercentage'] as $track)
-                        <tr>
+                        <tr style="display: flex; justify-content: space-between; width: 100%;">
                             <td>{{ $track['track'] }}</td>
                             <td>{{ $track['percentage'] }}%</td>
                         </tr>
