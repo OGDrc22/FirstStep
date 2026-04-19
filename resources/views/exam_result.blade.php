@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>Result</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
 
@@ -220,7 +220,7 @@
             
             <div id="qrcode_canvas" style="margin-bottom:20px; padding:10px; background:#f4f4f4; border-radius:10px; display:inline-block;"></div>
             
-            <button onclick="document.getElementById('qrModal').style.display='none'" 
+            <button id="modal-btn-done" 
                     style="background:#2D79C1; color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; width:100%; font-weight:bold;">
                 Done
             </button>

@@ -34,7 +34,7 @@ class ExamResult extends Model
         'questions' => 'array',
         'accuracy_per_category' => 'array',
         'duration_per_category' => 'array',
-        'questionsData' => 'array'
+        'questionsData' => 'array',
     ];
 
     public function student()

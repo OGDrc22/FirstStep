@@ -15,6 +15,7 @@ class QrResults extends Model
     ];
 
     protected $casts = [
-        'payload' => 'array', // auto json decode
+        'payload' => 'array',
+        'created_at' => 'datetime'
     ];
 }

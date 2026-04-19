@@ -305,8 +305,9 @@ class ExamResultController extends Controller
             $acc_per_category
         );
 
-        
+        $action = "latest";        
         $resultN = compact(
+            'action',
             'username',
             'useremail',
             'questionsData',

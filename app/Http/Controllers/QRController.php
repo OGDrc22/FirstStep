@@ -31,7 +31,7 @@ class QRController extends Controller
 
         $token = Str::random(10);
         // $qr =
-         QrResults::create([
+        QrResults::create([
             'token' => $token,
             'payload' => $resultN,
             'expires_at' => now()->addDay()
@@ -39,7 +39,7 @@ class QRController extends Controller
 
         // dd($qr);
 
-        
+
         return response()->json([
             'success' => true,
             'url' => config('app.url') . '/view-result?token=' . $token
@@ -63,8 +63,13 @@ class QRController extends Controller
         if (!$results) {
             abort(404, 'Invalid or expired data');
         }
-        // dd($results);
 
-        return view('qr/result_qr', compact('results'));
+        $action = $results['action'];
+
+        if ($action == 'all') {
+            return view('qr/all_result_qr', compact('results'));
+        } else {
+            return view('qr/result_qr', compact('results'));
+        }
     }
 }

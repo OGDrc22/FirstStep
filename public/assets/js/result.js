@@ -51,9 +51,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
+    const qrModal = document.getElementById("qrModal");
     const sendQR = document.getElementById("send-qr");
     const qrUrl = sendQR.getAttribute('data-url');
     const qrToken = sendQR.getAttribute('data-token');
+    const dBtn = document.getElementById("modal-btn-done");
+
     sendQR.addEventListener('click', function () {
         // This targets the specific row containing the two cards in your image
         const target = document.getElementById("target-content");
@@ -99,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         height: 200
                     });
 
-                    document.getElementById("qrModal").style.display = "flex";
+                    qrModal.style.display = "flex";
                 }
             })
             .catch(err => {
@@ -108,5 +111,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         });
     });
+
+    dBtn.addEventListener('click', function () {
+        qrModal.style.display = "none";
+    });
+
+    qrModal.addEventListener('click', function () {
+        qrModal.style.display = "none";
+    })
 
 });
