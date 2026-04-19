@@ -30,12 +30,14 @@ class QRController extends Controller
         // }
 
         $token = Str::random(10);
-
-        QrResults::create([
+        // $qr =
+         QrResults::create([
             'token' => $token,
             'payload' => $resultN,
             'expires_at' => now()->addDay()
         ]);
+
+        // dd($qr);
 
         
         return response()->json([
@@ -48,6 +50,7 @@ class QRController extends Controller
     {
         $data = QrResults::where('token', $request->token)->first();
 
+        dd($data);
 
         if ($data->expires_at && now()->gt($data->expires_at)) {
             abort(404);
