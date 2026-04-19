@@ -27,13 +27,74 @@ Route::get('/download-result/{file}', function ($file) {
     
     if (file_exists($path)) {
         // This 'download' function tells the phone: "Don't just show this, SAVE it."
-        return response()->download($path, 'CourseConnect_Report.png');
+        return response()->download($path, 'First-Step.png');
     }
     
     return abort(404);
 })->name('download-result');
 
 Route::get('/view-result', [QRController::class, 'viewResult'])->name('view.result');
+
+
+// Route::get('/preview-email', function () {
+
+//     return view('emails.all_result', [
+//         "username" => "dev",
+//         "useremail" => "dennies.chavez.coi@pcu.edu.ph",
+//         "recommendedTrack" => "Computer Science",
+//         "note" => "Based on your overall performance, with a top score of 37.95%, the Computer Science pathway is highly recommended. This is primarily due to your strong aptitude for abstract reasoning and problem-solving, which are essential for software development and data-driven fields.",
+//         "secondaryTrack" => "Information Technology",
+//         "examResult" => collect([
+//             (object)[
+//                 'created_at' => now(),
+//                 'predicted_track' => ['track' => 'Computer Science'],
+//                 'secondary_track' => ['track' => 'IT']
+//             ]
+//         ]),
+//         'results' => [
+//             "action" => "all",
+//             "averageAcc" => "",
+//             "averageDuration" =>  [
+//                 "Computer Science" => 8.4,
+//                 "Preference" => 1.6,
+//                 "Information Technology" => 0.0,
+//                 "Computer Engineering" => 0.0,
+//                 "Multimedia Arts" => 0.0,
+//             ],
+//             "computedTrackPercentage" => [
+//                 "Information Technology" => 18.0,
+//                 "Computer Engineering" => 18.0,
+//                 "Computer Science" => 37.954200283688,
+//                 "Multimedia Arts" => 18.0,
+//             ],
+//             "trackPercentage" => [
+//                 "Computer Engineering" => [
+//                 "track" => "Computer Engineering",
+//                 "percentage" => 22.08,
+//                 ],
+//                 "Computer Science" => [
+//                 "track" => "Computer Science",
+//                 "percentage" => 42.56,
+//                 ],
+//                 "Information Technology" => [
+//                 "track" => "Information Technology",
+//                 "percentage" => 13.27,
+//                 ],
+//                 "Multimedia Arts" => [
+//                 "track" => "Multimedia Arts",
+//                 "percentage" => 22.09,
+//                 ]
+//             ],
+//             "dateAttmpt" =>[
+//                 0 => "2026-04-18 08:36:32",
+//                 1 => "2026-04-18 08:34:09",
+//                 2 => "2026-04-18 08:04:10",
+//                 3 => "2026-04-18 07:01:29",
+//                 4 => "2026-04-18 07:01:03"
+//             ]
+//         ]
+//     ]);
+// });
 
 Route::get('/assessment-entry', [AssessmentController::class, 'showAssessmentEntryForm'])->name('assessment-entry');
 // Route::post('/login-data', [AssessmentController::class, 'login_data'])->name('login-data');

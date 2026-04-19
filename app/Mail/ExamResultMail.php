@@ -23,7 +23,12 @@ class ExamResultMail extends Mailable
 
     public function build()
     {
+        $view = $this->results['action'] === 'all'
+        ? 'emails.all_result'
+        : 'emails.exam_result';
+
         return $this->subject('Your Exam Results')
-                    ->view('emails.exam_result');
+                    ->view($view)
+                    ->with($this->results);
     }   
 }

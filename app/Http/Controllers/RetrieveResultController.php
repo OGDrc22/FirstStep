@@ -94,6 +94,7 @@ class RetrieveResultController extends Controller
                 $model_accuracy = $examResult ? $examResult->model_accuracy : null;
 
                 $resultN = compact(
+                    'action',
                     'username',
                     'useremail',
                     'questionsData',
@@ -154,6 +155,7 @@ class RetrieveResultController extends Controller
                 if ($firstAttempt && $firstAttempt->student) {
                     $username = $firstAttempt->student->name;
                 }
+                $useremail = $firstAttempt->student->email;
 
                 $service = new RetrieveResultService();
 
@@ -187,7 +189,24 @@ class RetrieveResultController extends Controller
                 // }
                 // dd($computedTrackPercentage, $trackPercentage);
 
-                return view('retrieve_result', compact('action', 'username', 'recommendedTrack', 'note', 'secondaryTrack', 'averageAcc', 'averageDuration', 'examResult', 'computedTrackPercentage', 'trackPercentage', 'dateAttmpt'));
+                $resultN = compact(
+                    'action',
+                    'username',
+                    'useremail',
+                    'recommendedTrack',
+                    'note',
+                    'secondaryTrack',
+                    'averageAcc',
+                    'averageDuration',
+                    'examResult',
+                    'computedTrackPercentage',
+                    'trackPercentage',
+                    'dateAttmpt'
+                );
+
+                session(['resultN' => $resultN]);
+
+                return view('retrieve_result', $resultN);
 
             } else {
                 return redirect()->route('get.result')->withErrors(['action' => 'Invalid action specified.']);
@@ -273,9 +292,10 @@ class RetrieveResultController extends Controller
 
         // Process the email
         $resultN = session('resultN');
-        dd($resultN);
         $userEmail = $resultN['useremail'];
         Mail::to($userEmail)->send(new ExamResultMail($resultN));
+
+        // dd($resultN);
 
         // Record the attempt for 10 seconds
         RateLimiter::hit($key, $decaySeconds = 10);

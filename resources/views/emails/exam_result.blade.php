@@ -48,16 +48,16 @@
 
             <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
                 <thead>
-                    <tr style="display: flex; justify-content: space-between; background:#eeeeee;">
+                    <tr style="background:#eeeeee;">
                         <th align="left">Area</th>
-                        <th align="left">Score</th>
+                        <th align="right">Score</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($results['coreCompetencies'] as $comp => $c)
-                        <tr style="display: flex; justify-content: space-between; width: 100%;">
-                            <td>{{ $comp }} — {{ $c['level'] }}</td>
-                            <td>{{ number_format($c['score'] * 100, 2)}}%</td>
+                        <tr style="width: 100%;">
+                            <td align="left">{{ $comp }} — {{ $c['level'] }}</td>
+                            <td align="right">{{ number_format($c['score'] * 100, 2)}}%</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -70,16 +70,16 @@
 
             <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
                 <thead>
-                    <tr style="display: flex; justify-content: space-between; background:#eeeeee;">
+                    <tr style="background:#eeeeee;">
                         <th align="left">Track</th>
                         <th align="left">Score</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($results['trackPercentage'] as $track)
-                        <tr style="display: flex; justify-content: space-between; width: 100%;">
-                            <td>{{ $track['track'] }}</td>
-                            <td>{{ $track['percentage'] }}%</td>
+                        <tr style="width: 100%;">
+                            <td align="left">{{ $track['track'] }}</td>
+                            <td align="right">{{ $track['percentage'] }}%</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -89,6 +89,7 @@
         <!-- FOOTER -->
         <div style="margin-top:30px; font-size:12px; color:#999; text-align:center;">
             <p>© 2026 Philippine Christian University - College of Informatics. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply.</p>
         </div>
 
     </div>

@@ -21,7 +21,16 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({})
         })
-            .then(res => res.json())
+            .then(async res => {
+                const text = await res.text(); // TEMP DEBUG
+
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error("NOT JSON RESPONSE:", text);
+                    throw new Error("Server did not return JSON");
+                }
+            })
             .then(data => {
                 if (data.status === "success") {
                     Toast.create(document.body, "success", data.message);

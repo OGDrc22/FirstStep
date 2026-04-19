@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Retrieve Result</title>
     <link rel="icon" type="image/png" href="{{asset('assets/images/main_logo.png')}}">
 
@@ -256,10 +257,20 @@
 
             @elseif($action === 'all')
                 <div class="card-all-result">
+                    <div class="header">
+                        <h3>Assessment History and Results</h3>
+                        <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
+                    </div>
                     <div class="top-container">
-                        <div class="header">
-                            <h3>Assessment History and Results for {{ $username }}</h3>
-                            <p>A comprehensive longitudinal analysis of your academic trajectories and technical aptitude patterns over time.</p>
+                        <div class="user-card card">
+                            <div class="user-detail">
+                                <i class="icon icon-user" alt="User Icon"></i>
+                                <span class="user-name">{{ $username }}</span>
+                            </div>
+                            <div class="user-detail">
+                                <i class="icon icon-email" alt="Email Icon"></i>
+                                <span class="user-email">{{ $useremail }}</span>
+                            </div>
                         </div>
 
                         <div class="btn-container-result">
