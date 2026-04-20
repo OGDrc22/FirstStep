@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
                 getInputs();
-                // autoSubmit(submit_btn);
+                autoSubmit(submit_btn);
                 startCountDown();
                 document.getElementById('seconds').innerText = timer;
             }
