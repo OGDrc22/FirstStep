@@ -233,12 +233,17 @@ hr {
     color: var(--color-text-muted);
 }
 
+
+
 .right-bar-chart {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 16px;
+}
+.right-bar-chart .left-chart {
+    width: 100%;
 }
 .right-bar-chart .chip {
     background-color: var(--accent-chip-bg-muted);

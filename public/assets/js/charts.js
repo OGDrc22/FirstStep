@@ -70,7 +70,7 @@ function initCharts(trackPercentage, detailedCompetencies, coreCompetencies) {
                 'rgb(102, 130, 255)'
             ],
             borderWidth: 0,
-            borderRadius: 15,
+            borderRadius: 16,
             borderSkipped: false,
         }]
     };
