@@ -158,8 +158,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     
     const { generateMiniTestQuestions } = await import('./assessment_helper.js');
-    let formStepsNum = 0;
-
 
     nextBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -185,13 +183,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const question = generateMiniTestQuestions(interest);
                 renderMiniTest(question);
                 getInputs();
-                autoSubmit(submit_btn);
+                // autoSubmit(submit_btn);
                 startCountDown();
                 document.getElementById('seconds').innerText = timer;
+            }
+
+            if (btn === submit_btn) {
+                if (!validateMiniTest()) {
+                    if (e) e.preventDefault();
+                    return;
+                }
+                return;
             }
             formStepsNum++;
             updateFormSteps();
             updateProgressStep();
+            
+
         })
     });
 
@@ -477,6 +485,58 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
 
+    let formStepsNum = 0;
+
+
+    function getMiniTestTotals() {
+        const totalQuestions = document.querySelectorAll('#mini-test-container .mini-question').length;
+        const answeredQuestions = document.querySelectorAll('#mini-test-container input[type="radio"]:checked').length;
+        return { totalQuestions, answeredQuestions };
+    }
+
+    function updateMiniTestSubmitState() {
+        if (!submit_btn) return;
+        const { totalQuestions, answeredQuestions } = getMiniTestTotals();
+        const complete = totalQuestions > 0 && answeredQuestions === totalQuestions;
+        submit_btn.disabled = !complete;
+        submit_btn.classList.toggle('disabled', !complete);
+    }
+
+    function validateMiniTest() {
+        const { totalQuestions, answeredQuestions } = getMiniTestTotals();
+
+        if (totalQuestions === 0) {
+            Toast.create(document.body, 'err', 'Mini test is not ready yet.');
+            return false;
+        }
+
+        if (answeredQuestions !== totalQuestions) {
+            Toast.create(document.body, 'err', 'Please answer all mini test questions.');
+
+            const firstUnanswered = Array.from(
+                document.querySelectorAll('#mini-test-container .mini-question')
+            ).find(q => !q.querySelector('input[type="radio"]:checked'));
+
+            if (firstUnanswered) {
+                firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    const miniTestContainer = document.getElementById('mini-test-container');
+    if (miniTestContainer) {
+        miniTestContainer.addEventListener('change', (e) => {
+            if (e.target && e.target.matches('input[type="radio"]')) {
+                updateMiniTestSubmitState();
+            }
+        });
+    }
+
+
     
 
 
@@ -554,7 +614,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         try {
             isSubmitting = true;
-            buttonID.disable = true;
+            buttonID.disabled = true;
             showLoadingScreen();
 
             collectBasicInfo();
