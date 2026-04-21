@@ -294,8 +294,43 @@ def main():
     - DO NOT use technical jargon like 'asynchronous' or 'polymorphism'.
     """
 
-    response = model.generate_content(prompt)
-    print("Sending request to Gemini...", flush=True)
+    response = None
+    max_attempts = int(os.getenv("GEMINI_MAX_ATTEMPTS", "3") or "3")
+    attempt = 1
+    while attempt <= max_attempts:
+        try:
+            response = model.generate_content(prompt)
+            break
+        except Exception as e:
+            if attempt >= max_attempts:
+                raise
+            err_text = str(e)
+            retryable = any(
+                token in err_text
+                for token in (
+                    "503",
+                    "UNAVAILABLE",
+                    "high demand",
+                    "RESOURCE_EXHAUSTED",
+                    "TooManyRequests",
+                    "Rate limit",
+                )
+            )
+            if not retryable:
+                raise
+            wait_s = min(60, 5 * (2 ** (attempt - 1)))
+            update_job(
+                "processing",
+                message=f"AI service busy. Retrying ({attempt}/{max_attempts})...",
+                progress=55,
+            )
+            try:
+                print(f"Attempt {attempt} failed with error: {err_text}. Retrying in {wait_s} seconds...", flush=True)
+            except Exception:
+                pass
+            time.sleep(wait_s)
+            attempt += 1
+    
 
 
 

@@ -687,12 +687,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     function startPolling(jobId) {
         const interval = setInterval(() => {
             fetch(`/exam/status/${jobId}`)
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`Status request failed (${res.status})`);
+                    }
+                    return res.json();
+                })
                 .then(job => {
                     if (job.status === "pending") {
                         statusText.textContent = "Getting Ready..."
                     } else {
-                        statusText.textContent = job.message + " " + job.progress + "%";
+                        const message = job.message || "Working...";
+                        const progress = (job.progress === null || job.progress === undefined) ? "" : ` ${job.progress}%`;
+                        statusText.textContent = message + progress;
                     }
                     console.log('Polling job status:', job.status);
                     if (job.status === 'done') {
@@ -703,8 +710,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                     }
                     if (job.status === 'failed') {
                         clearInterval(interval);
-                        statusText.textContent = job.error || 'An error occurred during exam generation. Please try again.';
+                        statusText.textContent = job.error_message || job.error || 'An error occurred during exam generation. Please try again.';
                     }
+                })
+                .catch(err => {
+                    clearInterval(interval);
+                    statusText.textContent = err?.message || 'Unable to check exam status. Please refresh and try again.';
                 });
         }, 2000);
     }
