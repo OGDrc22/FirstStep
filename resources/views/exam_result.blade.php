@@ -54,8 +54,8 @@
                     </div>
                 </div>
                 <div class="btn-container-result">
-                    <button type="submit" class="btn-sendEmail" id="sendEmail" data-url="{{ route('send.result.email.from.exam') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
-                    <button type="submit" class="btn-sendEmail" id="send-qr" data-url="{{ uri('/generate-qr-link') }}" data-token="{{ csrf_token() }}"><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
+                    <button type="submit" class="btn-sendCopy" id="sendEmail" data-url="{{ route('send.result.email.from.exam') }}" data-token="{{ csrf_token() }}"><i class="icon icon-email" alt="Email Icon"></i> Send a Copy to Email</button>
+                    <button type="submit" class="btn-sendCopy" id="send-qr" data-url="{{ uri('/generate-qr-link') }}" data-token="{{ csrf_token() }}"><i class="icon icon-grid" alt="Email Icon"></i> Get a Copy via QR Code</button>
                 </div>
                 <div class="result-display-card card">
 

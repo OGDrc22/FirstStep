@@ -400,3 +400,114 @@ body {
     /* 👈 THE MAGIC FIX: Keeps the numbers perfectly still while counting down */
     font-variant-numeric: tabular-nums; 
 }
+
+/* -------------------------------------------------
+   Mobile / Responsive
+   ------------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .bg-overlay {
+        background-attachment: scroll;
+    }
+
+    .main-container {
+        max-width: 100%;
+        margin: 24px auto;
+        padding: 0 16px;
+        gap: 24px;
+    }
+
+    .question-card-a {
+        padding: 24px;
+    }
+
+    .buttons {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-container {
+        flex-direction: column-reverse;
+    }
+
+    .right {
+        order: -1;
+        gap: 16px;
+    }
+
+    .progress-container {
+        align-items: start;
+    }
+
+    .question-navigator {
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+    }
+
+    .question-navigator .nav-q-btn {
+        height: 44px;
+    }
+
+    .q-nav-info {
+        padding: 16px 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-container {
+        margin: 16px auto;
+        padding: 0 12px;
+        gap: 16px;
+    }
+
+    .text_h {
+        font-size: 1.35rem;
+        height: auto;
+        padding-top: 0;
+    }
+
+    .question-card.active-q {
+        gap: 16px;
+    }
+
+    .question-card-a {
+        padding: 16px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .question {
+        font-size: 1.1rem;
+    }
+
+    .choices {
+        padding: 16px;
+    }
+
+    .choices label {
+        font-size: 0.95rem;
+        line-height: 1.3;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .next-btn {
+        margin-left: 0;
+    }
+
+    .q-nav-container {
+        border-radius: 12px;
+    }
+
+    #btn-submit {
+        padding: 14px 16px;
+    }
+}

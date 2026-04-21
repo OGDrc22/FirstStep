@@ -158,8 +158,8 @@ function initCharts(trackPercentage, detailedCompetencies, coreCompetencies) {
 
     labelsContainer.innerHTML = labels.map((label, index) => {
         return `
-            <div style="flex:1;display:grid;grid-template-rows:auto 1fr 1fr;">
-                <div style="display:flex;justify-content:space-between;align-items:end;padding-left:8px;">
+            <div class="grid-container">
+                <div class="label">
                     <span style="">${label} — ${levels[index]}</span>
                     <span style="">${scores[index].toFixed(2)}%</span>
                 </div>

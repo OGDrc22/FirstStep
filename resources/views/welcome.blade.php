@@ -22,17 +22,13 @@
             });
         </script>
     @endif
-    <!-- <div class="alert-bg">
-        <div class="alert alert-danger">
-            Sample Error Message
-        </div>
-    </div> -->
-
-    <!-- <div class="">
-        <div class="heads-up-message">
-            Sample Error Message
-        </div>
-    </div> -->
+     <!-- <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Toast.create(document.body, "err", "Error");
+            Toast.create(document.body, "info", "Information");
+            Toast.create(document.body, "success", "Success");
+        });
+    </script> -->
 
 
     <nav class="top-nav-pcu">
@@ -85,7 +81,7 @@
                 <div class="left-chart card">
                     <div class="chart-label">
                         <h3>Core Competencies</h3>
-                        <i class="icon-chart" alt="Chart Icon"></i>
+                        <i class="icon icon-chart" alt="Chart Icon"></i>
                     </div>
 
                     <div class="chart-bar" style="position: relative;">

@@ -211,3 +211,53 @@
     font-family: var(--manrope-font);
     color: var(--color-text-muted);
 }
+
+/* -------------------------------------------------
+   Mobile / Responsive
+   ------------------------------------------------- */
+
+@media (max-width: 768px) {
+    .top-nav-pcu {
+        padding: 10px 16px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .top-nav-left {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .pcu-text-small,
+    .coi-text {
+        font-size: 1rem;
+    }
+    .top-nav-right {
+        display: none;
+    }
+
+    .nav-right-btns {
+        width: 100%;
+        gap: 12px;
+        justify-content: space-between;
+        display: none;
+    }
+
+    .btn-action-nav {
+        flex: 1;
+        text-align: center;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 420px) {
+   
+    .coi-text {
+        display: none;
+    }
+
+    .pcu-logo {
+        height: 34px;
+    }
+}

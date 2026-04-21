@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let progressInterval;
     function move(seconds) {
 
-        console.log(window.getComputedStyle(elem).width);
+        // console.log(window.getComputedStyle(elem).width);
         
         clearInterval(progressInterval);
 

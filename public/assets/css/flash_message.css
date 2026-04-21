@@ -16,7 +16,7 @@
     --info-text-color: #33AAFF;
 
     --alert-bg: hsla(0, 0%, 0%, 0.8);
-    
+
 }
 
 
@@ -84,13 +84,16 @@
     overflow: hidden;
     color: var(--color-text-main-white-muted);
 }
+
 .toast-container:has(.message-container .icon-close) {
     animation: slideDownShake 6s ease-in-out;
 }
+
 .toast-container:has(.message-container .icon-info),
 .toast-container:has(.message-container .icon-success) {
     animation: slideDownOvershoot 6s ease-in-out;
 }
+
 .toast-container.removing {
     opacity: 0;
 }
@@ -101,6 +104,7 @@
     border-radius: 0 0 8px 8px;
     position: relative;
 }
+
 .toast-container span::after {
     position: absolute;
     left: -50%;
@@ -110,6 +114,7 @@
     width: 256px;
     filter: blur(64px);
 }
+
 .toast-container .message-container {
     flex: 1;
     display: flex;
@@ -118,38 +123,48 @@
     justify-content: center;
     align-items: center;
 }
+
 .toast-container .message-container i {
     width: 48px;
     height: 48px;
     background-repeat: no-repeat;
 }
+
 .toast-container .message-container .icon-close,
 .toast-container:has(.message-container .icon-close) span::after,
 .toast-container:has(.message-container .icon-close) span {
     background-color: var(--error-text-color);
 }
+
 .toast-container .message-container .icon-success,
 .toast-container:has(.message-container .icon-success) span::after,
 .toast-container:has(.message-container .icon-success) span {
     background-color: var(--success-text-color);
 }
+
 .toast-container .message-container .icon-info,
 .toast-container:has(.message-container .icon-info) span::after,
 .toast-container:has(.message-container .icon-info) span {
     background-color: var(--info-text-color);
 }
+
 @keyframes slideDownShake {
+
     /* 0%: Start above the screen and invisible */
     0% {
         opacity: 0;
-        max-height: 0; /* Start collapsed */
+        max-height: 0;
+        /* Start collapsed */
         margin-bottom: 0;
         transform: translateX(0%) translateY(-40px);
     }
+
     8% {
         opacity: 1;
-        max-height: 200px; /* Expand to show content */
-        margin-bottom: 12px; /* Your desired gap */
+        max-height: 200px;
+        /* Expand to show content */
+        margin-bottom: 12px;
+        /* Your desired gap */
         transform: translateX(0%) translateY(0);
     }
 
@@ -177,26 +192,36 @@
         margin-bottom: 16px;
         transform: translateX(0%) translateY(0);
     }
+
     100% {
         opacity: 0;
-        max-height: 0;      /* Shrink the height to 0 */
-        margin-bottom: 0;   /* Remove margin to avoid empty gaps */
-        padding: 0;         /* Clear padding to ensure 0 height */
+        max-height: 0;
+        /* Shrink the height to 0 */
+        margin-bottom: 0;
+        /* Remove margin to avoid empty gaps */
+        padding: 0;
+        /* Clear padding to ensure 0 height */
         transform: translateX(0%) translateY(-40px);
     }
 }
+
 @keyframes slideDownOvershoot {
+
     /* 0%: Start above the screen and invisible */
     0% {
         opacity: 0;
-        max-height: 0; /* Start collapsed */
+        max-height: 0;
+        /* Start collapsed */
         margin-bottom: 0;
         transform: translateX(0%) translateY(-40px);
     }
+
     8% {
         opacity: 1;
-        max-height: 200px; /* Expand to show content */
-        margin-bottom: 12px; /* Your desired gap */
+        max-height: 200px;
+        /* Expand to show content */
+        margin-bottom: 12px;
+        /* Your desired gap */
         transform: translateX(0%) translateY(0);
     }
 
@@ -214,11 +239,15 @@
         margin-bottom: 16px;
         transform: translateX(0%) translateY(0);
     }
+
     100% {
         opacity: 0;
-        max-height: 0;      /* Shrink the height to 0 */
-        margin-bottom: 0;   /* Remove margin to avoid empty gaps */
-        padding: 0;         /* Clear padding to ensure 0 height */
+        max-height: 0;
+        /* Shrink the height to 0 */
+        margin-bottom: 0;
+        /* Remove margin to avoid empty gaps */
+        padding: 0;
+        /* Clear padding to ensure 0 height */
         transform: translateX(0%) translateY(-40px);
     }
 
@@ -229,6 +258,7 @@
     width: 100%;
     background-color: transparent;
 }
+
 #timerProgress .progress-t {
     height: 100%;
     width: 100%;
@@ -254,6 +284,7 @@
     align-items: center;
     gap: 16px;
 }
+
 .modal i {
     width: 120px;
     height: 120px;
@@ -277,6 +308,7 @@
     gap: 16px;
     width: 100%;
 }
+
 .feedback-input {
     font-family: var(--inter-font);
     width: 100%;
@@ -325,7 +357,7 @@
 }
 
 .btn-primary {
-    grid-column: 3 / i 1;
+    grid-area: 1 / 3 / 2 / 4;
     background-color: var(--color-black);
     color: white;
 }
@@ -336,7 +368,7 @@
 }
 
 .btn-secondary {
-    grid-column: span 1;
+    grid-area: 1 / 1 / 2 / 2;
     background-color: var(--color-black-hover);
     color: white;
 }
@@ -352,7 +384,7 @@
 }
 
 .btn-middle {
-    grid-column: 2 / span 1;
+    grid-area: 1 / 2 / 2 / 3;
     background-color: var(--color-black);
     color: white;
 }
@@ -369,17 +401,18 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(248, 250, 252, 0.7); 
-    backdrop-filter: blur(8px); 
+    background-color: rgba(248, 250, 252, 0.7);
+    backdrop-filter: blur(8px);
     z-index: 10000;
-    display: none; /* Completely hides it from the browser until needed */
+    display: none;
+    /* Completely hides it from the browser until needed */
     justify-content: center;
     align-items: center;
 }
 
 /* When JavaScript adds this class, it WILL appear */
 .loading-screen.active {
-    display: flex; 
+    display: flex;
 }
 
 /* 2. The White Card */
@@ -406,10 +439,22 @@
 }
 
 @keyframes pulseSpinner {
-    0% { transform: scale(0.85); opacity: 0.8; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(0.85); opacity: 0.8; }
+    0% {
+        transform: scale(0.85);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.85);
+        opacity: 0.8;
+    }
 }
+
 /* 4. The Text */
 #text-loader {
     font-family: var(--inter-font);
@@ -418,4 +463,39 @@
     font-weight: 600;
     margin: 0;
     letter-spacing: 0.5px;
+}
+
+
+@media (max-width: 600px) {
+
+    .modal {
+        width: 90vw;
+        aspect-ratio: unset;
+        height: auto;
+    }
+    .modal .icon-info {
+        width: 80px;
+        height: 80px;
+    }
+    .modal h2 {
+        font-size: 1.2em;
+    }
+
+    .feedback-input {
+        min-height: 300px;
+    }
+    .alert-button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .toast-container {
+        width: 90vw;
+    }
+    .toast-container .message-container .icon {
+        width: 32px;
+        height: 32px;
+    }
 }

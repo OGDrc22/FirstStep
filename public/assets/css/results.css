@@ -343,7 +343,7 @@ body {
     flex-direction: column;
     gap: 8px;
 }
-.btn-container-result .btn-sendEmail {
+.btn-container-result .btn-sendCopy {
     flex: 1;
     align-self: center;
     justify-self: center;
@@ -362,13 +362,13 @@ body {
     justify-content: center;
     cursor: pointer;
 }
-.btn-sendEmail i {
+.btn-sendCopy i {
     background-color: var(--color-text-main-white);
 }
-.btn-sendEmail:hover {
+.btn-sendCopy:hover {
     background-color: var(--color-black-hover);
 }
-.btn-sendEmail:active {
+.btn-sendCopy:active {
     transform: scale(0.98);
 }
 .user-card {
@@ -497,6 +497,22 @@ body {
 }
 .card-all-result .result-info-container .left-chart {
     flex: 1;
+}
+
+.left-chart {
+    width: 100%;
+}
+.left-chart #custom-labels .grid-container {
+    flex:1;
+    display:grid;
+    grid-template-rows:auto 1fr 1fr;
+    width: 100%;
+}
+.left-chart #custom-labels .grid-container .label {
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    padding-left:8px;
 }
 
 .card-all-result .info-card {
@@ -818,3 +834,161 @@ body {
     margin-top: 32px;
 }
 
+/* -------------------------------------------------
+   Mobile / Responsive
+   ------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .content {
+        margin: 16px;
+    }
+
+    .login-page {
+        display: flex;
+        flex-direction: column;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
+        margin: 16px;
+        padding: 24px;
+    }
+
+    .login-page .top-content p {
+        font-size: 2.25rem;
+    }
+
+    .login-page .action-container {
+        padding: 32px 24px;
+        border-radius: 24px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-result {
+        width: 100%;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
+    }
+
+    .dashboard-grid .result-title,
+    .btn-container-result,
+    .user-card,
+    .result-display-card,
+    .aptitude-card,
+    .left-chart,
+    .right-chart {
+        grid-area: auto;
+    }
+
+    .dashboard-grid .result-title {
+        font-size: 2.25rem;
+        line-height: 2.4rem;
+    }
+
+    .card {
+        padding: 24px;
+    }
+
+    .btn-container-result .btn-sendCopy {
+        width: 100%;
+        padding: 8px 16px;
+    }
+
+    .chart-bar {
+        height: 240px;
+    }
+
+    .chart-wrapper {
+        width: min(240px, 100%);
+    }
+    
+    .left-chart {
+        padding: 16px;
+    }
+    .left-chart #custom-labels .grid-container .label span {
+        font-size: 0.8rem;
+    }
+
+    .left-chart .canvas-wrapper {
+        margin-top: 16px;
+    }
+
+    .card-all-result {
+        padding: 24px;
+        gap: 24px;
+    }
+
+    .card-all-result .top-container,
+    .card-all-result .result-info-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .card-all-result .info-card .cards-container {
+        flex-direction: column;
+    }
+
+    .card-all-result .info-card .cards-container .sub-card::after {
+        height: 0;
+        width: 0;
+    }
+
+    .card-all-result .results-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .card-all-result .results-table table {
+        min-width: 720px;
+    }
+}
+
+@media (max-width: 600px) {
+    .content {
+        margin: 12px;
+    }
+
+    .login-page {
+        margin: 12px;
+        padding: 16px;
+    }
+
+    .login-page .top-content p {
+        font-size: 1.9rem;
+    }
+
+    .login-page .action-container p:nth-child(1) {
+        font-size: 1.25rem;
+    }
+
+    .login-page .action-container p:nth-child(2) {
+        font-size: 1rem;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .dashboard-grid .result-title {
+        font-size: 1.9rem;
+        line-height: 2.1rem;
+    }
+
+    .card-data-row:nth-last-of-type(2) .card-value {
+        font-size: 1.8rem;
+    }
+
+    .card-data-row:nth-last-of-type(1) .card-value {
+        font-size: 1.35rem;
+    }
+
+    .card-all-result .results-table table {
+        min-width: 640px;
+    }
+}

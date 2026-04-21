@@ -803,3 +803,136 @@ body {
     left: 0;
     background: var(--color-primary); /* The underline turns your PCU blue */
 }
+
+/* -------------------------------------------------
+   Extra Mobile / Responsive (global layout)
+   ------------------------------------------------- */
+
+@media screen and (max-width: 900px) {
+    .bg-overlay {
+        background-attachment: scroll;
+    }
+
+    .container {
+        padding: 24px 0;
+    }
+
+    .assessment-card {
+        width: calc(100% - 32px);
+        padding: 24px;
+    }
+
+    .header h3 {
+        font-size: 2.25rem;
+        line-height: 2.4rem;
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    .progressbar {
+        gap: 8px;
+    }
+
+    .progress-step {
+        height: 12px;
+    }
+
+    .form-step.active {
+        margin-top: 20px;
+    }
+
+    #step-1.active,
+    #step-2,
+    #diagnostic-skill-test,
+    .form-step.active#diagnostic-mini-test {
+        padding: 20px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    #step-1 .buttons {
+        align-items: flex-start;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .next-btn {
+        margin-left: 0;
+    }
+
+    #diagnostic-skill-test .info-cards {
+        /* grid-template-columns: 1fr; */
+        display: flex;
+        flex-direction: column;
+    }
+    .info-cards .card {
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .interest-other-list {
+        margin-bottom: 20px;
+    }
+
+    .other-interest {
+        grid-template-columns: 1fr;
+    }
+
+    .likert-interest .interest-header {
+        flex-wrap: wrap;
+    }
+
+    .likert-choices label {
+        padding: 12px;
+    }
+
+    .form-step.active#diagnostic-mini-test {
+        align-items: stretch;
+    }
+
+    #diagnostic-mini-test .inf {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .mini-question .question-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .mini-question .mini-test-options {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .assessment-card {
+        width: calc(100% - 24px);
+        padding: 16px;
+    }
+
+    .header h3 {
+        font-size: 1.9rem;
+        line-height: 2.1rem;
+    }
+
+    .interest-options {
+        grid-template-columns: 1fr;
+    }
+
+    .mini-question .mini-test-options {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+}

@@ -132,14 +132,14 @@
                 <h2>Are you sure you want to submit the exam?</h2>
                 <div class="alert-button-container">
                     <button class="btn btn-secondary"><i class="icon-arrow-right"></i> Cancel</button>
-                    <button class="btn btn-primary">Submit <i class="icon-send"></i></button>
+                    <button class="btn btn-primary">Submit <i class="icon icon-send"></i></button>
                 </div>
             </div>
         </div>
 
         <div class="alert-bg feedback-form hidden">
             <div class="modal">
-                <p>Feedback Form</p>
+                <h2>Feedback Form</h2>
 
                 <form id="feedback-form" class="feedback-form">
                     <input type="hidden" id="name" name="name" placeholder="Your Name" required value="{{ $username }}">
