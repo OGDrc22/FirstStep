@@ -146,7 +146,7 @@ def main():
         "response_mime_type": "application/json", # <--- THIS IS THE KEY SETTING
     }
     model = genai.GenerativeModel(
-        model_name="gemini-3.1-flash",
+        model_name="gemini-3.1-flash-preview",
         generation_config=generation_config,
     )
 
