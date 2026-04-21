@@ -9,8 +9,6 @@ db = None
 cursor = None
 job_id = None
 
-sleep_t = 3
-div3 = 0.3333
 
 # ------------------ DB CONNECT ------------------
 def ensure_db_connection():
@@ -137,8 +135,6 @@ def main():
         message="Preparing Environment...",
         progress=0
     )
-    time.sleep(sleep_t)
-
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise Exception("GOOGLE_API_KEY is missing")
@@ -158,9 +154,7 @@ def main():
         'processing',
         message="Environment ready.",
         progress=10
-    )    
-    time.sleep(sleep_t)
-
+    )
     cursor.execute("SELECT payload FROM exam_jobs WHERE id = %s", (job_id,))
     row = cursor.fetchone()
 
@@ -168,8 +162,7 @@ def main():
         'processing',
         message="Reading your inputs.",
         progress=40
-    )    
-    time.sleep(div3)
+    )   
 
     if not row or not row['payload']:
         raise Exception("Payload not found")
@@ -178,8 +171,7 @@ def main():
         'processing',
         message="Reading your inputs.",
         progress=40
-    )    
-    time.sleep(div3)
+    )   
     
     payload_ = row['payload']
 
@@ -228,7 +220,6 @@ def main():
         message="Generating questions...",
         progress=50
     )
-    time.sleep(div3)
 
     prompt = f"""
     Act as an Exam Content Generator for a Grade 10 Career Aptitude Assessment (similar to the NCAE).
@@ -313,14 +304,12 @@ def main():
         message="Generating questions...",
         progress=60
     )
-    time.sleep(div3)
 
     update_job(
         'processing',
         message="Generating questions...",
         progress=70
     )
-    time.sleep(div3)
 
     
 
